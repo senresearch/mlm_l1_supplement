@@ -68,7 +68,6 @@ cyto.genoprobs = cbind(cyto, genoprobs)
 
 # Write the genotype probabilities and the cyto contrast to CSV
 write.csv(cyto.genoprobs, "./processed/lowry_cyto_genoprobs.csv", row.names = FALSE)
-# write.csv(genoprobs, "./processed/lowry_genoprobs.csv", row.names = FALSE)
 # Write the phenotypes to CSV
 write.csv(pheno, "./processed/lowry_pheno.csv", row.names = FALSE)
 
