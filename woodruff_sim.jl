@@ -1,11 +1,14 @@
 # Load libraries and dependencies
+@everywhere include("../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
+#@everywhere using matrixLMnet
+
 using DataFrames
 using Distributions
 using MLBase
 include("dummyfun.jl")
-@everywhere include("FISTA_backtrack.jl")
-@everywhere include("l1_streamlined.jl")
-include("collins.jl")
+#@everywhere include("FISTA_backtrack.jl")
+#@everywhere include("l1_streamlined.jl")
+#include("collins.jl")
 include("sim_funs.jl")
 
 
