@@ -35,7 +35,7 @@ elapsed_time = toc()
 
 flat_coeffs = Array(Float64, size(results.B,2)*size(results.B,3), length(lambdas))
 for i=1:length(lambdas)
-  flat_coeffs[:,i] = vec(results.B[i,:,:])
+  flat_coeffs[:,i] = vec(coef(results)[i,:,:])
 end
 writecsv("./processed/lowry_l1_coeffs.csv", flat_coeffs)
 

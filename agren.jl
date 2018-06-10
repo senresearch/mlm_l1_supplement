@@ -227,7 +227,7 @@ results = mlmnet(fista_bt!, MLM_data, lambdas, isZInterceptReg=true)
 
 flat_coeffs = Array(Float64, size(results.B,2)*size(results.B,3), length(lambdas))
 for i=1:length(lambdas)
-  flat_coeffs[:,i] = vec(results.B[i,:,:])
+  flat_coeffs[:,i] = vec(coef(results)[i,:,:])
 end
 writecsv("./processed/agren_l1_coeffs.csv", flat_coeffs)
 
