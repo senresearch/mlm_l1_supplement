@@ -37,16 +37,13 @@ end
 	return mlmnet(fun, MLM_data, lambdas)
 end
 
-lambdas = reverse(1.2.^(-32:17))[1:2]
-reps = 2
+lambdas = reverse(1.2.^(-32:17))
+reps = 10
 
 println("Starting")
 
 # Dry run 
 runSim(lambdas)
-
-pq_vals = collect(100:100:600)
-nm_vals = collect(200:200:1200)
 
 pq_vals = collect(200:200:1000)
 nm_vals = collect(400:400:2000)
