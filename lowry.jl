@@ -28,15 +28,21 @@ lambdas = reverse(1.2.^(-9:6))
 println("Starting")
 #@time reals = run_l1(fista!, X, Y, Z, lambdas; filename="./processed/juenger_l1_real.csv", isZInterceptReg=true)
 
+# Dry run 
+results = mlmnet(fista_bt!, MLM_data, lambdas; isZInterceptReg=true; maxiter=5)
+
+
+
+
+
+
+
 tic()
 results = mlmnet(fista_bt!, MLM_data, lambdas; isZInterceptReg=true)
 elapsed_time = toc()
 
 
-flat_coeffs = Array(Float64, size(results.B,2)*size(results.B,3), length(lambdas))
-for i=1:length(lambdas)
-  flat_coeffs[:,i] = vec(coef(results)[i,:,:])
-end
+flat_coeffs = coef_2d(results)
 writecsv("./processed/lowry_l1_coeffs.csv", flat_coeffs)
 
 writecsv("./processed/lowry_time.csv", elapsed_time)
