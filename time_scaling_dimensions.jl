@@ -1,8 +1,5 @@
 @everywhere include("../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
 @everywhere using matrixLMnet
-
-@everywhere using Distributions
-
 @everywhere include("sim_funs.jl")
 
 

@@ -1,4 +1,5 @@
-# 
+using Distributions
+
 """
   makeEffect(length, nonzero, dist)
 
