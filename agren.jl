@@ -34,18 +34,9 @@ Znoint = hcat([1, 1, 1, -1, -1, -1], eye(6))
 
 
 
-
-
 # Run L1 with this stuff. Penalize the Z intercept
 MLM_data = RawData(Response(Ystd), Predictors(Xnoint, Znoint))
 lambdas = reverse(1.2.^(-32:17))
-
-srand(120)
-mlmnet_cv_objs = mlmnet_cv(fista_bt!, MLM_data, lambdas, 8, 1; isZInterceptReg=true)
-mlmnet_cv_summary(mlmnet_cv_objs)
-
-save("./processed/agren_l1_cv.jld", "mlmnet_cv_objs", mlmnet_cv_objs)
-
 
 results = mlmnet(fista_bt!, MLM_data, lambdas, isZInterceptReg=true)
 
@@ -53,8 +44,12 @@ flat_coeffs = coef_2d(results)
 writecsv("./processed/agren_l1_coeffs.csv", flat_coeffs)
 
 
+# Need to use 0.01 starting step and gamma = 0.95
+srand(120)
+mlmnet_cv_objs = mlmnet_cv(fista_bt!, MLM_data, lambdas, 8, 1; isZInterceptReg=true, stepsize=0.01, gamma=0.95)
+mlmnet_cv_summary(mlmnet_cv_objs)
 
-
+save("./processed/agren_l1_cv.jld", "mlmnet_cv_objs", mlmnet_cv_objs)
 
 
 
