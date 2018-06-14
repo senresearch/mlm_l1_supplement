@@ -10,10 +10,10 @@ include("dummyfun.jl")
 
 
 # Read in X (genotype probabilities) with cytoplasm contrast. The first row is a header. 
-X = convert(Array{Float64}, readtable("./processed/juenger_cyto_genoprobs.csv", separator = ',', header=true))
+X = convert(Array{Float64}, readtable("./processed/lowry_cyto_genoprobs.csv", separator = ',', header=true))
 
 # Read in Y (phenotypes). The first row is a header. 
-Y = convert(Array, readtable("./processed/juenger_pheno.csv", separator = ',', header=true))
+Y = convert(Array, readtable("./processed/lowry_pheno.csv", separator = ',', header=true))
 
 # Create the Z contrast. 
 npheno = convert(Int64, size(Y,2)/2) 
@@ -28,9 +28,28 @@ lambdas = reverse(1.2.^(-9:6))
 println("Starting")
 #@time reals = run_l1(fista!, X, Y, Z, lambdas; filename="./processed/juenger_l1_real.csv", isZInterceptReg=true)
 
-# Dry run 
-results = mlmnet(fista_bt!, MLM_data, lambdas; isZInterceptReg=true; maxiter=5)
 
+
+
+# Dry run 
+randsamp = 500
+srand(10)
+rand_phenos = sort(shuffle(1:npheno)[1:randsamp])
+idx = Array(Int64, 2*randsamp)
+for i in 1:randsamp
+	idx[2*i-1] = rand_phenos[i]*2-1
+	idx[2*i] = rand_phenos[i]*2
+end
+Y_sub = Y[:,idx]
+
+# Create the Z contrast. 
+npheno_sub = convert(Int64, size(Y_sub,2)/2) 
+Z_sub = hcat(repeat([1, -1], outer=npheno_sub), kron(eye(npheno_sub), vcat([1 1], [1 -1])))
+
+MLM_data_sub = RawData(Response(Y_sub), Predictors(X, Z_sub))
+
+
+results_sub = mlmnet(fista_bt!, MLM_data_sub, lambdas; isZInterceptReg=true)
 
 
 
