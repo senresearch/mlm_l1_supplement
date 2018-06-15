@@ -1,11 +1,10 @@
 using DataFrames
-#using DataArrays
 
 # Convert categorical variables to dummy indicators using specified contrast type.
 # df = a data frame.
 # cvar = a symbol for the categorical variable in df to be converted.
 # ctype = character string indicating the type of contrast.
-# trtref = NA. Not used in this version of getdummy. 
+# trtref = missing. Not used in this version of getdummy. 
 function getdummy(df::DataFrames.DataFrame, cvar::Symbol, ctype::String, trtref::Missing)
   darr = df[cvar]
   if ctype=="treat"
@@ -68,11 +67,11 @@ end
 # Defaults to treatment contrasts ("treat") for all variables in cnames.
 # Other options include "sum" for sum contrasts and "noint" for treatment contrasts with no intercept.
 # For "treat" ctypes, you can also specify the level to use as the reference treatment. 
-# Do this by supplying a vector trtrefs of NA or string values of the same length as ctypes. 
-# trtrefs defaults to all NAs. 
+# Do this by supplying a vector trtrefs of missing or string values of the same length as ctypes. 
+# trtrefs defaults to all missings. 
 function contr(df::DataFrames.DataFrame, cvars::Array{Symbol,1}, 
   ctypes::Array{String,1}=repeat(["treat"], inner=length(cvars)), 
-  trtrefs::Array=repeat([Missing], inner=length(cvars)))
+  trtrefs::Array=repeat([missing], inner=length(cvars)))
   newdf = DataFrame()
   for var in names(df)
     if !in(var, cvars)
