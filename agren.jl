@@ -64,15 +64,16 @@ agren_times = SharedArray{Float64}(5, reps)
 println("Starting")
 
 # Dry run
-mlmnet(fista_bt!, MLM_data, lambdas, isZInterceptReg=true)
+@everywhere mlmnet(fista_bt!, MLM_data, lambdas, isZInterceptReg=true)
 # Get times from running FISTA with backtracking
 @sync @parallel for j in 1:reps
   agren_times[5,j] = @elapsed mlmnet(fista_bt!, MLM_data, lambdas, isZInterceptReg=true)
 end
+println(mean(agren_times, 2))
 
 # Cluster gives memory error when trying to calculate step size, so manually passing in
 # Dry run
-mlmnet(fista!, MLM_data, lambdas, isZInterceptReg=true)#, stepsize=0.00389033154159019)
+@everywhere mlmnet(fista!, MLM_data, lambdas, isZInterceptReg=true)#, stepsize=0.00389033154159019)
 # Get times from running FISTA with fixed step size
 @sync @parallel for j in 1:reps
   agren_times[4,j] = @elapsed mlmnet(fista!, MLM_data, lambdas, isZInterceptReg=true)#, stepsize=0.00389033154159019)
@@ -80,21 +81,21 @@ end
 
 # Cluster gives memory error when trying to calculate step size, so manually passing in
 # Dry run
-mlmnet(ista!, MLM_data, lambdas, isZInterceptReg=true)#, stepsize=0.00389033154159019)
+@everywhere mlmnet(ista!, MLM_data, lambdas, isZInterceptReg=true)#, stepsize=0.00389033154159019)
 # Get times from running ISTA with fixed step size
 @sync @parallel for j in 1:reps
   agren_times[3,j] = @elapsed mlmnet(ista!, MLM_data, lambdas, isZInterceptReg=true)#, stepsize=0.00389033154159019)
 end
 
 # Dry run
-mlmnet(cd_active!, MLM_data, lambdas, isZInterceptReg=true)
+@everywhere mlmnet(cd_active!, MLM_data, lambdas, isZInterceptReg=true)
 # Get times from running active coordinate descent
 @sync @parallel for j in 1:reps
   agren_times[2,j] = @elapsed mlmnet(cd_active!, MLM_data, lambdas, isZInterceptReg=true)
 end
 
 # Dry run
-mlmnet(cd!, MLM_data, lambdas, isZInterceptReg=true)
+@everywhere mlmnet(cd!, MLM_data, lambdas, isZInterceptReg=true)
 # Get times from running cyclic coordinate descent
 @sync @parallel for j in 1:reps
   agren_times[1,j] = @elapsed mlmnet(cd!, MLM_data, lambdas, isZInterceptReg=true)
