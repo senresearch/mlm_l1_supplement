@@ -7,32 +7,33 @@ nchem = 100
 ntiss = 10
 
 # Simulated X matrix of demographics
-X = read.csv("./processed/enviro_Xnoint_simX.csv", header=FALSE)
+X = read.csv("./processed/woodruff_sim_X.csv", header=FALSE)
 # Simulated Y matrix 
-Y = read.csv("./processed/enviro_Y_sim_simX.csv", header=FALSE)
+Y = read.csv("./processed/woodruff_sim_Y.csv", header=FALSE)
 # Simulated interactions
-inter = read.csv("./processed/enviro_sim_inter_simX.csv", header=FALSE)
+interactions = read.csv("./processed/woodruff_sim_interactions.csv", header=FALSE)
 
-# Lambdas used for L1
-lambdas = as.character(read.csv("./processed/enviro_lambdas.csv", header=FALSE)[,1])
-# Some annoying manipulation to get lambdas to match file names
-lambdas[lambdas=="1"] = "1.0"
-lambdas[lambdas=="5e-04"] = "0.0005"
-lambdas[lambdas=="1e-04"] = "0.0001"
-lambdas[lambdas=="8e-05"] = "8.0e-5"
-lambdas[lambdas=="6e-05"] = "6.0e-5"
+# # Lambdas used for L1
+# lambdas = as.character(read.csv("./processed/woodruff_sim_lambdas.csv", header=FALSE)[,1])
+# # Some annoying manipulation to get lambdas to match file names
+# lambdas[lambdas=="1"] = "1.0"
+# lambdas[lambdas=="5e-04"] = "0.0005"
+# lambdas[lambdas=="1e-04"] = "0.0001"
+# lambdas[lambdas=="8e-05"] = "8.0e-5"
+# lambdas[lambdas=="6e-05"] = "6.0e-5"
 
 # Read in coefficient estimates from L1
-coeffs_l1 = lapply(lambdas, function(lambda){
-  read.csv(paste("./processed/enviro_sim_lambda", lambda, "_foldall_simX.csv", sep=""), header=FALSE)
+coeffs = read.csv("./processed/woodruff_sim_l1_coeffs.csv", header=FALSE)
+coeffs_list = lapply(1:length(coeffs), function(j){
+  matrix(coeffs[,i], dim(interactions)[1], dim(interactions)[2])
 })
 
 # TPR and FPR for L1
-tpr_l1 = sapply(1:length(lambdas), function(i){
-  sum((coeffs_l1[[i]][-1, -1][,-(1:(nchem+ntiss))] == 0) & (inter[,-(1:(nchem+ntiss))] == 0)) /sum(inter[,-(1:(nchem+ntiss))] == 0)
+tpr_l1 = sapply(1:length(coeffs_list), function(i){
+  sum((coeffs_list[[i]][-1, -1][,-(1:(nchem+ntiss))] == 0) & (inter[,-(1:(nchem+ntiss))] == 0)) /sum(inter[,-(1:(nchem+ntiss))] == 0)
 })
-fpr_l1 = 1 - sapply(1:length(lambdas), function(i){
-  sum((coeffs_l1[[i]][-1, -1][,-(1:(nchem+ntiss))] != 0) & (inter[,-(1:(nchem+ntiss))] != 0)) /sum(inter[,-(1:(nchem+ntiss))] != 0)
+fpr_l1 = 1 - sapply(1:length(coeffs_list), function(i){
+  sum((coeffs_list[[i]][-1, -1][,-(1:(nchem+ntiss))] != 0) & (inter[,-(1:(nchem+ntiss))] != 0)) /sum(inter[,-(1:(nchem+ntiss))] != 0)
 })
 
 
@@ -48,10 +49,10 @@ FDR = c(10^(seq(-164, -44, by=20)), 10^(seq(-40, -4, by=4)), seq(0.1,1,length=20
 
 # TPR and FPR from univariate linear regression
 tprall = sapply(1:length(FDR), function(i){
-  sum((pvalsa_linreg <= FDR[i]) & (inter[,-(1:(nchem+ntiss))] != 0)) /sum(inter[,-(1:(nchem+ntiss))] != 0)
+  sum((pvalsa_linreg <= FDR[i]) & (interactions[,-(1:(nchem+ntiss))] != 0)) /sum(interactions[,-(1:(nchem+ntiss))] != 0)
 })
 fprall = sapply(1:length(FDR), function(i){
-  sum((pvalsa_linreg <= FDR[i]) & (inter[,-(1:(nchem+ntiss))] == 0)) /sum(inter[,-(1:(nchem+ntiss))] == 0)
+  sum((pvalsa_linreg <= FDR[i]) & (interactions[,-(1:(nchem+ntiss))] == 0)) /sum(interactions[,-(1:(nchem+ntiss))] == 0)
 })
 
 
@@ -65,17 +66,17 @@ B_reduce_chem = function (B, nchem, ntiss, fun=mean) {
 }
 
 # Repeated matrix of simulated chemical effects to map to chemicals
-inter_stack_chem = repmat(as.matrix(inter[,1:nchem]), ncol=ntiss) 
+inter_stack_chem = repmat(as.matrix(interactions[,1:nchem]), ncol=ntiss) 
 
 # TPR and FPR when using number of hits to detect chemical significance
 tpr_chem = sapply(1:4, function(k){
   sapply(1:length(FDR), function(i){
-    sum(B_reduce_chem(((pvalsa_linreg <= FDR[i]) & (inter_stack_chem != 0)), nchem, ntiss) > k/5) /sum(inter[,1:nchem] != 0)
+    sum(B_reduce_chem(((pvalsa_linreg <= FDR[i]) & (inter_stack_chem != 0)), nchem, ntiss) > k/5) /sum(interactions[,1:nchem] != 0)
   })
 })
 fpr_chem = sapply(1:4, function(k){
   sapply(1:length(FDR), function(i){
-    sum(B_reduce_chem(((pvalsa_linreg <= FDR[i]) & (inter_stack_chem == 0)), nchem, ntiss) > 1/5) /sum(inter[,1:nchem] == 0)
+    sum(B_reduce_chem(((pvalsa_linreg <= FDR[i]) & (inter_stack_chem == 0)), nchem, ntiss) > 1/5) /sum(interactions[,1:nchem] == 0)
   })
 })
 sapply(1:4, function(j){auc(c(0,fpr_chem[,j],1), c(0,tpr_chem[,j],1))})
@@ -85,7 +86,7 @@ sapply(1:4, function(j){auc(c(0,fpr_chem[,j],1), c(0,tpr_chem[,j],1))})
 auc_chem = c(MESS::auc(c(1,fpr_l1,0), c(1,tpr_l1,0), type="spline"),
              MESS::auc(c(0,fprall,1), c(0,tprall,1)),
              sapply(1:4, function(j){auc(c(0,fpr_chem[,j],1), c(0,tpr_chem[,j],1))}))
-png("./pictures/enviro_sim_ROC_simX_chem.png", width=380, height=380)
+png("./pictures/woodruff_sim_ROC_chem.png", width=380, height=380)
 par(mar=c(4.1,4.1,1.1,1.1))
 plot(c(fpr_l1,0), c(tpr_l1,0), xlab="False Positive Rate", ylab="True Positive Rate", 
      xaxs="i", yaxs="i", type="l") # L1
