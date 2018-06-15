@@ -25,15 +25,15 @@ interactions = read.csv("./processed/woodruff_sim_interactions.csv", header=FALS
 # Read in coefficient estimates from L1
 coeffs = read.csv("./processed/woodruff_sim_l1_coeffs.csv", header=FALSE)
 coeffs_list = lapply(1:length(coeffs), function(j){
-  matrix(coeffs[,i], dim(interactions)[1], dim(interactions)[2])
+  matrix(coeffs[,j], dim(interactions)[1]+1, dim(interactions)[2]+1)
 })
 
 # TPR and FPR for L1
 tpr_l1 = sapply(1:length(coeffs_list), function(i){
-  sum((coeffs_list[[i]][-1, -1][,-(1:(nchem+ntiss))] == 0) & (inter[,-(1:(nchem+ntiss))] == 0)) /sum(inter[,-(1:(nchem+ntiss))] == 0)
+  sum((coeffs_list[[i]][-1, -1][,-(1:(nchem+ntiss))] == 0) & (interactions[,-(1:(nchem+ntiss))] == 0)) /sum(interactions[,-(1:(nchem+ntiss))] == 0)
 })
 fpr_l1 = 1 - sapply(1:length(coeffs_list), function(i){
-  sum((coeffs_list[[i]][-1, -1][,-(1:(nchem+ntiss))] != 0) & (inter[,-(1:(nchem+ntiss))] != 0)) /sum(inter[,-(1:(nchem+ntiss))] != 0)
+  sum((coeffs_list[[i]][-1, -1][,-(1:(nchem+ntiss))] != 0) & (interactions[,-(1:(nchem+ntiss))] != 0)) /sum(interactions[,-(1:(nchem+ntiss))] != 0)
 })
 
 
