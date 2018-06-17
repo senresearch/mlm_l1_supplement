@@ -7,7 +7,8 @@ using JLD
 
 # Read in Y (pheno).
 # Y is only the first 6 columns (the last one is ids). The first row is a header. 
-Y = convert(Array, readtable("./processed/agren_phe.csv", separator = ',', header=true)[:,1:6])
+Y = convert(Array, readtable("./processed/agren_phe.csv", 
+			separator = ',', header=true)[:,1:6])
 # Drop missing rows of Y from X and Y. 
 dropidx = vec(.!any(Y.=="-",2))
 Ystd = Y[dropidx, :]
@@ -38,15 +39,15 @@ Znoint = hcat([1, 1, 1, -1, -1, -1], eye(6))
 MLM_data = RawData(Response(Ystd), Predictors(Xnoint, Znoint))
 lambdas = reverse(1.2.^(-32:17))
 
-results = mlmnet(fista_bt!, MLM_data, lambdas, isZInterceptReg=true, stepsize=0.01, gamma=0.95))
+results = mlmnet(fista_bt!, MLM_data, lambdas, isZInterceptReg=true, 
+				 stepsize=0.01)
 
 flat_coeffs = coef_2d(results)
 writecsv("./processed/agren_l1_coeffs.csv", flat_coeffs)
 
 
-# Need to use 0.01 starting step and gamma = 0.95
 srand(120)
-mlmnet_cv_objs = mlmnet_cv(fista_bt!, MLM_data, lambdas, 8, 1; isZInterceptReg=true, stepsize=0.01, gamma=0.95)
+mlmnet_cv_objs = mlmnet_cv(fista_bt!, MLM_data, lambdas, 8, 1; isZInterceptReg=true, stepsize=0.01)
 mlmnet_cv_summary(mlmnet_cv_objs)
 
 save("./processed/agren_l1_cv.jld", "mlmnet_cv_objs", mlmnet_cv_objs)
@@ -65,9 +66,8 @@ println("Starting")
 
 # Get times from running FISTA with backtracking
 @sync @parallel for j in 1:reps
-  agren_times[5,j] = @elapsed mlmnet(fista_bt!, MLM_data, lambdas, isZInterceptReg=true, stepsize=0.01, gamma=0.95))
+  agren_times[5,j] = @elapsed mlmnet(fista_bt!, MLM_data, lambdas, isZInterceptReg=true, stepsize=0.01)
 end
-
 
 # Get times from running FISTA with fixed step size
 @sync @parallel for j in 1:reps

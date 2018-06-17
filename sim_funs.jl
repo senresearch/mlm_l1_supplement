@@ -1,7 +1,7 @@
 using Distributions
 
 """
-  makeEffect(length, nonzero, dist)
+  make_effect(length, nonzero, dist)
 
 Function to simulate effects with a given proportion of nonzero and the rest drawn from some random distribution
 
@@ -16,7 +16,7 @@ Function to simulate effects with a given proportion of nonzero and the rest dra
 effect vector
 
 """
-function makeEffect(length, nonzero=0.5, dist=Normal(0,2))
+function make_effect(length, nonzero=0.5, dist=Normal(0,2))
   effect = zeros(length)
   effect[sample(1:length, convert(Integer,round(length*nonzero)); replace=false)] = rand(dist, convert(Integer,round(length*nonzero)))
   return effect
@@ -28,6 +28,6 @@ end
 # rdist, cdist, and edist = distributions or ranges from which the non-fixed effects should be randomly sampled.
 # Default to Normal(0,1), the standard normal.
 
-function makeY(n, m, fixed, rdist=Normal(0,1), cdist=Normal(0,1), edist=Normal(0,1))
+function make_Y(n, m, fixed, rdist=Normal(0,1), cdist=Normal(0,1), edist=Normal(0,1))
   return fixed + rand(rdist,n,m) + rand(cdist,n,m) + rand(edist,n,m)
 end

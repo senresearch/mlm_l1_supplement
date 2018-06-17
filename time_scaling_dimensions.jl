@@ -19,7 +19,7 @@
 	# Get the fixed effects and generate Y
 	# Calculate the fixed effects
 	fixed = X*d .+ transpose(Z*c) .+ A_mul_Bt(X*inter, Z)
-	Y = makeY(n, m, fixed)
+	Y = make_Y(n, m, fixed)
 	# Standardize Y
 	Y = (Y.-mean(Y,1))./std(Y,1) 
 	
@@ -35,7 +35,7 @@ end
 end
 
 lambdas = reverse(1.2.^(-32:17))
-reps = 10
+reps = 15
 
 println("Starting")
 

@@ -3,7 +3,7 @@ include("../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
 using matrixLMnet
 
 using DataFrames
-include("dummyfun.jl")
+include("dummy_fun.jl")
 
 #include("l1_streamlined.jl")
 #include("FISTA_backtrack.jl")
@@ -49,15 +49,15 @@ Z_sub = hcat(repeat([1, -1], outer=npheno_sub), kron(eye(npheno_sub), vcat([1 1]
 MLM_data_sub = RawData(Response(Y_sub), Predictors(X, Z_sub))
 
 
-results_sub = mlmnet(fista_bt!, MLM_data_sub, lambdas; isZInterceptReg=true)
+results_sub = mlmnet(fista!, MLM_data_sub, lambdas; isZInterceptReg=true)
 
 
-
+println("Starting")
 
 
 
 tic()
-results = mlmnet(fista_bt!, MLM_data, lambdas; isZInterceptReg=true)
+results = mlmnet(fista!, MLM_data, lambdas; isZInterceptReg=true)
 elapsed_time = toc()
 
 
