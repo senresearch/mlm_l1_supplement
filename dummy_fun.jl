@@ -4,8 +4,8 @@ using DataFrames
 # df = a data frame.
 # cvar = a symbol for the categorical variable in df to be converted.
 # ctype = character string indicating the type of contrast.
-# trtref = missing. Not used in this version of getdummy. 
-function getdummy(df::DataFrames.DataFrame, cvar::Symbol, ctype::String, trtref::Missing)
+# trtref = missing. Not used in this version of get_dummy. 
+function get_dummy(df::DataFrames.DataFrame, cvar::Symbol, ctype::String, trtref::Missing)
   darr = df[cvar]
   if ctype=="treat"
     vals = levels(darr)[2:end]
@@ -35,13 +35,13 @@ function getdummy(df::DataFrames.DataFrame, cvar::Symbol, ctype::String, trtref:
 end
 
 # Convert categorical variables to dummy indicators using specified contrast type.
-# Special case of the getdummy implementation above. For treatment contrasts with a specified
+# Special case of the get_dummy implementation above. For treatment contrasts with a specified
 # reference level. 
 # df = a data frame.
 # cvar = a symbol for the categorical variable in df to be converted.
 # ctype = character string indicating the type of contrast. In this case, it must be "treat". 
 # trtref = a string specifying the level in cvar to use as the reference. 
-function getdummy(df::DataFrames.DataFrame, cvar::Symbol, ctype::String, trtref::String)
+function get_dummy(df::DataFrames.DataFrame, cvar::Symbol, ctype::String, trtref::String)
   darr = df[cvar]
   if ctype=="treat"
     vals = levels(darr)[levels(darr) .!= trtref]
@@ -77,7 +77,7 @@ function contr(df::DataFrames.DataFrame, cvars::Array{Symbol,1},
     if !in(var, cvars)
       newdf[var] = df[var]
     else
-      dummydf = getdummy(df, var, ctypes[var.==cvars][1], trtrefs[var.==cvars][1])
+      dummydf = get_dummy(df, var, ctypes[var.==cvars][1], trtrefs[var.==cvars][1])
       for dummyname in names(dummydf)
         newdf[dummyname] = dummydf[dummyname]
       end
