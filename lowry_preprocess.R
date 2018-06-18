@@ -7,12 +7,15 @@ library(qtl)
 # Phenotype data seems to be stored in the GEO accession page
 # https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE42408
 # I downloaded the "Series Matrix File" GSE42408_series_matrix.txt
-# It has the 25667 phenotypes for 208 individuals 
+# It has the 25662 phenotypes for 208 individuals 
+
+# The files I used has 208 individuals (104, but each has wet and dry) and 
+# 51324/2 = 25662 phenotypes. There are 450 markers (plus the cyto contrasts)
 
 # Problem: trying to match this up with the genotype data. Supplemental Data 
 # Set 5 from the paper, downloaded as "tpc115352SupplementalDS5.csv" has the 
 # genotype matrix. But there are 341 individuals, so it's unclear how they 
-# should be matched up to their phenotypes. 
+# should be matched up to their phenotypes. There are also only 168 markers
 
 # Idea: read in the raw files, subset by some type of ID to get the correct 
 # 208 (104, but each has wet and dry). Write the files out again to CSV to 
@@ -20,6 +23,9 @@ library(qtl)
 
 a = read.cross("csv", file="./processed2/tpc115352SupplementalDS5.csv", skip=1)
 class(a)[1] = "riself"
+
+library(data.table)
+b = fread("./processed2/GSE42408_series_matrix.txt", skip=72, header=TRUE)
 
 ###############################################################################
 
