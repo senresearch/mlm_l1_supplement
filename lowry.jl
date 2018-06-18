@@ -49,7 +49,7 @@ Z_sub = hcat(repeat([1, -1], outer=npheno_sub), kron(eye(npheno_sub), vcat([1 1]
 MLM_data_sub = RawData(Response(Y_sub), Predictors(X, Z_sub))
 
 
-results_sub = mlmnet(fista!, MLM_data_sub, lambdas; isZInterceptReg=true)
+results_sub = mlmnet(fista_bt!, MLM_data_sub, lambdas; isZInterceptReg=true, stepsize=0.01)
 
 
 println("Starting")
@@ -57,7 +57,7 @@ println("Starting")
 
 
 tic()
-results = mlmnet(fista!, MLM_data, lambdas; isZInterceptReg=true)
+results = mlmnet(fista_bt!, MLM_data, lambdas; isZInterceptReg=true, stepsize=0.01)
 elapsed_time = toc()
 
 
