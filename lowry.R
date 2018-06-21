@@ -65,7 +65,7 @@ write.csv(gene.pos, "./processed/lowry_gene_pos.csv", row.names = FALSE)
 
 # Read in list of gene positions
 if (!exists("gene.pos")) {
-  gene.pos = write.csv("./processed/lowry_gene_pos.csv", header=TRUE)
+  gene.pos = read.csv("./processed/lowry_gene_pos.csv", header=TRUE)
 }
 
 # TKrils_Marker_PhysPos.csv is a file sent from John Lovell 
@@ -114,9 +114,9 @@ if (!exists("chr_cM") || !exists("cumsum_markers")
 }
 
 # Read in the coefficient matrix
-out = read.csv("./processed/juenger_l1_real.csv", header=FALSE)
+out = read.csv("./processed/lowry_l1_coeffs.csv", header=FALSE)
 # Pull out coefficients corresponding to lambda of interest
-lambda = 4
+lambda = 4 # 1.728
 coeffs = matrix(out[,lambda], 452, 51326)
 
 # Remove the intercepts, the cyto (X) contrast, and dry/wet environment 
@@ -142,7 +142,7 @@ mains = cbind(cumsum_markers_cM[idx_main[,1]],
 inter = cbind(cumsum_markers_cM[idx_inter[,1]], 
               cumsum_trans_cM2[idx_inter[,2]])
 
-png("./pictures/juenger_gene_vs_qtl_pos_lambda4.png", width=380, height=380)
+png("./pictures/lowry_gene_vs_qtl_pos_lambda1.7.png", width=380, height=380)
 par(mar=c(4.1,4.1,1.1,1.1))
 # Main effects
 plot(mains[,1], mains[,2], col="royalblue4", 
