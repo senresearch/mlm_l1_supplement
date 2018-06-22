@@ -14,8 +14,9 @@ library(qtl)
 
 # Problem: trying to match this up with the genotype data. Supplemental Data 
 # Set 5 from the paper, downloaded as "tpc115352SupplementalDS5.csv" has the 
-# genotype matrix. But there are 341 individuals, so it's unclear how they 
-# should be matched up to their phenotypes. There are also only 168 markers
+# genotype matrix. There are 341 individuals, 104 of which match up with the 
+# individuals (use "line marker" or "line" to match) in cross.ge. Problem is 
+# that there are only 168 markers, 123 are matches for the 450 in cross.ge. 
 
 # Idea: read in the raw files, subset by some type of ID to get the correct 
 # 208 (104, but each has wet and dry). Write the files out again to CSV to 
@@ -26,6 +27,14 @@ class(a)[1] = "riself"
 
 library(data.table)
 b = fread("./processed2/GSE42408_series_matrix.txt", skip=72, header=TRUE)
+
+# 104 matching RILs 
+length(intersect(a$pheno$Line.Marker, cross.ge$pheno$line))
+
+# 123 matching markers
+sum(sapply(1:5, function(i){
+  length(intersect(colnames(cross.ge$geno[[i]]$data), colnames(a$geno[[i]]$data)))
+}))
 
 ###############################################################################
 
