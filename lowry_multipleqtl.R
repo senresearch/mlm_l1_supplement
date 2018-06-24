@@ -19,7 +19,7 @@ set.seed(2)
 cross.wet.perms.2dim = scantwo(cross.wet, method="hk", n.perm=100)
 cross.wet.penalties = calc.penalties(cross.wet.perms.2dim)
 
-# Function to run multiple QTL (`stepwiseqtl`) on the phenotypes, one at a time
+# Function to run multiple QTL analysis (`stepwiseqtl`) on individual phenotypes
 # Only allows additive QTL models (no pairwise interactions)
 # cross = a cross object
 # pheno.idx = indices of phenotype column indices to analyze
