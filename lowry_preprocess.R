@@ -1,4 +1,4 @@
-library(qtl)
+library(qtl) # mapping quantitative trait loci
 
 ###############################################################################
 
@@ -51,7 +51,7 @@ cross.ge.genoprobs = calc.genoprob(cross.ge, step=0)
 genoprobs = do.call(cbind, lapply(cross.ge.genoprobs$geno, 
                                   function(x){x$prob[,,1]})) 
 
-# Rows from the same individuals aren't totally identical
+# Rows from the same individuals are similar but not totally identical
 # We will use the ones from the "dry" environments. 
 genoprobs = genoprobs[cross.ge$pheno$treatment == "dry",]
 
@@ -75,14 +75,16 @@ pheno[,seq(2, ncol(pheno), by=2)] = cross.ge$pheno[,-(1:5)][
 
 # Rename the phenotype columns to the form "phenotype.environment", e.g. 
 # "AT1G01010.dry" and "AT1G01010.wet". 
-names(pheno) = paste(rep(names(cross.ge$pheno[,-(1:5)]), each=2), c("dry", "wet"), sep=".")
+names(pheno) = paste(rep(names(cross.ge$pheno[,-(1:5)]), each=2), 
+                     c("dry", "wet"), sep=".")
 
 # Cyto contrast, to be added onto the genoprobs (X) matrix. 
 cyto = cross.ge$pheno$cyto[cross.ge$pheno$treatment == "dry"]
 cyto.genoprobs = cbind(cyto, genoprobs)
 
 # Write the genotype probabilities and the cyto contrast to CSV
-write.csv(cyto.genoprobs, "./processed/lowry_cyto_genoprobs.csv", row.names = FALSE)
+write.csv(cyto.genoprobs, "./processed/lowry_cyto_genoprobs.csv", 
+          row.names = FALSE)
 # Write the phenotypes to CSV
 write.csv(pheno, "./processed/lowry_pheno.csv", row.names = FALSE)
 

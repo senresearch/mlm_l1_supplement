@@ -1,4 +1,4 @@
-library(qtl)
+library(qtl) # mapping quantitative trait loci
 
 # Load cross
 load("./processed/cross.ge.rda")
@@ -12,7 +12,7 @@ cross.ge.genoprobs = calc.genoprob(cross.ge, step=0)
 
 ## Process genetic positions
 
-# Load the Arabidopsis annotation file TAIR10_GFF3_genes.gff (http://www.arabidopsis.org). 
+# Load the Arabidopsis annotation file TAIR10_GFF3_genes.gff 
 # https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_gff3/TAIR10_GFF3_genes.gff
 gene.pos = read.delim("./processed/TAIR10_GFF3_genes.gff", 
                       header=F, comment.char="#")
@@ -63,15 +63,15 @@ write.csv(gene.pos, "./processed/lowry_gene_pos.csv", row.names = FALSE)
 
 ## Create a map between physical and genetic positions
 
-# Read in list of gene positions
+# Read in list of gene positions if it hasn't already been loaded
 if (!exists("gene.pos")) {
   gene.pos = read.csv("./processed/lowry_gene_pos.csv", header=TRUE)
 }
 
-# TKrils_Marker_PhysPos.csv is a file sent from John Lovell 
-tKrils = read.csv("./processed/TKrils_Marker_PhysPos.csv", header=TRUE)
+# TKrils_Marker_PhysPos.csv contains physical positions (provided)
+TKrils = read.csv("./processed/TKrils_Marker_PhysPos.csv", header=TRUE)
 # Split by chromosome
-tKrils_chr = lapply(1:5, function(i){tKrils[tKrils$Chr==i, ]}) 
+TKrils_chr = lapply(1:5, function(i){TKrils[TKrils$Chr==i, ]}) 
 
 # Get the positions of the markers (from the genoprobs) in centimorgans
 markers_cM = lapply(cross.ge.genoprobs$geno, function(x){x$map})
@@ -81,12 +81,12 @@ trans_bp = lapply(1:5, function(i){
   gene.pos$start[gene.pos$sequence==paste("Chr",i,sep="")]})
 # Get the positions in centimorgans
 trans_cM = lapply(1:5, function(i){
-  approx(tKrils_chr[[i]]$Col.Phys.Pos, 
-         tKrils_chr[[i]]$Gen..Pos..LargeMap., 
+  approx(TKrils_chr[[i]]$Col.Phys.Pos, 
+         TKrils_chr[[i]]$Gen..Pos..LargeMap., 
          trans_bp[[i]], rule=2)})
 
-# Re-center the centimorgan positions as though the 5 chromosomes 
-# were on a single continuous scale
+# Re-center the centimorgan positions as though the 5 chromosomes were lined 
+# up adjacent to each other on a single continuous scale
 # Endpoints for the 5 chromosomes
 chr_cM = c(0, cumsum(sapply(cross.ge.genoprobs$geno, function(x){
   max(x$map)})))
@@ -107,26 +107,26 @@ save(chr_cM, cumsum_markers_cM, cumsum_trans_cM, cumsum_trans_cM2,
 
 ## Plot results
 
-# Load physical distances
+# Load physical distances if they haven't already been loaded
 if (!exists("chr_cM") || !exists("cumsum_markers") 
     || !exists("cumsum_trans_cM2")) {
   load("./processed/lowry_plot_data.rData")
 }
 
-# Read in the coefficient matrix
-out = read.csv("./processed/lowry_l1_coeffs.csv", header=FALSE)
+# Read in L1 coefficient estimates
+lowry_l1_coeffs = read.csv("./processed/lowry_l1_coeffs.csv", header=FALSE)
 # Pull out coefficients corresponding to lambda of interest
-lambda = 4 # 1.728
-coeffs = matrix(out[,lambda], 452, 51326)
+lambda = 4 # 4th lambda has value 1.728
+coeffs = matrix(lowry_l1_coeffs[,lambda], 452, 51326)
 
 # Remove the intercepts, the cyto (X) contrast, and dry/wet environment 
 # (Z) contrast
-my_coeffs = coeffs[-(1:2), -(1:2)]
+coeffs = coeffs[-(1:2), -(1:2)]
 # Find the indices of the non-zero interactions
-idx = which(my_coeffs != 0, arr.ind=TRUE)
+idx = which(coeffs != 0, arr.ind=TRUE)
 
 # Indices of the main effects
-idx_main = idx[idx[,2] %% 2 != 0,] 
+idx_mains = idx[idx[,2] %% 2 != 0,] 
 # Indices of the interactions 
 idx_inter = idx[idx[,2] %% 2 == 0,] 
 
@@ -136,75 +136,28 @@ chr_names = paste(paste("Chr", 1:5, sep=""),
 
 # Map the coefficients to their physical positions
 # Main effects
-mains = cbind(cumsum_markers_cM[idx_main[,1]], 
-              cumsum_trans_cM2[idx_main[,2]])
+mains = cbind(cumsum_markers_cM[idx_mains[,1]], 
+              cumsum_trans_cM2[idx_mains[,2]])
 # Interactions
 inter = cbind(cumsum_markers_cM[idx_inter[,1]], 
               cumsum_trans_cM2[idx_inter[,2]])
 
+
 png("./pictures/lowry_gene_vs_qtl_pos_lambda1.7.png", width=380, height=380)
 par(mar=c(4.1,4.1,1.1,1.1))
+
 # Main effects
 plot(mains[,1], mains[,2], col="royalblue4", 
      xlab="QTL Position (cM)", ylab="Gene Position (cM)") 
+
 # Interactions
 points(inter[,1], inter[,2], pch=15, col="firebrick3")
 
-# Draw lines to delineate chromosomes
+# Reference lines to delineate chromosomes
 invisible(sapply(chr_cM[2:5], function(x){abline(v=x)}))
 invisible(sapply(chr_cM[2:5], function(x){abline(h=x)}))
+
 # Label chromosomes
 mtext(side = 1, text = chr_names, line = 2)
 mtext(side = 2, text = chr_names, line = 2) 
 dev.off()
-
-###############################################################################
-
-## Run time for multiple QTL analysis with R/qtl
-
-# Subset the individuals with the "wet" treatment 
-cross.wet = subset(cross.ge.genoprobs, 
-                   ind=which(cross.ge.genoprobs$pheno$treatment=="wet"))
-# Drop line, id, treatment from phenotypes
-cross.wet$pheno = cross.wet$pheno[,-c(1,2,5)] 
-
-# Calculate LOD penalties from scantwo permutations
-set.seed(2)
-cross.wet.perms.2dim = scantwo(cross.wet, method="hk", n.perm=100)
-cross.wet.penalties = calc.penalties(cross.wet.perms.2dim)
-
-# Function to run stepwiseqtl on the phenotypes, one at a time
-# Only allows additive QTL models (no pairwise interactions)
-# cross = a cross object
-# pheno.idx = indices of phenotype column indices to analyze
-# ... additional arguments to pass into `stepwiseqtl`
-loop_stepwiseqtl = function(cross, pheno.idx, ...){
-  # Iterate through phenotypes
-  for (i in pheno.idx){
-    # Run stepwiseqtl on one phenotype column
-    stepwiseqtl(cross, pheno.col=i, method="hk", additive.only=TRUE, ...)
-  }
-}
-
-# Sample 100 random phenotypes
-set.seed(100)
-pheno.idx = sample(1:ncol(cross.wet$pheno), 100)
-
-# Run time for 100 phenotype columns, max.qtl = 3 
-# (does not count time to do scantwo permutations to get LOD penalties)
-times_maxqtl3 = system.time(loop_stepwiseqtl(cross.wet, pheno.idx, max.qtl=3,
-                                             penalties = cross.wet.penalties))
-# On work computer: 56.531 seconds elapsed
-# 56.531 * (25664 * 2) / 100 = 29016.23 seconds = 483 minutes = 8 hours
-# On personal laptop: 81.724 seconds elapsed
-
-# Run time for 100 phenotype columns, max.qtl = 10 (default value)
-# (does not count time to do scantwo permutations to get LOD penalties)
-times_maxqtl10 = system.time(loop_stepwiseqtl(cross.wet, pheno.idx, max.qtl=10, 
-                                              penalties = cross.wet.penalties))
-# On work computer: 514.476 seconds elapsed
-# 514.476 * (25664 * 2) / 100 = 264070.2 seconds = 4401.17 minutes = 73.35283 hours = 3 days
-# On personal laptop: 743.771 seconds elapsed
-
-times_out = rbind("max.qtl.3"=times_maxqtl3, "max.qtl.10"=times_maxqtl10)
-write.csv(times_out, file="./processed/rqtl_100pheno_times.csv")

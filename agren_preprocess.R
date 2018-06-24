@@ -1,4 +1,4 @@
-library(qtl)
+library(qtl) # mapping quantitative trait loci
 
 ###############################################################################
 
@@ -32,7 +32,7 @@ length(intersect(a$pheno[,17], agren$pheno[,7])) # 399 intersect
 
 ###############################################################################
 
-# Read in the arabidopsis data
+# Read in the data as a cross object
 agren = read.cross("csv",dir="./processed", genotypes=c("a","b"), 
                    file="agren2013_fullGenoMatrix4qtl_withParents.csv", 
                    na.strings=c("NA","-"))
@@ -44,11 +44,12 @@ agren = fill.geno(agren)
 write.cross(agren, "csvs", "./processed/agren")
 
 # Calculate conditional genotype probabilities
-agren.genoprob = calc.genoprob(agren, step=1) # 1 cM grid
+agren.genoprob = calc.genoprob(agren, step=1) 
 
 # Pull out the probabilities from each chromosome and put them all into the 
 # same matrix
-genoprobs = do.call(cbind, lapply(agren.genoprob$geno, function(x){x$prob[,,1]})) 
+genoprobs = do.call(cbind, lapply(agren.genoprob$geno, 
+                                  function(x){x$prob[,,1]})) 
 
 # Set the probabilities about 0.5 to 1 and below 0.5 to 0
 genoprobs[genoprobs > 0.5] = 1
