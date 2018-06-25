@@ -1,33 +1,61 @@
 using Distributions
 
-"""
-  make_effect(length, nonzero, dist)
 
-Function to simulate effects with a given proportion of nonzero and the rest drawn from some random distribution
+"""
+    make_effect(n, prop_nonzero, dist)
+
+Simulate effects with a given proportion of nonzero effects drawn from some 
+distribution. The remaining effects will be set to zero.
 
 # Arguments 
 
-- length = 
-- nonzero = 
-- dist = 
+- n = length of 1d effect array. 
+- prop_nonzero = proportion of nonzero effects. Defaults to 0.5.
+- dist = distribution from which the nonzero effects should be simulated. 
+Defaults to Normal(0,2). 
 
 # Value
 
-effect vector
+1d array of effects 
 
 """
-function make_effect(length, nonzero=0.5, dist=Normal(0,2))
-  effect = zeros(length)
-  effect[sample(1:length, convert(Integer,round(length*nonzero)); replace=false)] = rand(dist, convert(Integer,round(length*nonzero)))
-  return effect
+
+function make_effect(n::Int64, prop_nonzero::Float64=0.5, 
+                     dist::Distribution=Normal(0,2))
+    # Initialize vector for storing effects 
+    effect = zeros(n)
+    
+    # Randomly sample indices of nonzero effects
+    idx = sample(1:n, convert(Integer,round(n*prop_nonzero)); replace=false)
+    
+    # Simulate and assign nonzero effects  
+    effect[idx] = rand(dist, convert(Integer,round(n*prop_nonzero)))
+    
+    return effect
 end
 
-# Function to set up the Yijs in a simulation.
-# nm = dimensions of Y as a tuple
-# fixed = fixed effects for Y, should have same dimensions as nm
-# rdist, cdist, and edist = distributions or ranges from which the non-fixed effects should be randomly sampled.
-# Default to Normal(0,1), the standard normal.
 
-function make_Y(n, m, fixed, rdist=Normal(0,1), cdist=Normal(0,1), edist=Normal(0,1))
-  return fixed + rand(rdist,n,m) + rand(cdist,n,m) + rand(edist,n,m)
+"""
+    make_Y(n, m, fixed, edist)
+
+Simulate a 2d response array for simulations, with user-specified fixed 
+effects. 
+
+# Arguments 
+
+- n = number of rows
+- m = number of columns
+- fixed = 2d array of fixed effects (should be n by m)
+- edist = distribution from which the non-fixed effects should be randomly 
+sampled. Defaults to Normal(0,3). 
+
+# Value
+
+2d response array
+
+"""
+
+function make_Y(n::Int64, m::Int64, fixed::Array{Float64,2}, 
+                edist::Distribution=Normal(0,3))
+    return fixed + rand(edist, n, m)
 end

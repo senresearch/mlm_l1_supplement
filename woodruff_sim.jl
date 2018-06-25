@@ -1,62 +1,76 @@
-# Load libraries and dependencies
+# L1-penalized matrix linear models
 include("../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
 using matrixLMnet
 
+# DataFrames 
 using DataFrames
 
-#using MLBase
+# Functions for creating dummy contrasts for categorical variables
 include("dummy_fun.jl")
+# Functions for simulating data
 include("sim_funs.jl")
 
-# Set number of chemicals and tissues
+
+# Number of chemicals 
 nchem = 100
+# Number of tissues
 ntiss = 10 
 
-# Dimensions of model
+# Dimensions of data
 n = 108
 m = nchem*ntiss
 p = 19
 q = nchem*ntiss + nchem + ntiss
 
 
-# Read in X (demographics)
+# Simulate X (demographics)
 srand(100)
-Xnoint = randn(n, p) #size(Xnoint) = (108, 19)
+Xnoint = randn(n, p) 
 
-
-# Contrasts for chemicals and tissues
+# Create contrasts for chemicals and tissues
 chem = repmat(eye(nchem), ntiss, 1)
 tiss = zeros(nchem*ntiss, ntiss)
 for j in 1:ntiss
 	tiss[(nchem*(j-1)+1):(nchem*j),j] = 1
 end
-
-# Contrasts for chemicals, tissues, and combinations
+# Create Z matrix
 Znoint = hcat(chem, tiss, eye(nchem*ntiss))
 
 
-
-# Generate fixed effects.
 srand(40)
-dem_eff = make_effect(p) # Demographic main effects. 1/2 nonzero with SD 2.
-chem_eff = repeat(make_effect(nchem, 1/4), outer=ntiss) # Chemical main effects. 1/4 nonzero with SD 2.
-tiss_eff = repeat(make_effect(ntiss, 1), inner=nchem) # Tissue main effects for each tissue. SD 2
-interactions = reshape(make_effect((p)*(q), 1/8), p, q) # Interaction effects. 1/8 nonzero with SD 2.
+# Simulate demographic main effects, 1/2 nonzero from Normal(0,2). 
+dem_eff = make_effect(p) 
+# Simulate chemical main effects, 1/4 nonzero from Normal(0,2). 
+chem_eff = repeat(make_effect(nchem, 1/4), outer=ntiss) 
+# Simulate tissue main effects, from Normal(0,2). 
+tiss_eff = repeat(make_effect(ntiss, 1), inner=nchem) 
+# Simulate interaction effects, 1/8 nonzero from Normal(0,2). 
+interactions = reshape(make_effect((p)*(q), 1/8), p, q) 
 
-# Calculate the fixed effects
-fixed_eff = Xnoint*dem_eff .+ transpose(chem_eff .+ tiss_eff) .+ Xnoint*interactions*transpose(Znoint) 
+# Generate the fixed effects
+fixed_eff = Xnoint*dem_eff .+ transpose(chem_eff .+ tiss_eff) .+ 
+            Xnoint*interactions*transpose(Znoint) 
+# Simulate Y using fixed effects 
 Ysim = make_Y(n, m, fixed_eff)
 # Standardize Y
 Ysim = (Ysim.-mean(Ysim,1))./std(Ysim,1) 
 
 
+# Put together RawData object for MLM 
+MLM_data = RawData(Response(Ysim), Predictors(Xnoint, Znoint))
+
+# Array of 50 lambdas
 lambdas = reverse(1.3.^(-37:12))
 
-MLM_data = RawData(Response(Ysim), Predictors(Xnoint, Znoint))
+
+# Run L1-penalized matrix linear model
 results = mlmnet(fista_bt!, MLM_data, lambdas, stepsize=0.01)
+
+# Flatten coefficients and write results to CSV
 flat_coeffs = coef_2d(results)
 writecsv("./processed/woodruff_sim_l1_coeffs.csv", flat_coeffs)
 
+# Write simualted X, Y, and interactions to CSV
 writecsv("./processed/woodruff_sim_Y.csv", Ysim)
 writecsv("./processed/woodruff_sim_X.csv", Xnoint)
 writecsv("./processed/woodruff_sim_interactions.csv", interactions)

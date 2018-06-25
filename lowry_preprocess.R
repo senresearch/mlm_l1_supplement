@@ -36,6 +36,16 @@ sum(sapply(1:5, function(i){
   length(intersect(colnames(cross.ge$geno[[i]]$data), colnames(a$geno[[i]]$data)))
 }))
 
+
+d = read.cross("csvs", 
+               genfile="./processed2/TPC2015-00122-RAR1_Supplemental_Data_set_1b.csv", 
+               phefile="./processed2/TPC2015-00122-RAR1_Supplemental_Data_set_1a.csv", 
+               genotypes=c("a","b"), skip=1)
+b = fread("./processed2/TPC2015-00122-RAR1_Supplemental_Data_set_1b.csv", skip=1)
+sum(sapply(1:3, function(i){
+  length(intersect(colnames(cross.ge$geno[[i]]$data), colnames(d$geno[[i]]$data)))
+}))
+
 ###############################################################################
 
 # Load cross
