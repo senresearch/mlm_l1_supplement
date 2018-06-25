@@ -6,7 +6,7 @@ using matrixLMnet
 using DataFrames
 
 # Functions for creating dummy contrasts for categorical variables
-include("dummy_fun.jl")
+include("contr.jl")
 # Functions for simulating data
 include("sim_funs.jl")
 

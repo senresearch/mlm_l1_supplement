@@ -6,7 +6,7 @@ using matrixLMnet
 using DataFrames
 
 # Functions for creating dummy contrasts for categorical variables
-include("dummy_fun.jl")
+include("contr.jl")
 
 
 # Read in X (genotype probabilities) with cytoplasm contrast. 
