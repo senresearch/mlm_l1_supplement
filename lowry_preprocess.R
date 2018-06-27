@@ -1,60 +1,55 @@
 library(qtl) # mapping quantitative trait loci
+library(data.table) # quickly read in tables
 
-###############################################################################
+# Table that includes IDs and cytoplasm for markers
+ids = read.csv("./processed/dd2014_cytocovar.csv") 
+# Create indicator for cyto
+ids$cyto = ifelse(ids$cyto.num==1, 0, 1)
 
-# Attempt to pull in data from online 
+# Genotype matrix, downloaded from Supplemental Table 1 in
+# http://www.plantcell.org/content/27/4/969/tab-figures-data
+# (needs to be updated to include all the markers)
+geno = fread("./processed/TKrils_map55.csv")
 
-# Phenotype data seems to be stored in the GEO accession page
+# Series matrix file, downloaded from 
 # https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE42408
-# I downloaded the "Series Matrix File" GSE42408_series_matrix.txt
-# It has the 25662 phenotypes for 208 individuals 
+# Contains phenotypes and some other information about the experiment
+SMF = fread("./processed/GSE42408_series_matrix.txt", header=FALSE, fill=TRUE)
+# Pull out the sample title column, which includes the line markers and 
+# treatments
+sample_title = strsplit(as.character(SMF[37,-1]), " ")
+# Build phenotype matrix
+pheno = data.frame(sapply(sample_title, function(x){sub(",", "", x[2])}), 
+                   # marker line
+                   sapply(sample_title, function(x){x[3]}), 
+                   # treatment
+                   apply(t(SMF[-c(1:73,nrow(SMF)),-1]), 2, as.numeric))
+names(pheno) = c("code", "treatment", 
+                 as.character(SMF[-c(1:73,nrow(SMF))]$V1))
 
-# The files I used has 208 individuals (104, but each has wet and dry) and 
-# 51324/2 = 25662 phenotypes. There are 450 markers (plus the cyto contrasts)
+# Merge phenotype matrix with ID matrix 
+pheno = merge(ids[c("id", "code", "cyto")], pheno, by="code", all.y=TRUE)
 
-# Problem: trying to match this up with the genotype data. Supplemental Data 
-# Set 5 from the paper, downloaded as "tpc115352SupplementalDS5.csv" has the 
-# genotype matrix. There are 341 individuals, 104 of which match up with the 
-# individuals (use "line marker" or "line" to match) in cross.ge. Problem is 
-# that there are only 168 markers, 123 are matches for the 450 in cross.ge. 
+# Merge the phenotypes and genotypes to make one big matrix
+out = merge(pheno, geno, by="id", all.x=TRUE)
 
-# Idea: read in the raw files, subset by some type of ID to get the correct 
-# 208 (104, but each has wet and dry). Write the files out again to CSV to 
-# run read.cross. 
+# Make the matrix ready to be read into R/qtl
+blanks = matrix(NA, 2, ncol(pheno))
+colnames(blanks) = colnames(pheno)
+out = rbind(cbind(blanks, geno[1:2,-1]), out)
+write.csv(out, "./processed/lowry_raw.csv", row.names = FALSE, na="")
 
-library(data.table)
-geno = fread("./processed2/TKrils_map55.csv")
-
-SMT = fread("./processed2/GSE42408_series_matrix.txt", header=FALSE, fill=TRUE)
-pheno = t(SMT[-c(1:73,nrow(SMT)),-1])
-sample_title = strsplit(as.character(SMT[37,-1]), " ")
-treatment = sapply(sample_title, function(x){x[3]})
-ril = sapply(sample_title, function(x){sub(",", "", x[2])})
-
-ids = read.csv("./processed2/dd2014_cytocovar.csv") # also has cyto
-a = merge(ids, cross.ge$pheno[,1:2], by="id") # ids/lines match
-b = merge(ids, geno[,1:2], by="id")
-
-# 104 matching RILs 
-length(intersect(ril, cross.ge$pheno$line))
-length(intersect(ids$id, geno$id))
-
-# 123 matching markers
-sum(sapply(1:5, function(i){
-  length(intersect(colnames(cross.ge$geno[[i]]$data), colnames(a$geno[[i]]$data)))
-}))
-
-
-ids_for_geno_matrix = read.csv("./processed2/dd2014_cytocovar.csv")
-length(intersect(ids_for_geno_matrix$code, cross.ge$pheno$line))
-
-
-
+# Read in the data as a cross object
+cross.ge = read.cross("csv", file="./processed/lowry_raw.csv", 
+                      genotypes=c("a","b"))
+class(cross.ge)[1] = "riself"
+save(cross.ge, file="./processed/cross.ge.rda")
 
 ###############################################################################
 
-# Load cross
-load("./processed/cross.ge.rda")
+if(!exists("cross.ge")){
+  load("./processed/cross.ge.rda")
+}
 
 # Impute missing genotypes
 cross.ge = fill.geno(cross.ge)
@@ -82,15 +77,15 @@ all(cross.ge$pheno$id[seq(1, nrow(cross.ge$pheno), by=2)] ==
 # Split the phenotype rows into "dry" and "wet" environments and save it in 
 # wide format. (Should be "dry, wet, dry, wet, ...")
 pheno = as.data.frame(matrix(0, nrow(cross.ge$pheno)/2, 
-                             2*ncol(cross.ge$pheno[,-(1:5)])))
-pheno[,seq(1, ncol(pheno), by=2)] = cross.ge$pheno[,-(1:5)][
+                             2*ncol(cross.ge$pheno[,-(1:4)])))
+pheno[,seq(1, ncol(pheno), by=2)] = cross.ge$pheno[,-(1:4)][
   cross.ge$pheno$treatment == "dry", ]
-pheno[,seq(2, ncol(pheno), by=2)] = cross.ge$pheno[,-(1:5)][
+pheno[,seq(2, ncol(pheno), by=2)] = cross.ge$pheno[,-(1:4)][
   cross.ge$pheno$treatment == "wet", ]
 
 # Rename the phenotype columns to the form "phenotype.environment", e.g. 
 # "AT1G01010.dry" and "AT1G01010.wet". 
-names(pheno) = paste(rep(names(cross.ge$pheno[,-(1:5)]), each=2), 
+names(pheno) = paste(rep(names(cross.ge$pheno[,-(1:4)]), each=2), 
                      c("dry", "wet"), sep=".")
 
 # Cyto contrast, to be added onto the genoprobs (X) matrix. 
@@ -102,4 +97,3 @@ write.csv(cyto.genoprobs, "./processed/lowry_cyto_genoprobs.csv",
           row.names = FALSE)
 # Write the phenotypes to CSV
 write.csv(pheno, "./processed/lowry_pheno.csv", row.names = FALSE)
-

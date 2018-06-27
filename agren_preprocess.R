@@ -33,9 +33,10 @@ length(intersect(a$pheno[,17], agren$pheno[,7])) # 399 intersect
 ###############################################################################
 
 # Read in the data as a cross object
-agren = read.cross("csv",dir="./processed", genotypes=c("a","b"), 
-                   file="agren2013_fullGenoMatrix4qtl_withParents.csv", 
-                   na.strings=c("NA","-"))
+agren = read.cross("csv", 
+                   file="./processed/agren2013_fullGenoMatrix4qtl_withParents.csv", 
+                   genotypes=c("a","b"))
+class(agren)[1] = "riself"
 
 # Impute missing genotypes
 agren = fill.geno(agren)

@@ -11,8 +11,8 @@ cross.ge.genoprobs = calc.genoprob(cross.ge, step=0)
 # Subset the individuals with the "wet" treatment 
 cross.wet = subset(cross.ge.genoprobs, 
                    ind=which(cross.ge.genoprobs$pheno$treatment=="wet"))
-# Drop line, id, treatment from phenotypes
-cross.wet$pheno = cross.wet$pheno[,-c(1,2,5)] 
+# Drop code, id, cyto, and treatment from phenotypes
+cross.wet$pheno = cross.wet$pheno[,-(1:4)]
 
 # Calculate LOD penalties from scantwo permutations
 set.seed(2)
@@ -36,16 +36,21 @@ loop_stepwiseqtl = function(cross, pheno.idx, ...){
 set.seed(100)
 pheno.idx = sample(1:ncol(cross.wet$pheno), 100)
 
+reps = 10
+
 # Runtime for 100 phenotype columns, max.qtl = 3 
 # (does not count time to do scantwo permutations to get LOD penalties)
-times_maxqtl3 = system.time(loop_stepwiseqtl(cross.wet, pheno.idx, max.qtl=3,
-                                             penalties = cross.wet.penalties))
+times_maxqtl3 = replicate(reps, system.time(
+  loop_stepwiseqtl(cross.wet, pheno.idx, max.qtl=3,
+                   penalties = cross.wet.penalties))[3])
 
 # Runtime for 100 phenotype columns, max.qtl = 10 (default value)
 # (does not count time to do scantwo permutations to get LOD penalties)
-times_maxqtl10 = system.time(loop_stepwiseqtl(cross.wet, pheno.idx, max.qtl=10, 
-                                              penalties = cross.wet.penalties))
+times_maxqtl10 = replicate(reps, system.time(
+  loop_stepwiseqtl(cross.wet, pheno.idx, max.qtl=10,
+                   penalties = cross.wet.penalties))[3])
 
 # Write times to CSV
 times_out = rbind("max.qtl.3"=times_maxqtl3, "max.qtl.10"=times_maxqtl10)
-write.csv(times_out, file="./processed/rqtl_100pheno_times.csv")
+times_out = cbind(rowMeans(times_out), times_out)
+write.csv(times_out, file="./processed/lowry_rqtl_100pheno_times.csv")

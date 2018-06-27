@@ -49,7 +49,7 @@ obsolete_pos$ids = obsolete$new
 gene.pos = rbind(gene.pos, obsolete_pos)
 
 # Get the gene IDs from the cross
-pheno_ids = data.frame(ids=names(cross.ge.genoprobs$pheno[,-(1:5)]))
+pheno_ids = data.frame(ids=names(cross.ge.genoprobs$pheno[,-(1:4)]))
 # Merge them so that the positions are in the same order as the IDs in 
 # the cross
 gene.pos = merge(pheno_ids, gene.pos, by="ids", all.x=TRUE, all.y=FALSE)
