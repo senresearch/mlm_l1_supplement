@@ -22,14 +22,22 @@ library(qtl) # mapping quantitative trait loci
 # 208 (104, but each has wet and dry). Write the files out again to CSV to 
 # run read.cross. 
 
-a = read.cross("csv", file="./processed2/tpc115352SupplementalDS5.csv", skip=1)
-class(a)[1] = "riself"
-
 library(data.table)
-b = fread("./processed2/GSE42408_series_matrix.txt", skip=72, header=TRUE)
+geno = fread("./processed2/TKrils_map55.csv")
+
+SMT = fread("./processed2/GSE42408_series_matrix.txt", header=FALSE, fill=TRUE)
+pheno = t(SMT[-c(1:73,nrow(SMT)),-1])
+sample_title = strsplit(as.character(SMT[37,-1]), " ")
+treatment = sapply(sample_title, function(x){x[3]})
+ril = sapply(sample_title, function(x){sub(",", "", x[2])})
+
+ids = read.csv("./processed2/dd2014_cytocovar.csv") # also has cyto
+a = merge(ids, cross.ge$pheno[,1:2], by="id") # ids/lines match
+b = merge(ids, geno[,1:2], by="id")
 
 # 104 matching RILs 
-length(intersect(a$pheno$Line.Marker, cross.ge$pheno$line))
+length(intersect(ril, cross.ge$pheno$line))
+length(intersect(ids$id, geno$id))
 
 # 123 matching markers
 sum(sapply(1:5, function(i){
@@ -37,14 +45,11 @@ sum(sapply(1:5, function(i){
 }))
 
 
-d = read.cross("csvs", 
-               genfile="./processed2/TPC2015-00122-RAR1_Supplemental_Data_set_1b.csv", 
-               phefile="./processed2/TPC2015-00122-RAR1_Supplemental_Data_set_1a.csv", 
-               genotypes=c("a","b"), skip=1)
-b = fread("./processed2/TPC2015-00122-RAR1_Supplemental_Data_set_1b.csv", skip=1)
-sum(sapply(1:3, function(i){
-  length(intersect(colnames(cross.ge$geno[[i]]$data), colnames(d$geno[[i]]$data)))
-}))
+ids_for_geno_matrix = read.csv("./processed2/dd2014_cytocovar.csv")
+length(intersect(ids_for_geno_matrix$code, cross.ge$pheno$line))
+
+
+
 
 ###############################################################################
 
