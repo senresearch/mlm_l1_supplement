@@ -20,15 +20,41 @@ library(qtl) # mapping quantitative trait loci
 # missing phenotype information for the non-ED columns, it's not clear 
 # how the exactly 400 were chosen. 
 
-a = read.cross("csvs",dir="./processed2",
-               genotypes=c("a","b"), 
+# Read in the data as a cross object
+agren = read.cross("csvs",dir="./processed2", 
                genfile="geno.csv", 
-               phefile= "pheno.csv", 
-               na.strings=c("NA","-"))
-class(a)[1] = "riself"
+               phefile= "RIL_DataForSelectionAnalyses3yrs2.csv",
+               genotypes=c("a","b"))
+class(agren)[1] = "riself"
 
-sum(!apply(is.na(a$pheno[,11:17]), 1, any)) # 390, compared to 392 in original CSV
-length(intersect(a$pheno[,17], agren$pheno[,7])) # 399 intersect
+# Only keep IDs and phenotypes for fruits per seedling
+agren$pheno = agren$pheno[,c(1,5:11)]
+agren = subset(agren, ind=!apply(is.na(agren$pheno[,-1]), 1, any))
+
+# Impute missing genotypes
+agren = fill.geno(agren)
+
+# Write the genotypes and phenotypes to CSVs
+write.cross(agren, "csvs", "./processed/agren")
+
+# Calculate conditional genotype probabilities
+agren.genoprob = calc.genoprob(agren, step=1) 
+
+# Pull out the probabilities from each chromosome and put them all into the 
+# same matrix
+genoprobs = do.call(cbind, lapply(agren.genoprob$geno, 
+                                  function(x){x$prob[,,1]})) 
+
+# Set the probabilities about 0.5 to 1 and below 0.5 to 0
+genoprobs[genoprobs > 0.5] = 1
+genoprobs[genoprobs <= 0.5] = 0
+
+# Write the genotype probabilities to CSV
+write.csv(genoprobs, "./processed/agren_genoprobs.csv", row.names = FALSE)
+
+
+
+
 
 ###############################################################################
 
