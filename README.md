@@ -8,8 +8,17 @@ Agren, J., Oakley, C. G., McKay, J. K., Lovell, J. T. and Schemske, D. W.
     Arabidopsis thaliana’, Proceedings of the National Academy of Sciences 
     110(52), 21077–21082
 
-Data downloaded from: [https://datadryad.org/resource/doi:10.5061/dryad.77971]. 
-Currently using `cross.ge.rda`  
+Download `RIL_DataForSelectionAnalyses3yrs.xls` and `geno.csv` from 
+[https://datadryad.org/resource/doi:10.5061/dryad.77971]. 
+
+Agren J., Oakley C. G., Lundemo S., Schemske D. W. (2017) Adaptive divergence  
+    in flowering time among natural populations of Arabidopsis thaliana: 
+    Estimates of selection and QTL mapping. Evolution 71(3): 550-564. 
+
+Agren J., Oakley C. G., Lundemo S., Schemske D. W. (2016) Data from: Adaptive 
+    divergence in flowering time among natural populations of Arabidopsis 
+    thaliana: estimates of selection and QTL mapping. Dryad Digital 
+    Repository. 
 
 - `agren_preprocess.R`: Preprocess data
 
@@ -24,11 +33,23 @@ Lowry, D. B., Logan, T. L., Santuari, L., Hardtke, C. S., Richards, J. H.,
     ‘Expression quantitative trait locus mapping across water availability 
     environments reveals contrasting associations with genomic features in 
     arabidopsis’, The Plant Cell 25(9), 3266–3279.
+	
+Download the series matrix file from https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE42408] 
 
-Data downloaded from: [https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE42408] 
-and supplemental data set 5 in the text. Requires annotation file downloaded 
-here: 	 https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_gff3/TAIR10_GFF3_genes.gff 
-Currently using `agren2013_fullGenoMatrix4qtl_withParents.csv`. 
+Lowry DB, Logan TL, Santuari L, Hardtke CS et al. Expression quantitative 
+    trait locus mapping across water availability environments reveals 
+    contrasting associations with genomic features in Arabidopsis. Plant Cell 
+    2013 Sep;25(9):3266-79. PMID: 24045022
+
+and Supplemental Dataset 1b from [http://www.plantcell.org/content/27/4/969/tab-figures-data]. 
+
+Lovell, J. T., Mullen, J. L., Lowry, D. B., Awole, K., Richards, J. H., 
+    Sen, S., ... & McKay, J. K. (2015). Exploiting differential gene 
+    expression and epistasis to discover candidate genes for 
+    drought-associated QTLs in Arabidopsis thaliana. The Plant Cell, 27(4), 
+    969-983.
+
+Also requires annotation file downloaded here: 	 https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_gff3/TAIR10_GFF3_genes.gff 
 
 - `lowry_preprocess.R`: Preprocess data
 
@@ -55,10 +76,8 @@ Ran simulations based on this study.
 `runtime_scaling_dimensions.jl` provides to code to examine how run time 
 increases with dimension size in simulated data. 
 
+---
 
 Helper functions for the analysis: 
-
-- `dummy_fun.jl`: Functions to generate contrasts/dummy variables for 
-categorical data
 
 - `sim_funs.jl`: Functions to simulate data

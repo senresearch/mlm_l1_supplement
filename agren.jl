@@ -12,8 +12,8 @@ using JLD
 # Y = convert(Array, readtable("./processed/agren_phe.csv", 
 			# separator = ',', header=true)[:,1:6])
 # first column is IDs
-Y = convert(Array, readtable("./processed/agren_phe.csv", 
-			separator = ',', header=true)[:,2:7])
+Y = convert(Array{Float64}, readtable("./processed/agren_phe.csv", 
+			                          separator = ',', header=true)[:,2:7])
 # # Drop missing rows of Y.  
 # dropidx = vec(.!any(Y.=="-",2))
 # Ystd = Y[dropidx, :]
@@ -23,16 +23,16 @@ Y = convert(Array, readtable("./processed/agren_phe.csv",
   # end
 # end
 # Take the log of Y
-Ystd = log.(convert(Array{Float64}, Ystd))
+Ystd = log.(Ystd)
+# Ystd = log.(convert(Array{Float64}, Ystd))
 # Standardize Y 
 Ystd = (Ystd.-mean(Ystd,1))./std(Ystd,1) 
 
 # Read in X (genotype probabilities). The first row is a header. 
-X = readtable("./processed/agren_genoprobs.csv", 
-              separator = ',', header=true)
+X = convert(Array{Float64}, readtable("./processed/agren_genoprobs.csv", 
+                                      separator = ',', header=true))
 # # Drop missing rows of Y from X. 
 # Xnoint = convert(Array{Float64}, X[dropidx, :])
-Xnoint = convert(Array{Float64}, X)
 
 # Create Z matrix. The first column indicates country (Italy/Sweden). 
 # Znoint = hcat([1, 1, 1, -1, -1, -1], eye(6))
