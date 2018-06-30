@@ -6,7 +6,7 @@ using matrixLMnet
 using DataFrames
 
 # Functions for creating dummy contrasts for categorical variables
-include("contr.jl")
+# include("contr.jl")
 
 
 # Read in X (genotype probabilities) with cytoplasm contrast. 
@@ -15,8 +15,8 @@ X = convert(Array{Float64}, readtable("./processed/lowry_cyto_genoprobs.csv",
                                       separator = ',', header=true))
 
 # Read in Y (phenotypes). The first row is a header. 
-Y = convert(Array, readtable("./processed/lowry_pheno.csv", 
-                             separator = ',', header=true))
+Y = convert(Array{Float64}, readtable("./processed/lowry_pheno.csv", 
+                                      separator = ',', header=true))
 
 # Number of phenotypes 
 npheno = convert(Int64, size(Y,2)/2) 
