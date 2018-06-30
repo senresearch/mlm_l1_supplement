@@ -117,9 +117,12 @@ pq_grid = vec(collect(Base.product(pq_vals, pq_vals)))
 pq_times =  SharedArray{Float64}(length(pq_grid), reps)
 # Hold n and m fixed at 1200 and vary p and q over a grid
 @sync @parallel for j in 1:reps
-	for i in 1:length(pq_grid)
-		pq_times[i,j] = @elapsed runSim(lambdas; n=Int64(mean(nm_vals)), m=Int64(mean(nm_vals)), p=pq_grid[i][1], q=pq_grid[i][2])
-	end
+    for i in 1:length(pq_grid)
+        pq_times[i,j] = @elapsed runSim(lambdas; n=Int64(mean(nm_vals)), 
+                                        m=Int64(mean(nm_vals)), 
+                                        p=pq_grid[i][1], 
+                                        q=pq_grid[i][2])
+    end
 end
 
 # Print and write times to CSV
@@ -136,9 +139,12 @@ nm_grid = vec(collect(Base.product(nm_vals, nm_vals)))
 nm_times =  SharedArray{Float64}(length(nm_grid), reps)
 # Hold p and q fixed at 600 and vary n and m over a grid
 @sync @parallel for j in 1:reps
-	for i in 1:length(nm_grid)
-		nm_times[i,j] = @elapsed runSim(lambdas; n=nm_grid[i][1], m=nm_grid[i][2], p=Int64(mean(pq_vals)), q=Int64(mean(pq_vals)))
-	end
+    for i in 1:length(nm_grid)
+        nm_times[i,j] = @elapsed runSim(lambdas; n=nm_grid[i][1], 
+                                        m=nm_grid[i][2], 
+                                        p=Int64(mean(pq_vals)), 
+                                        q=Int64(mean(pq_vals)))
+    end
 end
 
 # Print and write times to CSV

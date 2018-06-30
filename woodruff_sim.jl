@@ -5,8 +5,6 @@ using matrixLMnet
 # DataFrames 
 using DataFrames
 
-# Functions for creating dummy contrasts for categorical variables
-# include("contr.jl")
 # Functions for simulating data
 include("sim_funs.jl")
 
@@ -25,7 +23,7 @@ q = nchem*ntiss + nchem + ntiss
 
 # Simulate X (demographics)
 srand(100)
-Xnoint = randn(n, p) 
+X = randn(n, p) 
 
 # Create contrasts for chemicals and tissues
 chem = repmat(eye(nchem), ntiss, 1)
@@ -34,7 +32,7 @@ for j in 1:ntiss
 	tiss[(nchem*(j-1)+1):(nchem*j),j] = 1
 end
 # Create Z matrix
-Znoint = hcat(chem, tiss, eye(nchem*ntiss))
+Z = hcat(chem, tiss, eye(nchem*ntiss))
 
 
 srand(40)
@@ -48,8 +46,8 @@ tiss_eff = repeat(make_effect(ntiss, 1), inner=nchem)
 interactions = reshape(make_effect((p)*(q), 1/8), p, q) 
 
 # Generate the fixed effects
-fixed_eff = Xnoint*dem_eff .+ transpose(chem_eff .+ tiss_eff) .+ 
-            Xnoint*interactions*transpose(Znoint) 
+fixed_eff = X*dem_eff .+ transpose(chem_eff .+ tiss_eff) .+ 
+            X*interactions*transpose(Z) 
 # Simulate Y using fixed effects 
 Ysim = make_Y(n, m, fixed_eff)
 # Standardize Y
@@ -57,14 +55,14 @@ Ysim = (Ysim.-mean(Ysim,1))./std(Ysim,1)
 
 
 # Put together RawData object for MLM 
-MLM_data = RawData(Response(Ysim), Predictors(Xnoint, Znoint))
+MLM_data = RawData(Response(Ysim), Predictors(X, Z))
 
 # Array of 50 lambdas
 lambdas = reverse(1.3.^(-37:12))
 
 
 # Run L1-penalized matrix linear model
-results = mlmnet(fista_bt!, MLM_data, lambdas, stepsize=0.01)
+results = mlmnet(fista_bt!, MLM_data, lambdas)
 
 # Flatten coefficients and write results to CSV
 flat_coeffs = coef_2d(results)
@@ -72,5 +70,5 @@ writecsv("./processed/woodruff_sim_l1_coeffs.csv", flat_coeffs)
 
 # Write simualted X, Y, and interactions to CSV
 writecsv("./processed/woodruff_sim_Y.csv", Ysim)
-writecsv("./processed/woodruff_sim_X.csv", Xnoint)
+writecsv("./processed/woodruff_sim_X.csv", X)
 writecsv("./processed/woodruff_sim_interactions.csv", interactions)

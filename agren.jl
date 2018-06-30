@@ -4,50 +4,35 @@
 
 # DataFrames 
 using DataFrames
+
 # JLD for saving variables
 using JLD
 
 
-# Read in Y (phenotypes). The first row is a header. The last column is IDs. 
-# Y = convert(Array, readtable("./processed/agren_phe.csv", 
-			# separator = ',', header=true)[:,1:6])
-# first column is IDs
+# Read in Y (phenotypes). The first row is a header. The first column is IDs. 
 Y = convert(Array{Float64}, readtable("./processed/agren_phe.csv", 
-			                          separator = ',', header=true)[:,2:7])
-# # Drop missing rows of Y.  
-# dropidx = vec(.!any(Y.=="-",2))
-# Ystd = Y[dropidx, :]
-# for i in 1:length(Ystd)
-  # if (typeof(Ystd[i]) == String)
-    # Ystd[i] = parse(Float64, Ystd[i])
-  # end
-# end
+			                                separator = ',', header=true)[:,2:7])
 # Take the log of Y
-Ystd = log.(Ystd)
-# Ystd = log.(convert(Array{Float64}, Ystd))
+Y = log.(Y)
 # Standardize Y 
-Ystd = (Ystd.-mean(Ystd,1))./std(Ystd,1) 
+Y = (Y.-mean(Y,1))./std(Y,1) 
 
 # Read in X (genotype probabilities). The first row is a header. 
 X = convert(Array{Float64}, readtable("./processed/agren_genoprobs.csv", 
                                       separator = ',', header=true))
-# # Drop missing rows of Y from X. 
-# Xnoint = convert(Array{Float64}, X[dropidx, :])
 
 # Create Z matrix. The first column indicates country (Italy/Sweden). 
-# Znoint = hcat([1, 1, 1, -1, -1, -1], eye(6))
-Znoint = hcat([1, -1, 1, -1, 1, -1], eye(6))
+Z = hcat([1, -1, 1, -1, 1, -1], eye(6))
 
 # Put together RawData object for MLM 
-MLM_data = RawData(Response(Ystd), Predictors(Xnoint, Znoint))
+MLM_data = RawData(Response(Y), Predictors(X, Z))
 
 # Array of 50 lambdas
 lambdas = reverse(1.2.^(-32:17))
 
 
 # Run L1-penalized matrix linear model
-results = mlmnet(fista_bt!, MLM_data, lambdas, isZInterceptReg=true, 
-				 stepsize=0.01)
+results = mlmnet(fista_bt!, MLM_data, lambdas, isZInterceptReg=true)
 
 # Flatten coefficients and write results to CSV
 flat_coeffs = coef_2d(results)
@@ -57,7 +42,7 @@ writecsv("./processed/agren_l1_coeffs.csv", flat_coeffs)
 # Run 8-fold cross-validation (on the rows)
 srand(120)
 mlmnet_cv_objs = mlmnet_cv(fista_bt!, MLM_data, lambdas, 8, 1; 
-                           isZInterceptReg=true, stepsize=0.01)
+                           isZInterceptReg=true)
 # Look at summary information from cross-validation
 println(mlmnet_cv_summary(mlmnet_cv_objs))
 
@@ -76,27 +61,32 @@ agren_times = SharedArray{Float64}(5, reps)
 
 # Get times from running FISTA with backtracking
 @sync @parallel for j in 1:reps
-  agren_times[5,j] = @elapsed mlmnet(fista_bt!, MLM_data, lambdas, isZInterceptReg=true, stepsize=0.01)
+    agren_times[5,j] = @elapsed mlmnet(fista_bt!, MLM_data, lambdas, 
+                                       isZInterceptReg=true) 
 end
 
 # Get times from running FISTA with fixed step size
 @sync @parallel for j in 1:reps
-  agren_times[4,j] = @elapsed mlmnet(fista!, MLM_data, lambdas, isZInterceptReg=true)
+    agren_times[4,j] = @elapsed mlmnet(fista!, MLM_data, lambdas, 
+                                       isZInterceptReg=true)
 end
 
 # Get times from running ISTA with fixed step size
 @sync @parallel for j in 1:reps
-  agren_times[3,j] = @elapsed mlmnet(ista!, MLM_data, lambdas, isZInterceptReg=true)
+    agren_times[3,j] = @elapsed mlmnet(ista!, MLM_data, lambdas, 
+                                       isZInterceptReg=true)
 end
 
 # Get times from running active coordinate descent
 @sync @parallel for j in 1:reps
-  agren_times[2,j] = @elapsed mlmnet(cd_active!, MLM_data, lambdas, isZInterceptReg=true)
+    agren_times[2,j] = @elapsed mlmnet(cd_active!, MLM_data, lambdas, 
+                                       isZInterceptReg=true)
 end
 
 # Get times from running cyclic coordinate descent
 @sync @parallel for j in 1:reps
-  agren_times[1,j] = @elapsed mlmnet(cd!, MLM_data, lambdas, isZInterceptReg=true)
+    agren_times[1,j] = @elapsed mlmnet(cd!, MLM_data, lambdas, 
+                                       isZInterceptReg=true)
 end
 
 

@@ -5,9 +5,6 @@ using matrixLMnet
 # DataFrames 
 using DataFrames
 
-# Functions for creating dummy contrasts for categorical variables
-# include("contr.jl")
-
 
 # Read in X (genotype probabilities) with cytoplasm contrast. 
 # The first row is a header. 
@@ -20,8 +17,8 @@ Y = convert(Array{Float64}, readtable("./processed/lowry_pheno.csv",
 
 # Number of phenotypes 
 npheno = convert(Int64, size(Y,2)/2) 
-# Create Z matrix 
-Z = hcat(repeat([1, -1], outer=npheno), # wet/dry
+# Create Z matrix. The first column indicates treatment (wet/dry)
+Z = hcat(repeat([1, -1], outer=npheno), 
          kron(eye(npheno), vcat([1 1], [1 -1])))
 
 # Put together RawData object for MLM
@@ -54,13 +51,13 @@ MLM_data_sub = RawData(Response(Ysub), Predictors(X, Zsub))
 
 # Dry run of L1-penalized matrix linear model using subset of phenotypes
 results_sub = mlmnet(fista_bt!, MLM_data_sub, lambdas; 
-                     isZInterceptReg=true, stepsize=0.01)
+                     isZInterceptReg=true)
 
 
 # Run L1-penalized matrix linear model while timing it
 tic()
 results = mlmnet(fista_bt!, MLM_data, lambdas; 
-                 isZInterceptReg=true, stepsize=0.01)
+                 isZInterceptReg=true)
 elapsed_time = toc()
 
 # Flatten coefficients and write results to CSV
