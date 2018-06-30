@@ -34,22 +34,19 @@ Lowry, D. B., Logan, T. L., Santuari, L., Hardtke, C. S., Richards, J. H.,
     environments reveals contrasting associations with genomic features in 
     arabidopsis’, The Plant Cell 25(9), 3266–3279.
 	
-Download the series matrix file from https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE42408] 
-
-Lowry DB, Logan TL, Santuari L, Hardtke CS et al. Expression quantitative 
-    trait locus mapping across water availability environments reveals 
-    contrasting associations with genomic features in Arabidopsis. Plant Cell 
-    2013 Sep;25(9):3266-79. PMID: 24045022
-
-and Supplemental Dataset 1b from [http://www.plantcell.org/content/27/4/969/tab-figures-data]. 
+Download the series matrix file from the paper's GEO site
+[https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE42408] 
+and Supplemental Dataset 1b from 
+[http://www.plantcell.org/content/27/4/969/tab-figures-data]. 
 
 Lovell, J. T., Mullen, J. L., Lowry, D. B., Awole, K., Richards, J. H., 
-    Sen, S., ... & McKay, J. K. (2015). Exploiting differential gene 
-    expression and epistasis to discover candidate genes for 
-    drought-associated QTLs in Arabidopsis thaliana. The Plant Cell, 27(4), 
-    969-983.
+    Sen, S., Verslues, P. E., Juenger, T. E. and McKay, J. K. (2015), 
+    `Exploiting differential gene expression and epistasis to discover 
+    candidate genes for drought-associated qtls in arabidopsis thaliana', The 
+    Plant Cell 27(4), 969{983.
 
-Also requires annotation file downloaded here: 	 https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_gff3/TAIR10_GFF3_genes.gff 
+Also requires annotation file downloaded here:  
+[https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_gff3/TAIR10_GFF3_genes.gff]
 
 - `lowry_preprocess.R`: Preprocess data
 
