@@ -9,15 +9,15 @@ Agren, J., Oakley, C. G., McKay, J. K., Lovell, J. T. and Schemske, D. W.
     110(52), 21077–21082
 
 Download `RIL_DataForSelectionAnalyses3yrs.xls` and `geno.csv` from 
-[https://datadryad.org/resource/doi:10.5061/dryad.77971]. 
+[https://datadryad.org/resource/doi:10.5061/dryad.77971] [^fn1] [^fn2]. 
 
-Agren J., Oakley C. G., Lundemo S., Schemske D. W. (2017) Adaptive divergence  
-    in flowering time among natural populations of Arabidopsis thaliana: 
-    Estimates of selection and QTL mapping. Evolution 71(3): 550-564. 
-
-Agren J., Oakley C. G., Lundemo S., Schemske D. W. (2016) Data from: Adaptive 
+[^fn1]: Agren J., Oakley C. G., Lundemo S., Schemske D. W. (2017) Adaptive 
     divergence in flowering time among natural populations of Arabidopsis 
-    thaliana: estimates of selection and QTL mapping. Dryad Digital 
+    thaliana: Estimates of selection and QTL mapping. Evolution 71(3): 550-564. 
+
+[^fn2]: Agren J., Oakley C. G., Lundemo S., Schemske D. W. (2016) Data from: 
+    Adaptive divergence in flowering time among natural populations of 
+    Arabidopsis thaliana: estimates of selection and QTL mapping. Dryad Digital 
     Repository. 
 
 - `agren_preprocess.R`: Preprocess data
@@ -37,9 +37,9 @@ Lowry, D. B., Logan, T. L., Santuari, L., Hardtke, C. S., Richards, J. H.,
 Download the series matrix file from the paper's GEO site
 [https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE42408] 
 and Supplemental Dataset 1b from 
-[http://www.plantcell.org/content/27/4/969/tab-figures-data]. 
+[http://www.plantcell.org/content/27/4/969/tab-figures-data] [^fn3]. 
 
-Lovell, J. T., Mullen, J. L., Lowry, D. B., Awole, K., Richards, J. H., 
+[^fn3]: Lovell, J. T., Mullen, J. L., Lowry, D. B., Awole, K., Richards, J. H., 
     Sen, S., Verslues, P. E., Juenger, T. E. and McKay, J. K. (2015), 
     `Exploiting differential gene expression and epistasis to discover 
     candidate genes for drought-associated qtls in arabidopsis thaliana', The 
