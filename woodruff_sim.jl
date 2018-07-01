@@ -41,7 +41,7 @@ dem_eff = make_effect(p)
 # Simulate chemical main effects, 1/4 nonzero from Normal(0,2). 
 chem_eff = repeat(make_effect(nchem, 1/4), outer=ntiss) 
 # Simulate tissue main effects, from Normal(0,2). 
-tiss_eff = repeat(make_effect(ntiss, 1), inner=nchem) 
+tiss_eff = repeat(make_effect(ntiss, 1.0), inner=nchem) 
 # Simulate interaction effects, 1/8 nonzero from Normal(0,2). 
 interactions = reshape(make_effect((p)*(q), 1/8), p, q) 
 

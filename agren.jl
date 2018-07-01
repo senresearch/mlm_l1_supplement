@@ -39,9 +39,9 @@ flat_coeffs = coef_2d(results)
 writecsv("./processed/agren_l1_coeffs.csv", flat_coeffs)
 
 
-# Run 8-fold cross-validation (on the rows)
+# Run 10-fold cross-validation (on the rows)
 srand(120)
-mlmnet_cv_objs = mlmnet_cv(fista_bt!, MLM_data, lambdas, 8, 1; 
+mlmnet_cv_objs = mlmnet_cv(fista_bt!, MLM_data, lambdas, 10, 1; 
                            isZInterceptReg=true)
 # Look at summary information from cross-validation
 println(mlmnet_cv_summary(mlmnet_cv_objs))
