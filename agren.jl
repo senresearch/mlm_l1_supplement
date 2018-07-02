@@ -93,6 +93,6 @@ end
 # Print and write times to CSV
 println(mean(agren_times, 2))
 writecsv("./processed/agren_times.csv",  
-          vcat(["method" "mean" transpose(collect(1:reps))], 
-                hcat(["cd", "cd_active", "ista", "fista", "fista_bt"], 
-                      mean(agren_times, 2), agren_times)))
+         vcat(["method" "mean" transpose(collect(1:reps))], 
+              hcat(["cd", "cd_active", "ista", "fista", "fista_bt"], 
+                   mean(agren_times, 2), agren_times)))

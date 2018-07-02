@@ -7,7 +7,7 @@
 
 
 @everywhere begin
-
+    
     """
         simRawData(n, m, p, q, seed)
 
@@ -63,7 +63,7 @@ end
 
 
 @everywhere begin
-
+    
     """
         runSim(lambdas, fun; n, m, p, q, seed)
     
@@ -134,8 +134,8 @@ end
 println(reshape(mean(pq_times, 2), length(pq_vals), length(pq_vals)))
 writecsv("./processed/pq_times.csv",  
           vcat(["p" "q" "mean" transpose(collect(1:reps))], 
-                hcat([x[1] for x in pq_grid], [x[2] for x in pq_grid],
-                    	mean(pq_times, 2), pq_times)))
+               hcat([x[1] for x in pq_grid], [x[2] for x in pq_grid],
+                    mean(pq_times, 2), pq_times)))
 
 
 # Generate grid of n and m values
@@ -155,6 +155,6 @@ end
 # Print and write times to CSV
 println(reshape(mean(nm_times, 2), length(nm_vals), length(nm_vals)))
 writecsv("./processed/nm_times.csv",  
-          vcat(["n" "m" "mean" transpose(collect(1:reps))], 
-                hcat([x[1] for x in nm_grid], [x[2] for x in nm_grid],
-                    	mean(nm_times, 2), nm_times)))
+         vcat(["n" "m" "mean" transpose(collect(1:reps))], 
+              hcat([x[1] for x in nm_grid], [x[2] for x in nm_grid],
+                   mean(nm_times, 2), nm_times)))
