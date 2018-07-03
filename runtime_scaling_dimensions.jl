@@ -80,6 +80,7 @@ end
     - p = number of columns of X
     - q = number of columns of Z
     - seed = random seed
+    - funArgs = variable keyword arguments to be passed into `fun`
 
     # Value
     
@@ -95,12 +96,12 @@ end
     
     function runSim(lambdas::Array{Float64,1}, fun::Function=fista_bt!; 
                     n::Int64=600, m::Int64=600, 
-                    p::Int64=200, q::Int64=200, seed::Int64=10)
+                    p::Int64=200, q::Int64=200, seed::Int64=10, funArgs...)
         # Simulate data
         MLM_data = simRawData(n, m, p, q, seed)
         
         # Run L1-penalized matrix linear model
-        return mlmnet(fun, MLM_data, lambdas)
+        return mlmnet(fun, MLM_data, lambdas, funArgs...)
     end
 end
 
@@ -126,7 +127,7 @@ pq_times =  SharedArray{Float64}(length(pq_grid), reps)
         pq_times[i,j] = @elapsed runSim(lambdas; n=Int64(mean(nm_vals)), 
                                         m=Int64(mean(nm_vals)), 
                                         p=pq_grid[i][1], 
-                                        q=pq_grid[i][2])
+                                        q=pq_grid[i][2], stepsize=1.0)
     end
 end
 
@@ -148,7 +149,7 @@ nm_times =  SharedArray{Float64}(length(nm_grid), reps)
         nm_times[i,j] = @elapsed runSim(lambdas; n=nm_grid[i][1], 
                                         m=nm_grid[i][2], 
                                         p=Int64(mean(pq_vals)), 
-                                        q=Int64(mean(pq_vals)))
+                                        q=Int64(mean(pq_vals)), stepsize=1.0)
     end
 end
 
