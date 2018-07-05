@@ -26,6 +26,8 @@ Download `RIL_DataForSelectionAnalyses3yrs.xls` and `geno.csv` from
 
 - `agren.R`: Reproduce plot used in manuscript
 
+- `agren_times.jl`: Compare runtimes for different L1-penalized algorithms
+
 ---
 
 Lowry, D. B., Logan, T. L., Santuari, L., Hardtke, C. S., Richards, J. H., 
@@ -70,11 +72,9 @@ Ran simulations based on this study.
 
 ---
 
-`runtime_scaling_dimensions.jl` provides to code to examine how run time 
-increases with dimension size in simulated data. 
+`scaling_times.jl` provides to code to examine how runtime increases with 
+dimension size in simulated data. 
 
 ---
 
-Helper functions for the analysis: 
-
-- `sim_funs.jl`: Functions to simulate data
+`sim_funs.jl` contains helper functions to simulate data. 

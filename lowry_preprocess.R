@@ -6,9 +6,9 @@ ids = read.csv("./processed/dd2014_cytocovar.csv")
 # Create indicator for cyto
 ids$cyto = ifelse(ids$cyto.num==1, 0, 1)
 
-# Genotype matrix, downloaded from Supplemental Table 1 in
+# Genotype matrix, downloaded from Supplemental Table 1b in
 # http://www.plantcell.org/content/27/4/969/tab-figures-data
-# (needs to be updated to include all the markers)
+# (as of July 2018, needs to be updated to include all the markers)
 geno = fread("./processed/TKrils_map55.csv")
 
 # Series matrix file, downloaded from 
