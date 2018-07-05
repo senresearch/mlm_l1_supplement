@@ -101,7 +101,7 @@ end
         MLM_data = simRawData(n, m, p, q, seed)
         
         # Run L1-penalized matrix linear model
-        return mlmnet(fun, MLM_data, lambdas, funArgs...)
+        return mlmnet(fun, MLM_data, lambdas; funArgs...)
     end
 end
 
