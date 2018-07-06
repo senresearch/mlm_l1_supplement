@@ -3,6 +3,18 @@ paper.
 
 ---
 
+Woodruff, T. J., Zota, A. R. and Schwartz, J. M. (2011), ‘Environmental 
+    chemicals in pregnant women in the United States: NHANES 2003-2004’, 
+    Environmental health perspectives 119(6), 878.
+
+Ran simulations based on this study. 
+
+- `woodruff_sim.jl`: Run L1-penalized matrix linear model
+
+- `woodruff_sim.R`: Reproduce plot used in manuscript
+
+---
+
 Agren, J., Oakley, C. G., McKay, J. K., Lovell, J. T. and Schemske, D. W. 
     (2013), ‘Genetic mapping of adaptation reveals fitness tradeoffs in 
     Arabidopsis thaliana’, Proceedings of the National Academy of Sciences 
@@ -50,6 +62,9 @@ and Supplemental Dataset 1b from
 Also requires annotation file downloaded here:  
 [https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_gff3/TAIR10_GFF3_genes.gff]
 
+and the files `TKrils_Marker_PhysPos.csv` and `dd2014_cytocovar.csv`, which 
+are provided. 
+
 - `lowry_preprocess.R`: Preprocess data
 
 - `lowry.jl`: Run L1-penalized matrix linear model
@@ -60,21 +75,9 @@ Also requires annotation file downloaded here:
 
 ---
 
-Woodruff, T. J., Zota, A. R. and Schwartz, J. M. (2011), ‘Environmental 
-    chemicals in pregnant women in the United States: NHANES 2003-2004’, 
-    Environmental health perspectives 119(6), 878.
-
-Ran simulations based on this study. 
-
-- `woodruff_sim.jl`: Run L1-penalized matrix linear model
-
-- `woodruff_sim.R`: Reproduce plot used in manuscript
-
----
-
-`scaling_times.jl` provides to code to examine how runtime increases with 
+`scaling_times.jl` provides the code to examine how runtime increases with 
 dimension size in simulated data. 
 
 ---
 
-`sim_funs.jl` contains helper functions to simulate data. 
+`sim_funs.jl` contains helper functions for simulating data. 

@@ -52,5 +52,7 @@ times_maxqtl10 = replicate(reps, system.time(
 
 # Write times to CSV
 times_out = rbind("max.qtl.3"=times_maxqtl3, "max.qtl.10"=times_maxqtl10)
-times_out = cbind(rowMeans(times_out), times_out)
+times_out = cbind(means=rowMeans(times_out), times_out)
 write.csv(times_out, file="./processed/lowry_rqtl_100pheno_times.csv")
+
+ncol(cross.wet$pheno)*2 * times_out$means/100/3600
