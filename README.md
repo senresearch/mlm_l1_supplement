@@ -60,7 +60,7 @@ and Supplemental Dataset 1b from
 
 [^fn3]: Lovell, J. T., Mullen, J. L., Lowry, D. B., Awole, K., Richards, J. H., 
     Sen, S., Verslues, P. E., Juenger, T. E. and McKay, J. K. (2015), 
-    `Exploiting differential gene expression and epistasis to discover 
+    'Exploiting differential gene expression and epistasis to discover 
     candidate genes for drought-associated qtls in arabidopsis thaliana', The 
     Plant Cell 27(4), 969{983.
 
