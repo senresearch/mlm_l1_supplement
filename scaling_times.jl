@@ -109,7 +109,7 @@ end
 # Array of 50 lambdas
 lambdas = reverse(1.2.^(-32:17))
 # Number of replicates
-reps = 15
+reps = 10
 
 # Range of p and q values to try
 pq_vals = collect(200:200:1000)

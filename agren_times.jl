@@ -29,7 +29,7 @@ lambdas = reverse(1.2.^(-32:17))
 
 
 # Number of replicates
-reps = 15
+reps = 10
 # Initialize array for storing times
 agren_times = SharedArray{Float64}(5, reps)
 
@@ -60,8 +60,8 @@ end
 
 # Get times from running cyclic coordinate descent
 @sync @parallel for j in 1:reps
-    agren_times[1,j] = @elapsed mlmnet(cd!, MLM_data, lambdas, 
-                                       isZInterceptReg=true)
+    agren_times[1,j] = @elapsed mlmnet(cd_active!, MLM_data, lambdas, 
+                                       isZInterceptReg=true, isRandom=false)
 end
 
 

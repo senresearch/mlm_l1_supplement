@@ -3,6 +3,11 @@ paper.
 
 ---
 
+`scaling_times.jl` provides the code to examine how runtime increases with 
+dimension size in simulated data. 
+
+---
+
 Woodruff, T. J., Zota, A. R. and Schwartz, J. M. (2011), ‘Environmental 
     chemicals in pregnant women in the United States: NHANES 2003-2004’, 
     Environmental health perspectives 119(6), 878.
@@ -61,7 +66,6 @@ and Supplemental Dataset 1b from
 
 Also requires annotation file downloaded here:  
 [https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_gff3/TAIR10_GFF3_genes.gff]
-
 and the files `TKrils_Marker_PhysPos.csv` and `dd2014_cytocovar.csv`, which 
 are provided. 
 
@@ -72,11 +76,6 @@ are provided.
 - `lowry.R`: Reproduce plot used in manuscript
 
 - `lowry_multipleqtl.R`: Run multiple QTL analysis on individual phenotypes
-
----
-
-`scaling_times.jl` provides the code to examine how runtime increases with 
-dimension size in simulated data. 
 
 ---
 
