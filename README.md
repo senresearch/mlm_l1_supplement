@@ -8,8 +8,8 @@ dimension size in simulated data.
 
 ---
 
-Woodruff, T. J., Zota, A. R. and Schwartz, J. M. (2011), ‘Environmental 
-    chemicals in pregnant women in the United States: NHANES 2003-2004’, 
+Woodruff, T. J., Zota, A. R. and Schwartz, J. M. (2011), 'Environmental 
+    chemicals in pregnant women in the United States: NHANES 2003-2004', 
     Environmental health perspectives 119(6), 878.
 
 Ran simulations based on this study. 
@@ -23,19 +23,20 @@ Ran simulations based on this study.
 Agren, J., Oakley, C. G., McKay, J. K., Lovell, J. T. and Schemske, D. W. 
     (2013), ‘Genetic mapping of adaptation reveals fitness tradeoffs in 
     Arabidopsis thaliana’, Proceedings of the National Academy of Sciences 
-    110(52), 21077–21082
+    110(52), 21077–21082.
 
 Download `RIL_DataForSelectionAnalyses3yrs.xls` and `geno.csv` from 
 [https://datadryad.org/resource/doi:10.5061/dryad.77971] [^fn1] [^fn2]. 
 
-[^fn1]: Agren J., Oakley C. G., Lundemo S., Schemske D. W. (2017) Adaptive 
-    divergence in flowering time among natural populations of Arabidopsis 
-    thaliana: Estimates of selection and QTL mapping. Evolution 71(3): 550-564. 
+[^fn1]: Agren, J., Oakley, C. G., Lundemo, S. and Schemske, D. W. (2017), 
+    ‘Adaptive divergence in flowering time among natural populations of
+    arabidopsis thaliana: Estimates of selection and qtl mapping’, Evolution 
+    71(3), 550–564.
 
-[^fn2]: Agren J., Oakley C. G., Lundemo S., Schemske D. W. (2016) Data from: 
-    Adaptive divergence in flowering time among natural populations of 
-    Arabidopsis thaliana: estimates of selection and QTL mapping. Dryad Digital 
-    Repository. 
+[^fn2]: Agren, J., Oakley, C. G., Lundemo, S. and Schemske, D. W. (2016), 
+    ‘Adaptive divergence in flowering time among natural populations of 
+    arabidopsis thaliana: estimates of selection and qtl mapping’. Data from: 
+    Dryad Digital Repository. https://doi.org/10.5061/ dryad.77971.
 
 - `agren_preprocess.R`: Preprocess data
 
@@ -49,17 +50,17 @@ Download `RIL_DataForSelectionAnalyses3yrs.xls` and `geno.csv` from
 
 Lowry, D. B., Logan, T. L., Santuari, L., Hardtke, C. S., Richards, J. H., 
     DeRose-Wilson, L. J., McKay, J. K., Sen, S. and Juenger, T. E. (2013), 
-    ‘Expression quantitative trait locus mapping across water availability 
+    'Expression quantitative trait locus mapping across water availability 
     environments reveals contrasting associations with genomic features in 
-    arabidopsis’, The Plant Cell 25(9), 3266–3279.
-	
+    arabidopsis', The Plant Cell 25(9), 3266–3279.
+
 Download the series matrix file from the paper's GEO site
 [https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE42408] 
 and Supplemental Dataset 1b from 
 [http://www.plantcell.org/content/27/4/969/tab-figures-data] [^fn3]. 
 
-[^fn3]: Lovell, J. T., Mullen, J. L., Lowry, D. B., Awole, K., Richards, J. H., 
-    Sen, S., Verslues, P. E., Juenger, T. E. and McKay, J. K. (2015), 
+[^fn3]: Lovell, J. T., Mullen, J. L., Lowry, D. B., Awole, K., Richards, 
+    J. H., Sen, S., Verslues, P. E., Juenger, T. E. and McKay, J. K. (2015), 
     'Exploiting differential gene expression and epistasis to discover 
     candidate genes for drought-associated qtls in arabidopsis thaliana', The 
     Plant Cell 27(4), 969{983.
