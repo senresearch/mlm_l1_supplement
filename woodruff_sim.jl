@@ -55,14 +55,14 @@ Ysim = (Ysim.-mean(Ysim,1))./std(Ysim,1)
 
 
 # Put together RawData object for MLM 
-MLM_data = RawData(Response(Ysim), Predictors(X, Z))
+MLMdata = RawData(Response(Ysim), Predictors(X, Z))
 
 # Array of 50 lambdas
 lambdas = reverse(1.3.^(-37:12))
 
 
 # Run L1-penalized matrix linear model
-results = mlmnet(fista_bt!, MLM_data, lambdas)
+results = mlmnet(fista_bt!, MLMdata, lambdas)
 
 # Flatten coefficients and write results to CSV
 flat_coeffs = coef_2d(results)

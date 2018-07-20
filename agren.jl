@@ -25,14 +25,14 @@ X = convert(Array{Float64}, readtable("./processed/agren_genoprobs.csv",
 Z = hcat([1, -1, 1, -1, 1, -1], eye(6))
 
 # Put together RawData object for MLM 
-MLM_data = RawData(Response(Y), Predictors(X, Z))
+MLMdata = RawData(Response(Y), Predictors(X, Z))
 
 # Array of 50 lambdas
 lambdas = reverse(1.2.^(-32:17))
 
 
 # Run L1-penalized matrix linear model
-results = mlmnet(fista_bt!, MLM_data, lambdas, isZInterceptReg=true)
+results = mlmnet(fista_bt!, MLMdata, lambdas, isZInterceptReg=true)
 
 # Flatten coefficients and write results to CSV
 flat_coeffs = coef_2d(results)
@@ -41,7 +41,7 @@ writecsv("./processed/agren_l1_coeffs.csv", flat_coeffs)
 
 # Run 10-fold cross-validation (on the rows)
 srand(120)
-mlmnet_cv_objs = mlmnet_cv(fista_bt!, MLM_data, lambdas, 10, 1; 
+mlmnet_cv_objs = mlmnet_cv(fista_bt!, MLMdata, lambdas, 10, 1; 
                            isZInterceptReg=true)
 # Look at summary information from cross-validation
 println(mlmnet_cv_summary(mlmnet_cv_objs))

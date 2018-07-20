@@ -98,10 +98,10 @@ end
                     n::Int64=600, m::Int64=600, 
                     p::Int64=200, q::Int64=200, seed::Int64=10, funArgs...)
         # Simulate data
-        MLM_data = simRawData(n, m, p, q, seed)
+        MLMdata = simRawData(n, m, p, q, seed)
         
         # Run L1-penalized matrix linear model
-        return mlmnet(fun, MLM_data, lambdas; funArgs...)
+        return mlmnet(fun, MLMdata, lambdas; funArgs...)
     end
 end
 

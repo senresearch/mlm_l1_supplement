@@ -22,7 +22,7 @@ Z = hcat(repeat([1, -1], outer=npheno),
          kron(eye(npheno), vcat([1 1], [1 -1])))
 
 # Put together RawData object for MLM
-MLM_data = RawData(Response(Y), Predictors(X, Z))
+MLMdata = RawData(Response(Y), Predictors(X, Z))
 
 # Array of 16 lambdas
 lambdas = reverse(1.2.^(-9:6))
@@ -42,21 +42,21 @@ end
 Ysub = Y[:,idx]
 
 # Create the Z matrix for this subset of phenotypes
-npheno_sub = convert(Int64, size(Ysub,2)/2) 
-Zsub = hcat(repeat([1, -1], outer=npheno_sub), 
-            kron(eye(npheno_sub), vcat([1 1], [1 -1])))
+nPhenoSub = convert(Int64, size(Ysub,2)/2) 
+Zsub = hcat(repeat([1, -1], outer=nPhenoSub), 
+            kron(eye(nPhenoSub), vcat([1 1], [1 -1])))
 
 # Put together RawData object for MLM using subsetted data
-MLM_data_sub = RawData(Response(Ysub), Predictors(X, Zsub))
+MLMdataSub = RawData(Response(Ysub), Predictors(X, Zsub))
 
 # Dry run of L1-penalized matrix linear model using subset of phenotypes
-results_sub = mlmnet(fista_bt!, MLM_data_sub, lambdas; 
+results_sub = mlmnet(fista_bt!, MLMdataSub, lambdas; 
                      isZInterceptReg=true)
 
 
 # Run L1-penalized matrix linear model while timing it
 tic()
-results = mlmnet(fista_bt!, MLM_data, lambdas; 
+results = mlmnet(fista_bt!, MLMdata, lambdas; 
                  isZInterceptReg=true)
 elapsed_time = toc()
 

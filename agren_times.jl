@@ -22,7 +22,7 @@ X = convert(Array{Float64}, readtable("./processed/agren_genoprobs.csv",
 Z = hcat([1, -1, 1, -1, 1, -1], eye(6))
 
 # Put together RawData object for MLM 
-MLM_data = RawData(Response(Y), Predictors(X, Z))
+MLMdata = RawData(Response(Y), Predictors(X, Z))
 
 # Array of 50 lambdas
 lambdas = reverse(1.2.^(-32:17))
@@ -36,31 +36,31 @@ agren_times = SharedArray{Float64}(5, reps)
 
 # Get times from running FISTA with backtracking
 @sync @parallel for j in 1:reps
-    agren_times[5,j] = @elapsed mlmnet(fista_bt!, MLM_data, lambdas, 
+    agren_times[5,j] = @elapsed mlmnet(fista_bt!, MLMdata, lambdas, 
                                        isZInterceptReg=true) 
 end
 
 # Get times from running FISTA with fixed step size
 @sync @parallel for j in 1:reps
-    agren_times[4,j] = @elapsed mlmnet(fista!, MLM_data, lambdas, 
+    agren_times[4,j] = @elapsed mlmnet(fista!, MLMdata, lambdas, 
                                        isZInterceptReg=true)
 end
 
 # Get times from running ISTA with fixed step size
 @sync @parallel for j in 1:reps
-    agren_times[3,j] = @elapsed mlmnet(ista!, MLM_data, lambdas, 
+    agren_times[3,j] = @elapsed mlmnet(ista!, MLMdata, lambdas, 
                                        isZInterceptReg=true)
 end
 
 # Get times from running active coordinate descent
 @sync @parallel for j in 1:reps
-    agren_times[2,j] = @elapsed mlmnet(cd_active!, MLM_data, lambdas, 
+    agren_times[2,j] = @elapsed mlmnet(cd_active!, MLMdata, lambdas, 
                                        isZInterceptReg=true)
 end
 
 # Get times from running cyclic coordinate descent
 @sync @parallel for j in 1:reps
-    agren_times[1,j] = @elapsed mlmnet(cd_active!, MLM_data, lambdas, 
+    agren_times[1,j] = @elapsed mlmnet(cd_active!, MLMdata, lambdas, 
                                        isZInterceptReg=true, isRandom=false)
 end
 
