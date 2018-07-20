@@ -12,7 +12,7 @@ distribution. The remaining effects will be set to zero.
 - n = length of 1d effect array. 
 - prop_nonzero = proportion of nonzero effects. Defaults to 0.5.
 - dist = distribution from which the nonzero effects should be simulated. 
-Defaults to Normal(0,2). 
+  Defaults to Normal(0,2). 
 
 # Value
 
@@ -47,7 +47,7 @@ effects.
 - m = number of columns
 - fixed = 2d array of fixed effects (should be n by m)
 - edist = distribution from which the non-fixed effects should be randomly 
-sampled. Defaults to Normal(0,3). 
+  sampled. Defaults to Normal(0,3). 
 
 # Value
 
