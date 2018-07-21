@@ -11,7 +11,7 @@ using JLD
 
 # Read in Y (phenotypes). The first row is a header. The first column is IDs. 
 Y = convert(Array{Float64}, readtable("./processed/agren_phe.csv", 
-			                                separator = ',', header=true)[:,2:7])
+			                          separator = ',', header=true)[:,2:7])
 # Take the log of Y
 Y = log.(Y)
 # Standardize Y 
@@ -25,26 +25,26 @@ X = convert(Array{Float64}, readtable("./processed/agren_genoprobs.csv",
 Z = hcat([1, -1, 1, -1, 1, -1], eye(6))
 
 # Put together RawData object for MLM 
-MLMdata = RawData(Response(Y), Predictors(X, Z))
+MLMData = RawData(Response(Y), Predictors(X, Z))
 
 # Array of 50 lambdas
 lambdas = reverse(1.2.^(-32:17))
 
 
 # Run L1-penalized matrix linear model
-results = mlmnet(fista_bt!, MLMdata, lambdas, isZInterceptReg=true)
+results = mlmnet(fista_bt!, MLMData, lambdas, isZInterceptReg=true)
 
 # Flatten coefficients and write results to CSV
-flat_coeffs = coef_2d(results)
-writecsv("./processed/agren_l1_coeffs.csv", flat_coeffs)
+flatCoeffs = coef_2d(results)
+writecsv("./processed/agren_l1_coeffs.csv", flatCoeffs)
 
 
 # Run 10-fold cross-validation (on the rows)
 srand(120)
-mlmnet_cv_objs = mlmnet_cv(fista_bt!, MLMdata, lambdas, 10, 1; 
-                           isZInterceptReg=true)
+mlmnetCVObjs = mlmnet_cv(fista_bt!, MLMData, lambdas, 10, 1; 
+                         isZInterceptReg=true)
 # Look at summary information from cross-validation
-println(mlmnet_cv_summary(mlmnet_cv_objs))
+println(mlmnet_cv_summary(mlmnetCVObjs))
 
 # Save Mlmnet_cv object
-save("./processed/agren_l1_cv.jld", "mlmnet_cv_objs", mlmnet_cv_objs)
+save("./processed/agren_l1_cv.jld", "mlmnetCVObjs", mlmnetCVObjs)

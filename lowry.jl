@@ -22,42 +22,40 @@ Z = hcat(repeat([1, -1], outer=npheno),
          kron(eye(npheno), vcat([1 1], [1 -1])))
 
 # Put together RawData object for MLM
-MLMdata = RawData(Response(Y), Predictors(X, Z))
+MLMData = RawData(Response(Y), Predictors(X, Z))
 
 # Array of 16 lambdas
 lambdas = reverse(1.2.^(-9:6))
 
 
 # Randomly sample a small number of phenotypes for a dry run
-randsamp = 500 # Number of random phenotypes to sample
+randSamp = 500 # Number of random phenotypes to sample
 srand(10)
-rand_phenos = sort(shuffle(1:npheno)[1:randsamp])
-idx = Array(Int64, 2*randsamp)
-for i in 1:randsamp
-	idx[2*i-1] = rand_phenos[i]*2-1
-	idx[2*i] = rand_phenos[i]*2
+randPhenos = sort(shuffle(1:npheno)[1:randSamp])
+idx = Array(Int64, 2*randSamp)
+for i in 1:randSamp
+	idx[2*i-1] = randPhenos[i]*2-1
+	idx[2*i] = randPhenos[i]*2
 end
 
 # Subset the Y matrix to keep only these phenotypes
-Ysub = Y[:,idx]
+YSub = Y[:,idx]
 
 # Create the Z matrix for this subset of phenotypes
-nPhenoSub = convert(Int64, size(Ysub,2)/2) 
-Zsub = hcat(repeat([1, -1], outer=nPhenoSub), 
+nPhenoSub = convert(Int64, size(YSub,2)/2) 
+ZSub = hcat(repeat([1, -1], outer=nPhenoSub), 
             kron(eye(nPhenoSub), vcat([1 1], [1 -1])))
 
 # Put together RawData object for MLM using subsetted data
-MLMdataSub = RawData(Response(Ysub), Predictors(X, Zsub))
+MLMDataSub = RawData(Response(YSub), Predictors(X, ZSub))
 
 # Dry run of L1-penalized matrix linear model using subset of phenotypes
-results_sub = mlmnet(fista_bt!, MLMdataSub, lambdas; 
-                     isZInterceptReg=true)
+resultsSub = mlmnet(fista_bt!, MLMDataSub, lambdas; isZInterceptReg=true) 
 
 
 # Run L1-penalized matrix linear model while timing it
 tic()
-results = mlmnet(fista_bt!, MLMdata, lambdas; 
-                 isZInterceptReg=true)
+results = mlmnet(fista_bt!, MLMData, lambdas; isZInterceptReg=true) 
 elapsed_time = toc()
 
 # Flatten coefficients and write results to CSV

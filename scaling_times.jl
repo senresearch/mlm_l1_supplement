@@ -98,10 +98,10 @@ end
                     n::Int64=600, m::Int64=600, 
                     p::Int64=200, q::Int64=200, seed::Int64=10, funArgs...)
         # Simulate data
-        MLMdata = simRawData(n, m, p, q, seed)
+        MLMData = simRawData(n, m, p, q, seed)
         
         # Run L1-penalized matrix linear model
-        return mlmnet(fun, MLMdata, lambdas; funArgs...)
+        return mlmnet(fun, MLMData, lambdas; funArgs...)
     end
 end
 
@@ -112,50 +112,50 @@ lambdas = reverse(1.2.^(-32:17))
 reps = 10
 
 # Range of p and q values to try
-pq_vals = collect(200:200:1000)
+pqVals = collect(200:200:1000)
 # Range of n and m values to try 
-nm_vals = collect(400:400:2000)
+nmVals = collect(400:400:2000)
 
 
 # Generate grid of p and q values
-pq_grid = vec(collect(Base.product(pq_vals, pq_vals)))
+pqGrid = vec(collect(Base.product(pqVals, pqVals)))
 # Initialize array for storing times
-pq_times =  SharedArray{Float64}(length(pq_grid), reps)
+pqTimes =  SharedArray{Float64}(length(pqGrid), reps)
 # Hold n and m fixed at 1200 and vary p and q over a grid
 @sync @parallel for j in 1:reps
-    for i in 1:length(pq_grid)
-        pq_times[i,j] = @elapsed runSim(lambdas; n=Int64(mean(nm_vals)), 
-                                        m=Int64(mean(nm_vals)), 
-                                        p=pq_grid[i][1], 
-                                        q=pq_grid[i][2], stepsize=1.0)
+    for i in 1:length(pqGrid)
+        pqTimes[i,j] = @elapsed runSim(lambdas; n=Int64(mean(nmVals)), 
+                                       m=Int64(mean(nmVals)), 
+                                       p=pqGrid[i][1], 
+                                       q=pqGrid[i][2], stepsize=1.0)
     end
 end
 
 # Print and write times to CSV
-println(reshape(mean(pq_times, 2), length(pq_vals), length(pq_vals)))
+println(reshape(mean(pqTimes, 2), length(pqVals), length(pqVals)))
 writecsv("./processed/pq_times.csv",  
           vcat(["p" "q" "mean" transpose(collect(1:reps))], 
-               hcat([x[1] for x in pq_grid], [x[2] for x in pq_grid],
-                    mean(pq_times, 2), pq_times)))
+               hcat([x[1] for x in pqGrid], [x[2] for x in pqGrid],
+                    mean(pqTimes, 2), pqTimes)))
 
 
 # Generate grid of n and m values
-nm_grid = vec(collect(Base.product(nm_vals, nm_vals)))
+nmGrid = vec(collect(Base.product(nmVals, nmVals)))
 # Initialize array for storing times
-nm_times =  SharedArray{Float64}(length(nm_grid), reps)
+nmTimes =  SharedArray{Float64}(length(nmGrid), reps)
 # Hold p and q fixed at 600 and vary n and m over a grid
 @sync @parallel for j in 1:reps
-    for i in 1:length(nm_grid)
-        nm_times[i,j] = @elapsed runSim(lambdas; n=nm_grid[i][1], 
-                                        m=nm_grid[i][2], 
-                                        p=Int64(mean(pq_vals)), 
-                                        q=Int64(mean(pq_vals)), stepsize=1.0)
+    for i in 1:length(nmGrid)
+        nmTimes[i,j] = @elapsed runSim(lambdas; n=nmGrid[i][1], 
+                                       m=nmGrid[i][2], 
+                                       p=Int64(mean(pqVals)), 
+                                       q=Int64(mean(pqVals)), stepsize=1.0)
     end
 end
 
 # Print and write times to CSV
-println(reshape(mean(nm_times, 2), length(nm_vals), length(nm_vals)))
+println(reshape(mean(nmTimes, 2), length(nmVals), length(nmVals)))
 writecsv("./processed/nm_times.csv",  
          vcat(["n" "m" "mean" transpose(collect(1:reps))], 
-              hcat([x[1] for x in nm_grid], [x[2] for x in nm_grid],
-                   mean(nm_times, 2), nm_times)))
+              hcat([x[1] for x in nmGrid], [x[2] for x in nmGrid],
+                   mean(nmTimes, 2), nmTimes)))

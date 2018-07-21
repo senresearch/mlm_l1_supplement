@@ -22,7 +22,7 @@ X = convert(Array{Float64}, readtable("./processed/agren_genoprobs.csv",
 Z = hcat([1, -1, 1, -1, 1, -1], eye(6))
 
 # Put together RawData object for MLM 
-MLMdata = RawData(Response(Y), Predictors(X, Z))
+MLMData = RawData(Response(Y), Predictors(X, Z))
 
 # Array of 50 lambdas
 lambdas = reverse(1.2.^(-32:17))
@@ -31,43 +31,43 @@ lambdas = reverse(1.2.^(-32:17))
 # Number of replicates
 reps = 10
 # Initialize array for storing times
-agren_times = SharedArray{Float64}(5, reps)
+agrenTimes = SharedArray{Float64}(5, reps)
 
 
 # Get times from running FISTA with backtracking
 @sync @parallel for j in 1:reps
-    agren_times[5,j] = @elapsed mlmnet(fista_bt!, MLMdata, lambdas, 
-                                       isZInterceptReg=true) 
+    agrenTimes[5,j] = @elapsed mlmnet(fista_bt!, MLMData, lambdas, 
+                                      isZInterceptReg=true) 
 end
 
 # Get times from running FISTA with fixed step size
 @sync @parallel for j in 1:reps
-    agren_times[4,j] = @elapsed mlmnet(fista!, MLMdata, lambdas, 
-                                       isZInterceptReg=true)
+    agrenTimes[4,j] = @elapsed mlmnet(fista!, MLMData, lambdas, 
+                                      isZInterceptReg=true)
 end
 
 # Get times from running ISTA with fixed step size
 @sync @parallel for j in 1:reps
-    agren_times[3,j] = @elapsed mlmnet(ista!, MLMdata, lambdas, 
-                                       isZInterceptReg=true)
+    agrenTimes[3,j] = @elapsed mlmnet(ista!, MLMData, lambdas, 
+                                      isZInterceptReg=true)
 end
 
 # Get times from running active coordinate descent
 @sync @parallel for j in 1:reps
-    agren_times[2,j] = @elapsed mlmnet(cd_active!, MLMdata, lambdas, 
-                                       isZInterceptReg=true)
+    agrenTimes[2,j] = @elapsed mlmnet(cd_active!, MLMData, lambdas, 
+                                      isZInterceptReg=true)
 end
 
 # Get times from running cyclic coordinate descent
 @sync @parallel for j in 1:reps
-    agren_times[1,j] = @elapsed mlmnet(cd_active!, MLMdata, lambdas, 
-                                       isZInterceptReg=true, isRandom=false)
+    agrenTimes[1,j] = @elapsed mlmnet(cd_active!, MLMData, lambdas, 
+                                      isZInterceptReg=true, isRandom=false)
 end
 
 
 # Print and write times to CSV
-println(mean(agren_times, 2))
+println(mean(agrenTimes, 2))
 writecsv("./processed/agren_times.csv",  
          vcat(["method" "mean" transpose(collect(1:reps))], 
               hcat(["cd", "cd_active", "ista", "fista", "fista_bt"], 
-                   mean(agren_times, 2), agren_times)))
+                   mean(agrenTimes, 2), agrenTimes)))
