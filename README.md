@@ -77,7 +77,3 @@ are provided.
 - `lowry.R`: Reproduce plot used in manuscript
 
 - `lowry_multipleqtl.R`: Run multiple QTL analysis on individual phenotypes
-
----
-
-`make_effect.jl` contains a helper functions for simulating data. 
