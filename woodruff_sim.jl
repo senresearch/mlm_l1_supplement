@@ -4,9 +4,11 @@ using matrixLMnet
 
 # DataFrames 
 using DataFrames
+# Distributions
+using Distributions
 
 # Functions for simulating data
-include("sim_funs.jl")
+include("make_effect.jl")
 
 
 # Number of chemicals 
@@ -43,13 +45,13 @@ chemEff = repeat(make_effect(nChem, 1/4), outer=nTiss)
 # Simulate tissue main effects, from Normal(0,2). 
 tissEff = repeat(make_effect(nTiss, 1.0), inner=nChem) 
 # Simulate interaction effects, 1/8 nonzero from Normal(0,2). 
-interactions = reshape(make_effect((p)*(q), 1/8), p, q) 
+interactions = reshape(make_effect(p*q, 1/8), p, q) 
 
 # Generate the fixed effects
 fixedEff = X*demEff .+ transpose(chemEff .+ tissEff) .+ 
             X*interactions*transpose(Z) 
 # Simulate Y using fixed effects 
-YSim = make_Y(n, m, fixedEff)
+YSim = fixedEff + rand(Normal(0,3), n, m) 
 # Standardize Y
 YSim = (YSim.-mean(YSim,1))./std(YSim,1) 
 

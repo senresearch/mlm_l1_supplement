@@ -80,4 +80,4 @@ are provided.
 
 ---
 
-`sim_funs.jl` contains helper functions for simulating data. 
+`make_effect.jl` contains a helper functions for simulating data. 
