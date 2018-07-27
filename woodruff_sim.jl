@@ -9,7 +9,7 @@ using Distributions
 
 
 """
-    sim_effect(n, propNonzero, dist)
+    sim_effect(n, propNonzero; eDist)
 
 Simulate effects with a given proportion of nonzero effects drawn from some 
 distribution. The remaining effects will be set to zero.
@@ -17,18 +17,21 @@ distribution. The remaining effects will be set to zero.
 # Arguments 
 
 - n = length of 1d effect array. 
-- prop_nonzero = proportion of nonzero effects. Defaults to 0.5.
-- dist = distribution from which the nonzero effects should be simulated. 
-  Defaults to Normal(0,2). 
+- propNonzero = proportion of nonzero effects. Defaults to `1/2`.
+
+# Keyword arguments
+
+- eDist = distribution from which the nonzero effects should be simulated. 
+  Defaults to `Normal(0,2)`. 
 
 # Value
 
-1d array of effects 
+1d array of floats 
 
 """
 
-function sim_effect(n::Int64, propNonzero::Float64=0.5, 
-                     dist::Distribution=Normal(0,2))
+function sim_effect(n::Int64, propNonzero::Float64=1/2, 
+                    eDist::Distribution=Normal(0,2))
     # Initialize vector for storing effects 
     effect = zeros(n)
     
@@ -36,7 +39,7 @@ function sim_effect(n::Int64, propNonzero::Float64=0.5,
     idx = sample(1:n, convert(Integer, round(n*propNonzero)); replace=false)
     
     # Simulate and assign nonzero effects  
-    effect[idx] = rand(dist, convert(Integer, round(n*propNonzero)))
+    effect[idx] = rand(eDist, convert(Integer, round(n*propNonzero)))
     
     return effect
 end
