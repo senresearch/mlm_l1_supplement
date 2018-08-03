@@ -9,11 +9,11 @@ using DataFrames
 # Read in X (genotype probabilities) with cytoplasm contrast. 
 # The first row is a header. 
 X = convert(Array{Float64}, readtable("./processed/lowry_cyto_genoprobs.csv", 
-                                      separator = ',', header=true))
+                                      separator=',', header=true))
 
 # Read in Y (phenotypes). The first row is a header. 
 Y = convert(Array{Float64}, readtable("./processed/lowry_pheno.csv", 
-                                      separator = ',', header=true))
+                                      separator=',', header=true))
 
 # Number of phenotypes 
 npheno = convert(Int64, size(Y,2)/2) 

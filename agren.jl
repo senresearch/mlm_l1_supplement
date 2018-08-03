@@ -11,7 +11,7 @@ using JLD
 
 # Read in Y (phenotypes). The first row is a header. The first column is IDs. 
 Y = convert(Array{Float64}, readtable("./processed/agren_phe.csv", 
-			                          separator = ',', header=true)[:,2:7])
+			                          separator=',', header=true)[:,2:end])
 # Take the log of Y
 Y = log.(Y)
 # Standardize Y 
@@ -19,7 +19,7 @@ Y = (Y.-mean(Y,1))./std(Y,1)
 
 # Read in X (genotype probabilities). The first row is a header. 
 X = convert(Array{Float64}, readtable("./processed/agren_genoprobs.csv", 
-                                      separator = ',', header=true))
+                                      separator=',', header=true))
 
 # Create Z matrix. The first column indicates country (Italy/Sweden). 
 Z = hcat([1, -1, 1, -1, 1, -1], eye(6))
