@@ -4,7 +4,7 @@ paper.
 ---
 
 `scaling_times.jl` provides the code to examine how runtime increases with 
-dimension size in simulated data. 
+dimension size in simulated data
 
 ---
 

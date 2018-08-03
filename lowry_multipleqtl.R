@@ -1,23 +1,23 @@
 library(qtl) # mapping quantitative trait loci
 
 # Load cross
-load("./processed/cross.ge.rda")
+load("./processed/cross_ge.rda")
 
 # Impute missing genotypes
-cross.ge = fill.geno(cross.ge)
+crossGE = fill.geno(crossGE)
 # Calculate conditional genotype probabilities
-cross.ge.genoprobs = calc.genoprob(cross.ge, step=0)
+crossGEGenoprobs = calc.genoprob(crossGE, step=0)
 
 # Subset the individuals with the "wet" treatment 
-cross.wet = subset(cross.ge.genoprobs, 
-                   ind=which(cross.ge.genoprobs$pheno$treatment=="wet"))
+crossWet = subset(crossGEGenoprobs, 
+                  ind=which(crossGEGenoprobs$pheno$treatment=="wet"))
 # Drop code, id, cyto, and treatment from phenotypes
-cross.wet$pheno = cross.wet$pheno[,-(1:4)]
+crossWet$pheno = crossWet$pheno[,-(1:4)]
 
 # Calculate LOD penalties from scantwo permutations
 set.seed(2)
-cross.wet.perms.2dim = scantwo(cross.wet, method="hk", n.perm=100)
-cross.wet.penalties = calc.penalties(cross.wet.perms.2dim)
+crossWetPerms2Dim = scantwo(crossWet, method="hk", n.perm=100)
+crossWetPenalties = calc.penalties(crossWetPerms2Dim)
 
 # Function to run multiple QTL analysis (`stepwiseqtl`) on individual phenotypes
 # Only allows additive QTL models (no pairwise interactions)
@@ -34,27 +34,27 @@ loop_stepwiseqtl = function(cross, pheno.idx, ...){
 
 # Sample 100 random phenotypes
 set.seed(100)
-pheno.idx = sample(1:ncol(cross.wet$pheno), 100)
+pheno.idx = sample(1:ncol(crossWet$pheno), 100)
 
 reps = 10
 
 # Runtime for 100 phenotype columns, max.qtl = 3 
 # (does not count time to do scantwo permutations to get LOD penalties)
-times_maxqtl3 = replicate(reps, system.time(
-  loop_stepwiseqtl(cross.wet, pheno.idx, max.qtl=3,
-                   penalties = cross.wet.penalties))[3])
+timesMaxQTL3 = replicate(reps, system.time(
+  loop_stepwiseqtl(crossWet, pheno.idx, max.qtl=3,
+                   penalties = crossWetPenalties))[3])
 
 # Runtime for 100 phenotype columns, max.qtl = 10 (default value)
 # (does not count time to do scantwo permutations to get LOD penalties)
-times_maxqtl10 = replicate(reps, system.time(
-  loop_stepwiseqtl(cross.wet, pheno.idx, max.qtl=10,
-                   penalties = cross.wet.penalties))[3])
+timesMaxQTL10 = replicate(reps, system.time(
+  loop_stepwiseqtl(crossWet, pheno.idx, max.qtl=10,
+                   penalties = crossWetPenalties))[3])
 
 # Write times to CSV
-times_out = rbind("max.qtl.3"=times_maxqtl3, "max.qtl.10"=times_maxqtl10)
+times_out = rbind("max.qtl.3"=timesMaxQTL3, "max.qtl.10"=timesMaxQTL10)
 times_out = cbind(means=rowMeans(times_out), times_out)
 write.csv(times_out, file="./processed/lowry_rqtl_100pheno_times.csv")
 
 # Estimate based on the runtime for 100 phenotypes how much time it would 
 # take to run stepwiseqtl on all the phenotypes
-ncol(cross.wet$pheno)*2 * times_out$means/100/3600
+ncol(crossWet$pheno)*2 * times_out$means/100/3600
