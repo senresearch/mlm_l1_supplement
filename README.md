@@ -1,17 +1,17 @@
-# Fast algorithms for fitting L$_1$-penalized linear models to matrix-valued structured high-throughput data
+# Fast algorithms for fitting L1-penalized linear models to matrix-valued structured high-throughput data
 
 This repository contains code and data that can be used to reproduce
 the results presented in the paper.
 
 ## Runtime and data size
 
-Simulated data inspired by the structure of the following paper.
-
 ---
 Woodruff, T. J., Zota, A. R. and Schwartz, J. M. (2011),
 'Environmental chemicals in pregnant women in the United States:
 NHANES 2003-2004', Environmental health perspectives 119(6), 878.
 ---
+
+Simulated data inspired by the structure of the above paper.
 
 - [`scaling_times.jl`](scaling_times.jl) provides the code to examine
 how runtime increases with dimension size in simulated data
