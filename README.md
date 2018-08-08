@@ -5,6 +5,11 @@ the results presented in the paper.
 
 ## Runtime and data size
 
+Simulated data 
+
+- [`scaling_times.jl`](code/scaling_times.jl) provides the code to examine
+how runtime increases with dimension size in simulated data
+
 ---
 Woodruff, T. J., Zota, A. R. and Schwartz, J. M. (2011),
 'Environmental chemicals in pregnant women in the United States:
@@ -13,8 +18,6 @@ NHANES 2003-2004', Environmental health perspectives 119(6), 878.
 
 Simulated data inspired by the structure of the above paper.
 
-- [`scaling_times.jl`](code/scaling_times.jl) provides the code to examine
-how runtime increases with dimension size in simulated data
 - [`woodruff_sim.jl`](code/woodruff_sim.jl): runs L1-penalized matrix linear model
 - [`woodruff_sim.R`](code/woodruff_sim.R): reproduces plot used in manuscript
 
