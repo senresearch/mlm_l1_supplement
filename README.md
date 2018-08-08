@@ -1,9 +1,11 @@
-Repository for storing code and data to include in the supplement for the L1 
-paper. 
+# Fast algorithms for fitting L$_1$-penalized linear models to matrix-valued structured high-throughput data
 
----
+This repository contains code and data that can be used to reproduce
+the results presented in the paper.
 
-`scaling_times.jl` provides the code to examine how runtime increases with 
+## File guide
+
+- [`scaling_times.jl`](scaling_times.jl) provides the code to examine how runtime increases with 
 dimension size in simulated data
 
 ---
