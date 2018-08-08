@@ -13,10 +13,10 @@ NHANES 2003-2004', Environmental health perspectives 119(6), 878.
 
 Simulated data inspired by the structure of the above paper.
 
-- [`scaling_times.jl`](scaling_times.jl) provides the code to examine
+- [`scaling_times.jl`](code/scaling_times.jl) provides the code to examine
 how runtime increases with dimension size in simulated data
-- [`woodruff_sim.jl`](woodruff_sim.jl): runs L1-penalized matrix linear model
-- [`woodruff_sim.R`](woodruff_sim.R): reproduces plot used in manuscript
+- [`woodruff_sim.jl`](code/woodruff_sim.jl): runs L1-penalized matrix linear model
+- [`woodruff_sim.R`](code/woodruff_sim.R): reproduces plot used in manuscript
 
 ## Agren data
 
@@ -41,10 +41,10 @@ Download `RIL_DataForSelectionAnalyses3yrs.xls` and `geno.csv` from
     arabidopsis thaliana: estimates of selection and qtl mapping’. Data from: 
     Dryad Digital Repository. https://doi.org/10.5061/ dryad.77971.
 
-- [`agren_preprocess.R`](agren_preprocess.R): preprocess data
-- [`agren.jl`](agren.jl): run L1-penalized matrix linear model
-- [`agren.R`](agren.R): reproduce plot used in manuscript
-- [`agren_times.jl`](agren_times.jl): compare runtimes for different
+- [`agren_preprocess.R`](code/agren_preprocess.R): preprocess data
+- [`agren.jl`](code/agren.jl): run L1-penalized matrix linear model
+- [`agren.R`](code/agren.R): reproduce plot used in manuscript
+- [`agren_times.jl`](code/agren_times.jl): compare runtimes for different
   L1-penalized algorithms
 
 ## Lowry data
@@ -73,8 +73,8 @@ Download annotation file here:
 and the files `TKrils_Marker_PhysPos.csv` and `dd2014_cytocovar.csv`,
 which are provided.
 
-- [`lowry_preprocess.R`](lowry_preprocess.R): preprocess data
-- [`lowry.jl`](lowry.jl): run L1-penalized matrix linear model
-- [`lowry.R`](lowry.R): reproduce plot used in manuscript
-- [`lowry_multipleqtl.R`](lowry_multipleqtl.R): run multiple QTL
+- [`lowry_preprocess.R`](code/lowry_preprocess.R): preprocess data
+- [`lowry.jl`](code/lowry.jl): run L1-penalized matrix linear model
+- [`lowry.R`](code/lowry.R): reproduce plot used in manuscript
+- [`lowry_multipleqtl.R`](code/lowry_multipleqtl.R): run multiple QTL
   analysis on individual phenotypes
