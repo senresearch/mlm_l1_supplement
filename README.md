@@ -68,10 +68,11 @@ and Supplemental Dataset 1b from
     Plant Cell 27(4), 969{983.
 
 Download annotation file here:  
-[https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_gff3/TAIR10_GFF3_genes.gff](https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_gff3/TAIR10_GFF3_genes.gff)
-and the files
-[`TKrils_Marker_PhysPos.csv`](data/TKrils_Marker_PhysPos.csv) and
-[`dd2014_cytocovar.csv`](data/dd2014_cytocovar.csv), which are
+[https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_gff3/TAIR10_GFF3_genes.gff](https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_gff3/TAIR10_GFF3_genes.gff) .
+
+The files for the marker positions, 
+[`TKrils_Marker_PhysPos.csv`](data/TKrils_Marker_PhysPos.csv), and the key 
+for the TxK RIL IDs, [`dd2014_cytocovar.csv`](data/dd2014_cytocovar.csv), are 
 provided.
 
 - [`lowry_preprocess.R`](code/lowry_preprocess.R): preprocess data

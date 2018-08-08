@@ -1,5 +1,5 @@
 # L1-penalized matrix linear models
-@everywhere include("../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
+@everywhere include("../../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
 @everywhere using matrixLMnet
 
 # DataFrames 
@@ -7,7 +7,7 @@ using DataFrames
 
 
 # Read in Y (phenotypes). The first row is a header. The first column is IDs. 
-Y = convert(Array{Float64}, readtable("./processed/agren_phe.csv", 
+Y = convert(Array{Float64}, readtable("../processed/agren_phe.csv", 
 			                          separator=',', header=true)[:,2:end])
 # Take the log of Y
 Y = log.(Y)
@@ -15,7 +15,7 @@ Y = log.(Y)
 Y = (Y.-mean(Y,1))./std(Y,1) 
 
 # Read in X (genotype probabilities). The first row is a header. 
-X = convert(Array{Float64}, readtable("./processed/agren_genoprobs.csv", 
+X = convert(Array{Float64}, readtable("../processed/agren_genoprobs.csv", 
                                       separator=',', header=true))
 
 # Create Z matrix. The first column indicates country (Italy/Sweden). 
@@ -67,7 +67,7 @@ end
 
 # Print and write times to CSV
 println(mean(agrenTimes, 2))
-writecsv("./processed/agren_times.csv",  
+writecsv("../processed/agren_times.csv",  
          vcat(["method" "mean" transpose(collect(1:reps))], 
               hcat(["cd", "cd_active", "ista", "fista", "fista_bt"], 
                    mean(agrenTimes, 2), agrenTimes)))

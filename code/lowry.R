@@ -1,7 +1,7 @@
 library(qtl) # mapping quantitative trait loci
 
 # Load cross
-load("./processed/cross_ge.rda")
+load("../processed/cross_ge.rda")
 
 # Impute missing genotypes
 crossGE = fill.geno(crossGE)
@@ -14,7 +14,7 @@ crossGEGenoprobs = calc.genoprob(crossGE, step=0)
 
 # Load the Arabidopsis annotation file TAIR10_GFF3_genes.gff 
 # https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_gff3/TAIR10_GFF3_genes.gff
-genePos = read.delim("./processed/TAIR10_GFF3_genes.gff", 
+genePos = read.delim("../data/TAIR10_GFF3_genes.gff", 
                      header=F, comment.char="#")
 
 # Keep only gene rows and relevant columns
@@ -57,7 +57,7 @@ genePos = merge(phenoIDs, genePos, by="ids", all.x=TRUE, all.y=FALSE)
 genePos = genePos[,1:4]
 
 # Write the list of genetic positions to CSV
-write.csv(genePos, "./processed/lowry_gene_pos.csv", row.names = FALSE)
+write.csv(genePos, "../processed/lowry_gene_pos.csv", row.names = FALSE)
 
 ###############################################################################
 
@@ -65,11 +65,11 @@ write.csv(genePos, "./processed/lowry_gene_pos.csv", row.names = FALSE)
 
 # Read in list of gene positions if it hasn't already been loaded
 if (!exists("genePos")) {
-  genePos = read.csv("./processed/lowry_gene_pos.csv", header=TRUE)
+  genePos = read.csv("../processed/lowry_gene_pos.csv", header=TRUE)
 }
 
 # TKrils_Marker_PhysPos.csv contains physical positions (provided)
-TKrils = read.csv("./processed/TKrils_Marker_PhysPos.csv", header=TRUE)
+TKrils = read.csv("../data/TKrils_Marker_PhysPos.csv", header=TRUE)
 # Split by chromosome
 TKrilsChr = lapply(1:5, function(i){TKrils[TKrils$Chr==i, ]}) 
 
@@ -101,7 +101,7 @@ cumSumTranscM2 = rep(cumSumTranscM, each=2)
 
 # Save cM positions
 save(chrcM, cumSumMarkerscM, cumSumTranscM, cumSumTranscM2, 
-     file="./processed/lowry_plot_data.rData")
+     file="../processed/lowry_plot_data.rData")
 
 ###############################################################################
 
@@ -110,11 +110,11 @@ save(chrcM, cumSumMarkerscM, cumSumTranscM, cumSumTranscM2,
 # Load physical distances if they haven't already been loaded
 if (!exists("chrcM") || !exists("cumSumMarkerscM") 
     || !exists("cumSumTranscM2")) {
-  load("./processed/lowry_plot_data.rData")
+  load("../processed/lowry_plot_data.rData")
 }
 
 # Read in L1 coefficient estimates
-lowryL1Coeffs = read.csv("./processed/lowry_l1_coeffs.csv", header=FALSE)
+lowryL1Coeffs = read.csv("../processed/lowry_l1_coeffs.csv", header=FALSE)
 # Pull out coefficients corresponding to lambda of interest
 lambda = 4 # 4th lambda has value 1.728
 coeffs = matrix(lowryL1Coeffs[,lambda], 452, 51326)
@@ -143,7 +143,7 @@ inter = cbind(cumSumMarkerscM[idxInter[,1]],
               cumSumTranscM2[idxInter[,2]])
 
 
-png("./pictures/lowry_gene_vs_qtl_pos_lambda1.7.png", width=380, height=380)
+png("../pictures/lowry_gene_vs_qtl_pos_lambda1.7.png", width=380, height=380)
 par(mar=c(4.1,4.1,1.1,1.1))
 
 # Main effects
@@ -160,4 +160,5 @@ invisible(sapply(chrcM[2:5], function(x){abline(h=x)}))
 # Label chromosomes
 mtext(side=1, text=chrNames, line=2)
 mtext(side=2, text=chrNames, line=2) 
+
 dev.off()

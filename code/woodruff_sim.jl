@@ -1,5 +1,5 @@
 # L1-penalized matrix linear models
-include("../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
+include("../../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
 using matrixLMnet
 
 # DataFrames 
@@ -102,9 +102,9 @@ results = mlmnet(fista_bt!, MLMSimData, lambdas)
 
 # Flatten coefficients and write results to CSV
 flat_coeffs = coef_2d(results)
-writecsv("./processed/woodruff_sim_l1_coeffs.csv", flat_coeffs)
+writecsv("../processed/woodruff_sim_l1_coeffs.csv", flat_coeffs)
 
 # Write simualted X, Y, and interactions to CSV
-writecsv("./processed/woodruff_sim_Y.csv", YSim)
-writecsv("./processed/woodruff_sim_X.csv", X)
-writecsv("./processed/woodruff_sim_interactions.csv", interactions)
+writecsv("../processed/woodruff_sim_Y.csv", YSim)
+writecsv("../processed/woodruff_sim_X.csv", X)
+writecsv("../processed/woodruff_sim_interactions.csv", interactions)

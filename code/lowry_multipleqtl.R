@@ -1,7 +1,7 @@
 library(qtl) # mapping quantitative trait loci
 
 # Load cross
-load("./processed/cross_ge.rda")
+load("../processed/cross_ge.rda")
 
 # Impute missing genotypes
 crossGE = fill.geno(crossGE)
@@ -53,7 +53,7 @@ timesMaxQTL10 = replicate(reps, system.time(
 # Write times to CSV
 times_out = rbind("max.qtl.3"=timesMaxQTL3, "max.qtl.10"=timesMaxQTL10)
 times_out = cbind(means=rowMeans(times_out), times_out)
-write.csv(times_out, file="./processed/lowry_rqtl_100pheno_times.csv")
+write.csv(times_out, file="../processed/lowry_rqtl_100pheno_times.csv")
 
 # Estimate based on the runtime for 100 phenotypes how much time it would 
 # take to run stepwiseqtl on all the phenotypes

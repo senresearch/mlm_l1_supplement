@@ -2,19 +2,19 @@ library(qtl) # mapping quantitative trait loci
 library(data.table) # quickly read in tables
 
 # Table that includes IDs and cytoplasm for markers
-ids = read.csv("./processed/dd2014_cytocovar.csv") 
+ids = read.csv("../data/dd2014_cytocovar.csv") 
 # Create indicator for cyto
 ids$cyto = ifelse(ids$cyto.num==1, 0, 1)
 
 # Genotype matrix, downloaded from Supplemental Table 1b in
 # http://www.plantcell.org/content/27/4/969/tab-figures-data
-# (as of July 2018, needs to be updated to include all the markers)
-geno = fread("./processed/TKrils_map55.csv")
+# (as of August 2018, needs to be updated to include all the markers)
+geno = fread("../data/TPC2015-00122-RAR1_Supplemental_Data_set_1b.csv")
 
 # Series matrix file, downloaded from 
 # https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE42408
 # Contains phenotypes and some other information about the experiment
-SMF = fread("./processed/GSE42408_series_matrix.txt", header=FALSE, fill=TRUE)
+SMF = fread("../data/GSE42408_series_matrix.txt", header=FALSE, fill=TRUE)
 # Pull out the sample title column, which includes the line markers and 
 # treatments
 sampleTitle = strsplit(as.character(SMF[37,-1]), " ")
@@ -37,18 +37,18 @@ out = merge(pheno, geno, by="id", all.x=TRUE)
 blanks = matrix(NA, 2, ncol(pheno))
 colnames(blanks) = colnames(pheno)
 out = rbind(cbind(blanks, geno[1:2,-1]), out)
-write.csv(out, "./processed/lowry_raw.csv", row.names = FALSE, na="")
+write.csv(out, "../processed/lowry_raw.csv", row.names = FALSE, na="")
 
 # Read in the data as a cross object
-crossGE = read.cross("csv", file="./processed/lowry_raw.csv", 
+crossGE = read.cross("csv", file="../processed/lowry_raw.csv", 
                      genotypes=c("a","b"))
 class(crossGE)[1] = "riself"
-save(crossGE, file="./processed/cross_ge.rda")
+save(crossGE, file="../processed/cross_ge.rda")
 
 ###############################################################################
 
 if(!exists("crossGE")){
-  load("./processed/cross_ge.rda")
+  load("../processed/cross_ge.rda")
 }
 
 # Impute missing genotypes
@@ -93,7 +93,7 @@ cyto = crossGE$pheno$cyto[crossGE$pheno$treatment == "dry"]
 cytoGenoprobs = cbind(cyto, genoprobs)
 
 # Write the genotype probabilities and the cyto contrast to CSV
-write.csv(cytoGenoprobs, "./processed/lowry_cyto_genoprobs.csv", 
+write.csv(cytoGenoprobs, "../processed/lowry_cyto_genoprobs.csv", 
           row.names = FALSE)
 # Write the phenotypes to CSV
-write.csv(pheno, "./processed/lowry_pheno.csv", row.names = FALSE)
+write.csv(pheno, "../processed/lowry_pheno.csv", row.names = FALSE)

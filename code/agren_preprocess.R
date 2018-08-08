@@ -2,7 +2,7 @@ library(qtl) # mapping quantitative trait loci
 
 # Read in the data as a cross object
 # Downloaded from https://datadryad.org/resource/doi:10.5061/dryad.77971
-agren = read.cross("csvs",dir="./processed", 
+agren = read.cross("csvs",dir="../data", 
                genfile="geno.csv", 
                phefile= "RIL_DataForSelectionAnalyses3yrs2.csv",
                genotypes=c("a","b"))
@@ -16,7 +16,7 @@ agren = subset(agren, ind=!apply(is.na(agren$pheno[,-1]), 1, any))
 agren = fill.geno(agren)
 
 # Write the genotypes and phenotypes to CSVs
-write.cross(agren, "csvs", "./processed/agren")
+write.cross(agren, "csvs", "../processed/agren")
 
 # Calculate conditional genotype probabilities
 agrenGenoprobs = calc.genoprob(agren, step=1) 
@@ -31,4 +31,4 @@ genoprobs[genoprobs > 0.5] = 1
 genoprobs[genoprobs <= 0.5] = 0
 
 # Write the genotype probabilities to CSV
-write.csv(genoprobs, "./processed/agren_genoprobs.csv", row.names = FALSE)
+write.csv(genoprobs, "../processed/agren_genoprobs.csv", row.names = FALSE)

@@ -7,15 +7,15 @@ nChem = 100
 nTiss = 10
 
 # Read in simulated X matrix of demographics
-X = read.csv("./processed/woodruff_sim_X.csv", header=FALSE)
+X = read.csv("../processed/woodruff_sim_X.csv", header=FALSE)
 # Read in simulated Y matrix 
-Y = read.csv("./processed/woodruff_sim_Y.csv", header=FALSE)
+Y = read.csv("../processed/woodruff_sim_Y.csv", header=FALSE)
 # Read in simulated interactions
-interactions = read.csv("./processed/woodruff_sim_interactions.csv", 
+interactions = read.csv("../processed/woodruff_sim_interactions.csv", 
                         header=FALSE)
 
 # Read in L1 coefficient estimates
-woodruffSimL1Coeffs = read.csv("./processed/woodruff_sim_l1_coeffs.csv", 
+woodruffSimL1Coeffs = read.csv("../processed/woodruff_sim_l1_coeffs.csv", 
                                header=FALSE)
 # Reshape the coefficients so that there is a separate matrix for each lambda
 coeffsList = lapply(1:length(woodruffSimL1Coeffs), function(j){
@@ -105,7 +105,7 @@ AUCs = c(MESS::auc(c(1,mlmL1FPR,0), c(1,mlmL1TPR,0), type="spline"),
            auc(c(0,lmChemFPR,1), c(0,lmChemTPR[,j],1))}))
 
 
-png("./pictures/woodruff_sim_ROC_chem.png", width=380, height=380)
+png("../pictures/woodruff_sim_ROC_chem.png", width=380, height=380)
 par(mar=c(4.1,4.1,1.1,1.1))
 
 # L1-penalized matrix linear models

@@ -1,9 +1,6 @@
 # L1-penalized matrix linear models
-@everywhere include("../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
+@everywhere include("../../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
 @everywhere using matrixLMnet
-
-# Functions for simulating data
-@everywhere include("sim_funs.jl")
 
 
 @everywhere begin
@@ -133,7 +130,7 @@ end
 
 # Print and write times to CSV
 println(reshape(mean(pqTimes, 2), length(pqVals), length(pqVals)))
-writecsv("./processed/pq_times.csv",  
+writecsv("../processed/pq_times.csv",  
           vcat(["p" "q" "mean" transpose(collect(1:reps))], 
                hcat([x[1] for x in pqGrid], [x[2] for x in pqGrid],
                     mean(pqTimes, 2), pqTimes)))
@@ -155,7 +152,7 @@ end
 
 # Print and write times to CSV
 println(reshape(mean(nmTimes, 2), length(nmVals), length(nmVals)))
-writecsv("./processed/nm_times.csv",  
+writecsv("../processed/nm_times.csv",  
          vcat(["n" "m" "mean" transpose(collect(1:reps))], 
               hcat([x[1] for x in nmGrid], [x[2] for x in nmGrid],
                    mean(nmTimes, 2), nmTimes)))

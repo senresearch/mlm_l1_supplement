@@ -1,5 +1,5 @@
 # L1-penalized matrix linear models
-include("../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
+include("../../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
 using matrixLMnet
 
 # DataFrames 
@@ -8,11 +8,11 @@ using DataFrames
 
 # Read in X (genotype probabilities) with cytoplasm contrast. 
 # The first row is a header. 
-X = convert(Array{Float64}, readtable("./processed/lowry_cyto_genoprobs.csv", 
+X = convert(Array{Float64}, readtable("../processed/lowry_cyto_genoprobs.csv", 
                                       separator=',', header=true))
 
 # Read in Y (phenotypes). The first row is a header. 
-Y = convert(Array{Float64}, readtable("./processed/lowry_pheno.csv", 
+Y = convert(Array{Float64}, readtable("../processed/lowry_pheno.csv", 
                                       separator=',', header=true))
 
 # Number of phenotypes 
@@ -56,12 +56,12 @@ resultsSub = mlmnet(fista_bt!, MLMDataSub, lambdas; isZInterceptReg=true)
 # Run L1-penalized matrix linear model while timing it
 tic()
 results = mlmnet(fista_bt!, MLMData, lambdas; isZInterceptReg=true) 
-elapsed_time = toc()
+elapsedTime = toc()
 
 # Flatten coefficients and write results to CSV
 flat_coeffs = coef_2d(results)
-writecsv("./processed/lowry_l1_coeffs.csv", flat_coeffs)
+writecsv("../processed/lowry_l1_coeffs.csv", flat_coeffs)
 
 # Print and write time to CSV
-println(elapsed_time)
-writecsv("./processed/lowry_time.csv", elapsed_time)
+println(elapsedTime)
+writecsv("../processed/lowry_time.csv", elapsedTime)
