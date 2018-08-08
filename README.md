@@ -20,7 +20,6 @@ how runtime increases with dimension size in simulated data
 
 ## Agren data
 
-
 ---
 Agren, J., Oakley, C. G., McKay, J. K., Lovell, J. T. and Schemske,
 D. W.  (2013), ‘Genetic mapping of adaptation reveals fitness
@@ -70,8 +69,10 @@ and Supplemental Dataset 1b from
 
 Download annotation file here:  
 [https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_gff3/TAIR10_GFF3_genes.gff](https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_gff3/TAIR10_GFF3_genes.gff)
-and the files `TKrils_Marker_PhysPos.csv` and `dd2014_cytocovar.csv`,
-which are provided.
+and the files
+[`TKrils_Marker_PhysPos.csv`](data/TKrils_Marker_PhysPos.csv) and
+[`dd2014_cytocovar.csv`](data/dd2014_cytocovar.csv), which are
+provided.
 
 - [`lowry_preprocess.R`](code/lowry_preprocess.R): preprocess data
 - [`lowry.jl`](code/lowry.jl): run L1-penalized matrix linear model
