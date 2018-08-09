@@ -3,12 +3,12 @@
 This repository contains code and data that can be used to reproduce
 the results presented in the paper.
 
-## Runtime and data size
-
-Simulated data 
+## Simulations examining dependence of runtimes on data size
 
 - [`scaling_times.jl`](code/scaling_times.jl) provides the code to examine
 how runtime increases with dimension size in simulated data
+
+## Simulations inspired by environmental screening data (Woodruff)
 
 ---
 Woodruff, T. J., Zota, A. R. and Schwartz, J. M. (2011),
@@ -21,7 +21,7 @@ Simulated data inspired by the structure of the above paper.
 - [`woodruff_sim.jl`](code/woodruff_sim.jl): runs L1-penalized matrix linear model
 - [`woodruff_sim.R`](code/woodruff_sim.R): reproduces plot used in manuscript
 
-## Agren data
+## Arabidopsis fitness adaptation QTL data (Agren)
 
 ---
 Agren, J., Oakley, C. G., McKay, J. K., Lovell, J. T. and Schemske,
@@ -49,7 +49,7 @@ Download `RIL_DataForSelectionAnalyses3yrs.xls` and `geno.csv` from
 - [`agren_times.jl`](code/agren_times.jl): compare runtimes for different
   L1-penalized algorithms
 
-## Lowry data
+## Arabidopsis eQTL experiment data (Lowry)
 
 ---
 Lowry, D. B., Logan, T. L., Santuari, L., Hardtke, C. S., Richards, J. H., 
