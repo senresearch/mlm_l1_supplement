@@ -5,8 +5,8 @@ the results presented in the paper.
 
 ## Simulations examining dependence of runtimes on data size
 
-- [`scaling_times.jl`](code/scaling_times.jl) provides the code to examine
-how runtime increases with dimension size in simulated data
+- [`scaling_times.jl`](code/scaling_times.jl): examine how runtime increases 
+with dimension size in simulated data
 
 ## Simulations inspired by environmental screening data (Woodruff)
 
@@ -18,8 +18,8 @@ NHANES 2003-2004', Environmental health perspectives 119(6), 878.
 
 Simulated data inspired by the structure of the above paper.
 
-- [`woodruff_sim.jl`](code/woodruff_sim.jl): runs L1-penalized matrix linear model
-- [`woodruff_sim.R`](code/woodruff_sim.R): reproduces plot used in manuscript
+- [`woodruff_sim.jl`](code/woodruff_sim.jl): run L1-penalized matrix linear model
+- [`woodruff_sim.R`](code/woodruff_sim.R): reproduce plot used in manuscript
 
 ## Arabidopsis fitness adaptation QTL data (Agren)
 
