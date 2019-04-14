@@ -38,7 +38,8 @@ results = mlmnet(fista_bt!, MLMData, lambdas, isZInterceptReg=true)
 
 # Flatten coefficients and write results to CSV
 flatCoeffs = coef_2d(results)
-CSV.write("../processed/agren_l1_coeffs.csv", DataFrame(flatCoeffs))
+CSV.write("../processed/agren_l1_coeffs.csv", 
+          DataFrame(flatCoeffs), writeheader=false)
 
 
 # Run 10-fold cross-validation (on the rows)

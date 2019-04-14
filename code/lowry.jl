@@ -65,8 +65,10 @@ elapsedTime = toc()
 
 # Flatten coefficients and write results to CSV
 flat_coeffs = coef_2d(results)
-CSV.write("../processed/lowry_l1_coeffs.csv", DataFrame(flat_coeffs))
+CSV.write("../processed/lowry_l1_coeffs.csv", 
+          DataFrame(flat_coeffs), writeheader=false)
 
 # Print and write time to CSV
 println(elapsedTime)
-CSV.write("../processed/lowry_time.csv", DataFrame(elapsedTime))
+CSV.write("../processed/lowry_time.csv", DataFrame(elapsedTime), 
+          writeheader=false)

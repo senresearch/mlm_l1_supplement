@@ -74,4 +74,5 @@ println(Statistics.mean(agrenTimes, dims=2))
 CSV.write("../processed/agren_times.csv",  
           DataFrame(vcat(["method" "mean" transpose(collect(1:reps))], 
                     hcat(["cd", "cd_active", "ista", "fista", "fista_bt"], 
-                         Statistics.mean(agrenTimes, dims=2), agrenTimes))))
+                         Statistics.mean(agrenTimes, dims=2), agrenTimes))), 
+          writeheader=false)

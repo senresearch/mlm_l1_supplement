@@ -1,4 +1,5 @@
 using DataFrames
+using LinearAlgebra
 using Distributions
 using Random
 using CSV
@@ -61,13 +62,13 @@ Random.seed!(100)
 X = randn(n, p) 
 
 # Create contrasts for chemicals and tissues
-chem = repeat(Matrix{Float64}(I, nChem, nChem), nTiss, 1)
+chem = repeat(Matrix{Float64}(LinearAlgebra.I, nChem, nChem), nTiss, 1)
 tiss = zeros(nChem*nTiss, nTiss)
 for j in 1:nTiss
 	tiss[(nChem*(j-1)+1):(nChem*j),j] .= 1
 end
 # Create Z matrix
-Z = hcat(chem, tiss, eye(nChem*nTiss))
+Z = hcat(chem, tiss, Matrix{Float64}(LinearAlgebra.I, nChem*nTiss, nChem*nTiss))
 
 
 Random.seed!(40)
@@ -101,10 +102,13 @@ results = mlmnet(fista_bt!, MLMSimData, lambdas)
 
 # Flatten coefficients and write results to CSV
 flat_coeffs = coef_2d(results)
-CSV.write(("../processed/woodruff_sim_l1_coeffs.csv", DataFrame(flat_coeffs))
+CSV.write("../processed/woodruff_sim_l1_coeffs.csv", 
+          DataFrame(flat_coeffs), writeheader=false)
 
 # Write simualted X, Y, and interactions to CSV
-CSV.write(("../processed/woodruff_sim_Y.csv", DataFrame(YSim))
-CSV.write(("../processed/woodruff_sim_X.csv", DataFrame(X))
-CSV.write(("../processed/woodruff_sim_interactions.csv", 
-          DataFrame(interactions))
+CSV.write("../processed/woodruff_sim_Y.csv", 
+          DataFrame(YSim), writeheader=false)
+CSV.write("../processed/woodruff_sim_X.csv", 
+          DataFrame(X), writeheader=false)
+CSV.write("../processed/woodruff_sim_interactions.csv", 
+          DataFrame(interactions), writeheader=false)

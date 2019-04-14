@@ -205,11 +205,13 @@ pqTimes = SharedArrays.SharedArray{Float64}(length(pqGrid), reps)
 end
 
 # Print and write times to CSV
-println(reshape(Statistics.mean(pqTimes, dims=2), length(pqVals), length(pqVals)))
+println(reshape(Statistics.mean(pqTimes, dims=2), 
+                length(pqVals), length(pqVals)))
 CSV.write("../processed/pq_times.csv",  
           DataFrame(vcat(["p" "q" "mean" transpose(collect(1:reps))], 
-                         hcat([x[1] for x in pqGrid], [x[2] for x in pqGrid],
-                              Statistics.mean(pqTimes, dims=2), pqTimes))))
+                         hcat([x[1] for x in pqGrid], [x[2] for x in pqGrid], 
+                              Statistics.mean(pqTimes, dims=2), pqTimes))), 
+          writeheader=false)
 
 
 # Generate grid of n and m values
@@ -227,8 +229,10 @@ nmTimes = SharedArrays.SharedArray{Float64}(length(nmGrid), reps)
 end
 
 # Print and write times to CSV
-println(reshape(Statistics.mean(nmTimes, dims=2), length(nmVals), length(nmVals)))
+println(reshape(Statistics.mean(nmTimes, dims=2), 
+                length(nmVals), length(nmVals)))
 CSV.write("../processed/nm_times.csv",  
           DataFrame(vcat(["n" "m" "mean" transpose(collect(1:reps))], 
-                         hcat([x[1] for x in nmGrid], [x[2] for x in nmGrid],
-                              Statistics.mean(nmTimes, dims=2), nmTimes))))
+                         hcat([x[1] for x in nmGrid], [x[2] for x in nmGrid], 
+                              Statistics.mean(nmTimes, dims=2), nmTimes))), 
+          writeheader=false)
