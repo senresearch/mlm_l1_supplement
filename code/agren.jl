@@ -1,28 +1,30 @@
+using Distributed
+using DataFrames
+using Statistics
+using LinearAlgebra
+using Random
+using CSV
+using JLD
+
 # L1-penalized matrix linear models
 @everywhere include("../../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
-@everywhere using matrixLMnet
-
-# DataFrames 
-using DataFrames
-
-# JLD for saving variables
-using JLD
+@everywhere using Main.matrixLMnet
 
 
 # Read in Y (phenotypes). The first row is a header. The first column is IDs. 
-Y = convert(Array{Float64}, readtable("../processed/agren_phe.csv", 
-			                          separator=',', header=true)[:,2:end])
+Y = convert(Array{Float64, 2}, CSV.read("../processed/agren_phe.csv", 
+			                            delim=',', header=true)[:,2:end])
 # Take the log of Y
 Y = log.(Y)
 # Standardize Y 
-Y = (Y.-mean(Y,1))./std(Y,1) 
+Y = (Y.-Statistics.mean(Y, dims=1)) ./ Statistics.std(Y, dims=1) 
 
 # Read in X (genotype probabilities). The first row is a header. 
-X = convert(Array{Float64}, readtable("../processed/agren_genoprobs.csv", 
-                                      separator=',', header=true))
+X = convert(Array{Float64, 2}, CSV.read("../processed/agren_genoprobs.csv", 
+                                        delim=',', header=true))
 
 # Create Z matrix. The first column indicates country (Italy/Sweden). 
-Z = hcat([1, -1, 1, -1, 1, -1], eye(6))
+Z = hcat([1, -1, 1, -1, 1, -1], Matrix{Float64}(LinearAlgebra.I, 6, 6))
 
 # Put together RawData object for MLM 
 MLMData = RawData(Response(Y), Predictors(X, Z))
@@ -36,11 +38,11 @@ results = mlmnet(fista_bt!, MLMData, lambdas, isZInterceptReg=true)
 
 # Flatten coefficients and write results to CSV
 flatCoeffs = coef_2d(results)
-writecsv("../processed/agren_l1_coeffs.csv", flatCoeffs)
+CSV.write("../processed/agren_l1_coeffs.csv", DataFrame(flatCoeffs))
 
 
 # Run 10-fold cross-validation (on the rows)
-srand(120)
+Random.seed!(120)
 mlmnetCVObjs = mlmnet_cv(fista_bt!, MLMData, lambdas, 10, 1; 
                          isZInterceptReg=true)
 # Look at summary information from cross-validation

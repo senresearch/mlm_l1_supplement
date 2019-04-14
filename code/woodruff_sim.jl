@@ -1,11 +1,11 @@
+using DataFrames
+using Distributions
+using Random
+using CSV
+
 # L1-penalized matrix linear models
 include("../../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
-using matrixLMnet
-
-# DataFrames 
-using DataFrames
-# Distributions
-using Distributions
+using Main.matrixLMnet
 
 
 """
@@ -29,7 +29,6 @@ distribution. The remaining effects will be set to zero.
 1d array of floats 
 
 """
-
 function sim_effect(n::Int64, propNonzero::Float64=1/2, 
                     eDist::Distribution=Normal(0,2))
     # Initialize vector for storing effects 
@@ -58,20 +57,20 @@ q = nChem*nTiss + nChem + nTiss
 
 
 # Simulate X (demographics)
-srand(100)
+Random.seed!(100)
 X = randn(n, p) 
 
 # Create contrasts for chemicals and tissues
-chem = repmat(eye(nChem), nTiss, 1)
+chem = repeat(Matrix{Float64}(I, nChem, nChem), nTiss, 1)
 tiss = zeros(nChem*nTiss, nTiss)
 for j in 1:nTiss
-	tiss[(nChem*(j-1)+1):(nChem*j),j] = 1
+	tiss[(nChem*(j-1)+1):(nChem*j),j] .= 1
 end
 # Create Z matrix
 Z = hcat(chem, tiss, eye(nChem*nTiss))
 
 
-srand(40)
+Random.seed!(40)
 # Simulate demographic main effects, 1/2 nonzero from Normal(0,2). 
 demEff = sim_effect(p) 
 # Simulate chemical main effects, 1/4 nonzero from Normal(0,2). 
@@ -87,7 +86,7 @@ fixedEff = X*demEff .+ transpose(chemEff .+ tissEff) .+
 # Simulate Y using fixed effects 
 YSim = fixedEff + rand(Normal(0,3), n, m) 
 # Standardize Y
-YSim = (YSim.-mean(YSim,1))./std(YSim,1) 
+YSim = (YSim.-mean(YSim, dims=1))./std(YSim, dims=1) 
 
 
 # Put together RawData object for MLM 
@@ -102,9 +101,10 @@ results = mlmnet(fista_bt!, MLMSimData, lambdas)
 
 # Flatten coefficients and write results to CSV
 flat_coeffs = coef_2d(results)
-writecsv("../processed/woodruff_sim_l1_coeffs.csv", flat_coeffs)
+CSV.write(("../processed/woodruff_sim_l1_coeffs.csv", DataFrame(flat_coeffs))
 
 # Write simualted X, Y, and interactions to CSV
-writecsv("../processed/woodruff_sim_Y.csv", YSim)
-writecsv("../processed/woodruff_sim_X.csv", X)
-writecsv("../processed/woodruff_sim_interactions.csv", interactions)
+CSV.write(("../processed/woodruff_sim_Y.csv", DataFrame(YSim))
+CSV.write(("../processed/woodruff_sim_X.csv", DataFrame(X))
+CSV.write(("../processed/woodruff_sim_interactions.csv", 
+          DataFrame(interactions))
