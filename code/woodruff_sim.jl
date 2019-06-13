@@ -32,6 +32,7 @@ distribution. The remaining effects will be set to zero.
 """
 function sim_effect(n::Int64, propNonzero::Float64=1/2, 
                     eDist::Distribution=Normal(0,2))
+    
     # Initialize vector for storing effects 
     effect = zeros(n)
     
@@ -65,7 +66,7 @@ X = randn(n, p)
 chem = repeat(Matrix{Float64}(LinearAlgebra.I, nChem, nChem), nTiss, 1)
 tiss = zeros(nChem*nTiss, nTiss)
 for j in 1:nTiss
-	tiss[(nChem*(j-1)+1):(nChem*j),j] .= 1
+    tiss[(nChem*(j-1)+1):(nChem*j),j] .= 1
 end
 # Create Z matrix
 Z = hcat(chem, tiss, Matrix{Float64}(LinearAlgebra.I, nChem*nTiss, nChem*nTiss))
@@ -83,7 +84,7 @@ interactions = reshape(sim_effect(p*q, 1/8), p, q)
 
 # Generate the fixed effects
 fixedEff = X*demEff .+ transpose(chemEff .+ tissEff) .+ 
-            X*interactions*transpose(Z) 
+             X*interactions*transpose(Z) 
 # Simulate Y using fixed effects 
 YSim = fixedEff + rand(Normal(0,3), n, m) 
 # Standardize Y

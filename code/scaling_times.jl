@@ -36,12 +36,14 @@ using SharedArrays
     
     """
     function sim_effect(n::Int64, propNonzero::Float64=1/2, 
-                    eDist::Distribution=Normal(0,2))
+                        eDist::Distribution=Normal(0,2))
+        
         # Initialize vector for storing effects 
         effect = zeros(n)
         
         # Randomly sample indices of nonzero effects
-        idx = sample(1:n, convert(Integer, round(n*propNonzero)); replace=false)
+        idx = sample(1:n, convert(Integer, round(n*propNonzero)); 
+                     replace=false)
         
         # Simulate and assign nonzero effects  
         effect[idx] = rand(eDist, convert(Integer, round(n*propNonzero)))
@@ -74,6 +76,7 @@ end
     """
     function make_Y(n::Int64, m::Int64, fixed::Array{Float64,2}, 
                     edist::Distribution=Normal(0,3))
+        
         return fixed + rand(edist, n, m)
     end
 end 
@@ -106,7 +109,8 @@ end
     
     """
     function sim_raw_data(n::Int64, m::Int64, p::Int64, q::Int64, 
-                        seed::Int64=10)
+                          seed::Int64=10)
+        
         # Set random seed
         Random.seed!(seed)
         
@@ -168,8 +172,10 @@ end
 
     """
     function run_sim(lambdas::Array{Float64,1}, fun::Function=fista_bt!; 
-                    n::Int64=600, m::Int64=600, 
-                    p::Int64=200, q::Int64=200, seed::Int64=10, funArgs...)
+                     n::Int64=600, m::Int64=600, 
+                     p::Int64=200, q::Int64=200, 
+                     seed::Int64=10, funArgs...)
+        
         # Simulate data
         MLMData = sim_raw_data(n, m, p, q, seed)
         

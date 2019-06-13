@@ -12,7 +12,7 @@ using SharedArrays
 
 # Read in Y (phenotypes). The first row is a header. The first column is IDs. 
 Y = convert(Array{Float64, 2}, CSV.read("../processed/agren_phe.csv", 
-                                  delim=',', header=true)[:,2:end])
+                                        delim=',', header=true)[:,2:end])
 # Take the log of Y
 Y = log.(Y)
 # Standardize Y 
@@ -35,8 +35,14 @@ lambdas = reverse(1.2.^(-32:17))
 # Number of replicates
 reps = 10
 # Initialize array for storing times
-agrenTimes = SharedArrays.SharedArray{Float64}(5, reps)
+agrenTimes = SharedArrays.SharedArray{Float64}(6, reps)
 
+
+# Get times from running ADMM
+@sync @distributed for j in 1:reps
+    agrenTimes[6,j] = @elapsed mlmnet(admm!, MLMData, lambdas, 
+                                      isZInterceptReg=true) 
+end
 
 # Get times from running FISTA with backtracking
 @sync @distributed for j in 1:reps
@@ -73,6 +79,7 @@ end
 println(Statistics.mean(agrenTimes, dims=2))
 CSV.write("../processed/agren_times.csv",  
           DataFrame(vcat(["method" "mean" transpose(collect(1:reps))], 
-                    hcat(["cd", "cd_active", "ista", "fista", "fista_bt"], 
+                    hcat(["cd", "cd_active", "ista", 
+                          "fista", "fista_bt", "admm"], 
                          Statistics.mean(agrenTimes, dims=2), agrenTimes))), 
           writeheader=false)

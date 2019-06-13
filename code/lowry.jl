@@ -38,8 +38,8 @@ Random.seed!(10)
 randPhenos = sort(Random.shuffle(1:nPheno)[1:randSamp])
 idx = Array{Int64}(undef, 2*randSamp)
 for i in 1:randSamp
-	idx[2*i-1] = randPhenos[i]*2-1
-	idx[2*i] = randPhenos[i]*2
+	  idx[2*i-1] = randPhenos[i]*2-1
+	  idx[2*i] = randPhenos[i]*2
 end
 
 # Subset the Y matrix to keep only these phenotypes
@@ -70,5 +70,5 @@ CSV.write("../processed/lowry_l1_coeffs.csv",
 
 # Print and write time to CSV
 println(elapsedTime)
-CSV.write("../processed/lowry_time.csv", DataFrame(elapsedTime), 
-          writeheader=false)
+CSV.write("../processed/lowry_time.csv", 
+          DataFrame(elapsedTime), writeheader=false)

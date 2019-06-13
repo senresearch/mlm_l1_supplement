@@ -2,7 +2,7 @@
 agrenL1Coeffs = as.matrix(read.csv("../processed/agren_l1_coeffs.csv", header=FALSE))
 # Pull out coefficients corresponding to lambda of interest
 lambda = 7 # 7th lambda has value 7.4
-coeffs = matrix(agrenL1Coeffs[,7], 700, 8) 
+coeffs = matrix(agrenL1Coeffs[,lambda], 700, 8) 
 
 
 png("../pictures/agren_l1_coeffs_lambda7.4.png", width=380, height=150)
