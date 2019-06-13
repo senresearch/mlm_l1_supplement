@@ -5,8 +5,7 @@ using Random
 using CSV
 
 # L1-penalized matrix linear models
-@everywhere include("../../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
-@everywhere using Main.matrixLMnet
+@everywhere using matrixLMnet
 
 
 # Read in X (genotype probabilities) with cytoplasm contrast. 

@@ -5,8 +5,7 @@ using Random
 using CSV
 
 # L1-penalized matrix linear models
-include("../../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
-using Main.matrixLMnet
+@everywhere using matrixLMnet
 
 
 """
