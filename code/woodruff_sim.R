@@ -133,7 +133,7 @@ leg_chem = paste0(c("Interactions",  "1/5 Hits", "2/5 Hits",
                     "3/5 Hits", "4/5 Hits"), 
                   " (", round(AUCs[-1], 3), ")")
 legend(0.4, 0.4, 
-       c(bquote(L[1]-penalized~(.(round(AUCs[1], 3)))), 
+       c(as.expression(bquote(L[1]-penalized ~ (.(round(AUCs[1], 3))))), 
          sapply(leg_chem, function(x){bquote(.(x))})), 
        col=c("black", "firebrick3", rep("dodgerblue3", 4)), 
        lty=c(rep("solid",3), "dashed", "dotdash", "dotted"), bty="n")
