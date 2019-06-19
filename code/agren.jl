@@ -1,13 +1,17 @@
 using Distributed
 using DataFrames
 using Statistics
+import Statistics.mean, Statistics.std
 using LinearAlgebra
+import LinearAlgebra.I
 using Random
 using CSV
 using JLD
 
 # L1-penalized matrix linear models
-@everywhere using matrixLMnet
+# @everywhere using matrixLMnet
+include("../../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
+using Main.matrixLMnet
 
 
 # Read in Y (phenotypes). The first row is a header. The first column is IDs. 
@@ -16,14 +20,14 @@ Y = convert(Array{Float64, 2}, CSV.read("../processed/agren_phe.csv",
 # Take the log of Y
 Y = log.(Y)
 # Standardize Y 
-Y = (Y.-Statistics.mean(Y, dims=1)) ./ Statistics.std(Y, dims=1) 
+Y = (Y.-mean(Y, dims=1)) ./ std(Y, dims=1) 
 
 # Read in X (genotype probabilities). The first row is a header. 
 X = convert(Array{Float64, 2}, CSV.read("../processed/agren_genoprobs.csv", 
                                         delim=',', header=true))
 
 # Create Z matrix. The first column indicates country (Italy/Sweden). 
-Z = hcat([1, -1, 1, -1, 1, -1], Matrix{Float64}(LinearAlgebra.I, 6, 6))
+Z = hcat([1, -1, 1, -1, 1, -1], Matrix{Float64}(I, 6, 6))
 
 # Put together RawData object for MLM 
 MLMData = RawData(Response(Y), Predictors(X, Z))
@@ -33,7 +37,7 @@ lambdas = reverse(1.2.^(-32:17))
 
 
 # Run L1-penalized matrix linear model
-results = mlmnet(fista_bt!, MLMData, lambdas, isZInterceptReg=true)
+results = mlmnet(admm!, MLMData, lambdas, isZInterceptReg=true)
 
 # Flatten coefficients and write results to CSV
 flatCoeffs = coef_2d(results)
@@ -43,7 +47,7 @@ CSV.write("../processed/agren_l1_coeffs.csv",
 
 # Run 10-fold cross-validation (on the rows)
 Random.seed!(120)
-mlmnetCVObjs = mlmnet_cv(fista_bt!, MLMData, lambdas, 10, 1; 
+mlmnetCVObjs = mlmnet_cv(admm!, MLMData, lambdas, 10, 1; 
                          isZInterceptReg=true)
 # Look at summary information from cross-validation
 println(mlmnet_cv_summary(mlmnetCVObjs))

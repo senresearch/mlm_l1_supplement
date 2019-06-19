@@ -1,12 +1,16 @@
 using Distributed
 using DataFrames
 using Statistics
+import Statistics.mean, Statistics.std
 using LinearAlgebra
+import LinearAlgebra.I
 using CSV
 using SharedArrays
 
 # L1-penalized matrix linear models
-@everywhere using matrixLMnet
+# @everywhere using matrixLMnet
+@everywhere include("../../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
+@everywhere using Main.matrixLMnet
 
 
 # Read in Y (phenotypes). The first row is a header. The first column is IDs. 
@@ -15,14 +19,14 @@ Y = convert(Array{Float64, 2}, CSV.read("../processed/agren_phe.csv",
 # Take the log of Y
 Y = log.(Y)
 # Standardize Y 
-Y = (Y.-Statistics.mean(Y, dims=1)) ./ Statistics.std(Y, dims=1) 
+Y = (Y.-mean(Y, dims=1)) ./ std(Y, dims=1) 
 
 # Read in X (genotype probabilities). The first row is a header. 
 X = convert(Array{Float64, 2}, CSV.read("../processed/agren_genoprobs.csv", 
                                         delim=',', header=true))
 
 # Create Z matrix. The first column indicates country (Italy/Sweden). 
-Z = hcat([1, -1, 1, -1, 1, -1], Matrix{Float64}(LinearAlgebra.I, 6, 6))
+Z = hcat([1, -1, 1, -1, 1, -1], Matrix{Float64}(I, 6, 6))
 
 # Put together RawData object for MLM 
 MLMData = RawData(Response(Y), Predictors(X, Z))
@@ -40,7 +44,7 @@ agrenTimes = SharedArrays.SharedArray{Float64}(6, reps)
 # Get times from running ADMM
 @sync @distributed for j in 1:reps
     agrenTimes[6,j] = @elapsed mlmnet(admm!, MLMData, lambdas, 
-                                      isZInterceptReg=true) 
+                                      isZInterceptReg=true, rho=0.005) 
 end
 
 # Get times from running FISTA with backtracking
@@ -75,10 +79,10 @@ end
 
 
 # Print and write times to CSV
-println(Statistics.mean(agrenTimes, dims=2))
+println(mean(agrenTimes, dims=2))
 CSV.write("../processed/agren_times.csv",  
           DataFrame(vcat(["method" "mean" transpose(collect(1:reps))], 
                     hcat(["cd", "cd_active", "ista", 
                           "fista", "fista_bt", "admm"], 
-                         Statistics.mean(agrenTimes, dims=2), agrenTimes))), 
+                         mean(agrenTimes, dims=2), agrenTimes))), 
           writeheader=false)

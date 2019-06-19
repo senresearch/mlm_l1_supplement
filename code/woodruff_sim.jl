@@ -1,5 +1,6 @@
 using DataFrames
 using LinearAlgebra
+import LinearAlgebra.I
 using Distributions
 using Random
 using CSV
@@ -62,13 +63,13 @@ Random.seed!(100)
 X = randn(n, p) 
 
 # Create contrasts for chemicals and tissues
-chem = repeat(Matrix{Float64}(LinearAlgebra.I, nChem, nChem), nTiss, 1)
+chem = repeat(Matrix{Float64}(I, nChem, nChem), nTiss, 1)
 tiss = zeros(nChem*nTiss, nTiss)
 for j in 1:nTiss
     tiss[(nChem*(j-1)+1):(nChem*j),j] .= 1
 end
 # Create Z matrix
-Z = hcat(chem, tiss, Matrix{Float64}(LinearAlgebra.I, nChem*nTiss, nChem*nTiss))
+Z = hcat(chem, tiss, Matrix{Float64}(I, nChem*nTiss, nChem*nTiss))
 
 
 Random.seed!(40)

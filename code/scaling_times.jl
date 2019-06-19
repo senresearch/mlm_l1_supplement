@@ -1,7 +1,9 @@
 using Distributed
 using DataFrames
 using Statistics
+import Statistics.mean, Statistics.std
 using LinearAlgebra
+import LinearAlgebra.I
 using Distributions
 using Random
 using CSV
@@ -121,17 +123,15 @@ end
         inter = reshape(sim_effect((p)*(q), 1/8), p, q) 
         
         # Simulate X and Z
-        X = repeat(Matrix{Float64}(LinearAlgebra.I, p, p), 
-                   outer=[Int(ceil(n/p)),1])[1:n,:]
-        Z = repeat(Matrix{Float64}(LinearAlgebra.I, q, q), 
-                   outer=[Int(ceil(m/q)),1])[1:m,:]
+        X = repeat(Matrix{Float64}(I, p, p), outer=[Int(ceil(n/p)),1])[1:n,:]
+        Z = repeat(Matrix{Float64}(I, q, q), outer=[Int(ceil(m/q)),1])[1:m,:]
         
         # Generate the fixed effects
         fixed = X*d .+ transpose(Z*c) .+ X*inter*transpose(Z)
         # Simulate Y using fixed effects 
         Y = make_Y(n, m, fixed)
         # Standardize Y
-        Y = (Y.-Statistics.mean(Y, dims=1)) ./ Statistics.std(Y, dims=1) 
+        Y = (Y.-mean(Y, dims=1)) ./ std(Y, dims=1) 
         	
         # Put together RawData object for MLM
         return RawData(Response(Y), Predictors(X, Z))
@@ -210,12 +210,11 @@ pqTimes = SharedArrays.SharedArray{Float64}(length(pqGrid), reps)
 end
 
 # Print and write times to CSV
-println(reshape(Statistics.mean(pqTimes, dims=2), 
-                length(pqVals), length(pqVals)))
+println(reshape(mean(pqTimes, dims=2), length(pqVals), length(pqVals)))
 CSV.write("../processed/pq_times.csv",  
           DataFrame(vcat(["p" "q" "mean" transpose(collect(1:reps))], 
                          hcat([x[1] for x in pqGrid], [x[2] for x in pqGrid], 
-                              Statistics.mean(pqTimes, dims=2), pqTimes))), 
+                              mean(pqTimes, dims=2), pqTimes))), 
           writeheader=false)
 
 
@@ -234,10 +233,9 @@ nmTimes = SharedArrays.SharedArray{Float64}(length(nmGrid), reps)
 end
 
 # Print and write times to CSV
-println(reshape(Statistics.mean(nmTimes, dims=2), 
-                length(nmVals), length(nmVals)))
+println(reshape(mean(nmTimes, dims=2), length(nmVals), length(nmVals)))
 CSV.write("../processed/nm_times.csv",  
           DataFrame(vcat(["n" "m" "mean" transpose(collect(1:reps))], 
                          hcat([x[1] for x in nmGrid], [x[2] for x in nmGrid], 
-                              Statistics.mean(nmTimes, dims=2), nmTimes))), 
+                              mean(nmTimes, dims=2), nmTimes))), 
           writeheader=false)

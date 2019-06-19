@@ -1,6 +1,7 @@
 using Distributed
 using DataFrames
 using LinearAlgebra
+import LinearAlgebra.I
 using Random
 using CSV
 
@@ -21,8 +22,7 @@ Y = convert(Array{Float64, 2}, CSV.read("../processed/lowry_pheno.csv",
 nPheno = convert(Int64, size(Y,2)/2) 
 # Create Z matrix. The first column indicates treatment (wet/dry)
 Z = hcat(repeat([1, -1], outer=nPheno), 
-         kron(Matrix{Float64}(LinearAlgebra.I, nPheno, nPheno), 
-              vcat([1 1], [1 -1])))
+         kron(Matrix{Float64}(I, nPheno, nPheno), vcat([1 1], [1 -1])))
 
 # Put together RawData object for MLM
 MLMData = RawData(Response(Y), Predictors(X, Z))
@@ -47,7 +47,7 @@ YSub = Y[:,idx]
 # Create the Z matrix for this subset of phenotypes
 nPhenoSub = convert(Int64, size(YSub,2)/2) 
 ZSub = hcat(repeat([1, -1], outer=nPhenoSub), 
-            kron(Matrix{Float64}(LinearAlgebra.I, nPhenoSub, nPhenoSub), 
+            kron(Matrix{Float64}(I, nPhenoSub, nPhenoSub), 
                  vcat([1 1], [1 -1])))
 
 # Put together RawData object for MLM using subsetted data
