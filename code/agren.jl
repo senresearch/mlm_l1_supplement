@@ -9,9 +9,7 @@ using CSV
 using JLD
 
 # L1-penalized matrix linear models
-# @everywhere using matrixLMnet
-include("../../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
-using Main.matrixLMnet
+@everywhere using matrixLMnet
 
 
 # Read in Y (phenotypes). The first row is a header. The first column is IDs. 
@@ -37,7 +35,7 @@ lambdas = reverse(1.2.^(-32:17))
 
 
 # Run L1-penalized matrix linear model
-results = mlmnet(admm!, MLMData, lambdas, isZInterceptReg=true)
+results = mlmnet(fista_bt!, MLMData, lambdas, isZInterceptReg=true)
 
 # Flatten coefficients and write results to CSV
 flatCoeffs = coef_2d(results)
@@ -47,7 +45,7 @@ CSV.write("../processed/agren_l1_coeffs.csv",
 
 # Run 10-fold cross-validation (on the rows)
 Random.seed!(120)
-mlmnetCVObjs = mlmnet_cv(admm!, MLMData, lambdas, 10, 1; 
+mlmnetCVObjs = mlmnet_cv(fista_bt!, MLMData, lambdas, 10, 1; 
                          isZInterceptReg=true)
 # Look at summary information from cross-validation
 println(mlmnet_cv_summary(mlmnetCVObjs))
