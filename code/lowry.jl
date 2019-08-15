@@ -6,7 +6,7 @@ using Random
 using CSV
 
 # L1-penalized matrix linear models
-@everywhere using matrixLMnet
+using matrixLMnet
 
 
 # Read in X (genotype probabilities) with cytoplasm contrast. 
@@ -58,9 +58,9 @@ resultsSub = mlmnet(fista_bt!, MLMDataSub, lambdas; isZInterceptReg=true)
 
 
 # Run L1-penalized matrix linear model while timing it
-tic()
+start = time()
 results = mlmnet(fista_bt!, MLMData, lambdas; isZInterceptReg=true) 
-elapsedTime = toc()
+elapsedTime = time() - start
 
 # Flatten coefficients and write results to CSV
 flat_coeffs = coef_2d(results)

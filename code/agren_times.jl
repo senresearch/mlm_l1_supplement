@@ -8,9 +8,7 @@ using CSV
 using SharedArrays
 
 # L1-penalized matrix linear models
-# @everywhere using matrixLMnet
-@everywhere include("../../mlm_packages/matrixLMnet/src/matrixLMnet.jl")
-@everywhere using Main.matrixLMnet
+@everywhere using matrixLMnet
 
 
 # Read in Y (phenotypes). The first row is a header. The first column is IDs. 

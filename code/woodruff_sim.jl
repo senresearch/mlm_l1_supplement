@@ -6,7 +6,7 @@ using Random
 using CSV
 
 # L1-penalized matrix linear models
-@everywhere using matrixLMnet
+using matrixLMnet
 
 
 """
@@ -106,7 +106,7 @@ flat_coeffs = coef_2d(results)
 CSV.write("../processed/woodruff_sim_l1_coeffs.csv", 
           DataFrame(flat_coeffs), writeheader=false)
 
-# Write simualted X, Y, and interactions to CSV
+# Write simulated X, Y, and interactions to CSV
 CSV.write("../processed/woodruff_sim_Y.csv", 
           DataFrame(YSim), writeheader=false)
 CSV.write("../processed/woodruff_sim_X.csv", 

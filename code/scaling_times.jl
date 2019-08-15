@@ -3,11 +3,12 @@ using DataFrames
 using Statistics
 import Statistics.mean, Statistics.std
 using LinearAlgebra
-import LinearAlgebra.I
-using Distributions
-using Random
 using CSV
 using SharedArrays
+
+@everywhere import LinearAlgebra.I
+@everywhere using Distributions
+@everywhere using Random
 
 # L1-penalized matrix linear models
 @everywhere using matrixLMnet
@@ -227,8 +228,8 @@ nmTimes = SharedArrays.SharedArray{Float64}(length(nmGrid), reps)
     for i in 1:length(nmGrid)
         nmTimes[i,j] = @elapsed run_sim(lambdas; n=nmGrid[i][1], 
                                         m=nmGrid[i][2], 
-                                        p=Int64(mean(pqVals)), 
-                                        q=Int64(mean(pqVals)), stepsize=1.0)
+                                        p=minimum(nmVals), 
+                                        q=minimum(nmVals), stepsize=1.0)
     end
 end
 
