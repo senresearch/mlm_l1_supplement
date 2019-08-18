@@ -6,7 +6,9 @@ using Random
 using CSV
 
 # L1-penalized matrix linear models
-using matrixLMnet
+# using matrixLMnet
+include("../../mlm_packages2/matrixLMnet/src/matrixLMnet.jl")
+using Main.matrixLMnet
 
 
 # Read in X (genotype probabilities) with cytoplasm contrast. 
@@ -54,12 +56,12 @@ ZSub = hcat(repeat([1, -1], outer=nPhenoSub),
 MLMDataSub = RawData(Response(YSub), Predictors(X, ZSub))
 
 # Dry run of L1-penalized matrix linear model using subset of phenotypes
-resultsSub = mlmnet(fista_bt!, MLMDataSub, lambdas; isZInterceptReg=true) 
+resultsSub = mlmnet(admm!, MLMDataSub, lambdas; isZInterceptReg=true) 
 
 
 # Run L1-penalized matrix linear model while timing it
 start = time()
-results = mlmnet(fista_bt!, MLMData, lambdas; isZInterceptReg=true) 
+results = mlmnet(admm!, MLMData, lambdas; isZInterceptReg=true) 
 elapsedTime = time() - start
 
 # Flatten coefficients and write results to CSV

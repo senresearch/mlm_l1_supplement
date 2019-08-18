@@ -11,7 +11,9 @@ using SharedArrays
 @everywhere using Random
 
 # L1-penalized matrix linear models
-@everywhere using matrixLMnet
+# @everywhere using matrixLMnet
+@everywhere include("../../mlm_packages2/matrixLMnet/src/matrixLMnet.jl")
+@everywhere using Main.matrixLMnet
 
 
 @everywhere begin
@@ -203,7 +205,7 @@ pqTimes = SharedArrays.SharedArray{Float64}(length(pqGrid), reps)
 # Hold n and m fixed at 1200 and vary p and q over a grid
 @sync @distributed for j in 1:reps
     for i in 1:length(pqGrid)
-        pqTimes[i,j] = @elapsed run_sim(lambdas; n=Int64(mean(nmVals)), 
+        pqTimes[i,j] = @elapsed run_sim(lambdas, admm!; n=Int64(mean(nmVals)), 
                                         m=Int64(mean(nmVals)), 
                                         p=pqGrid[i][1], 
                                         q=pqGrid[i][2], stepsize=1.0)
@@ -226,7 +228,7 @@ nmTimes = SharedArrays.SharedArray{Float64}(length(nmGrid), reps)
 # Hold p and q fixed at 600 and vary n and m over a grid
 @sync @distributed for j in 1:reps
     for i in 1:length(nmGrid)
-        nmTimes[i,j] = @elapsed run_sim(lambdas; n=nmGrid[i][1], 
+        nmTimes[i,j] = @elapsed run_sim(lambdas, admm!; n=nmGrid[i][1], 
                                         m=nmGrid[i][2], 
                                         p=minimum(nmVals), 
                                         q=minimum(nmVals), stepsize=1.0)
