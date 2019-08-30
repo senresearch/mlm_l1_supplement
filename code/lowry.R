@@ -117,11 +117,10 @@ if (!exists("chrcM") || !exists("cumSumMarkerscM")
 lowryL1Coeffs = read.csv("../processed/lowry_l1_coeffs.csv", header=FALSE)
 # Pull out coefficients corresponding to lambda of interest
 lambda = 4 # 4th lambda has value 1.728
-coeffs = matrix(lowryL1Coeffs[,lambda], 452, 51326)
+coeffs = matrix(lowryL1Coeffs[,lambda], 452, 51324)
 
-# Remove the intercepts, the cyto (X) contrast, and dry/wet environment 
-# (Z) contrast
-coeffs = coeffs[-(1:2), -(1:2)]
+# Remove the X intercept and the cyto contrast
+coeffs = coeffs[-(1:2), ]
 # Find the indices of the non-zero interactions
 idx = which(coeffs != 0, arr.ind=TRUE)
 

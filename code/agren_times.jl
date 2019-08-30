@@ -8,9 +8,7 @@ using CSV
 using SharedArrays
 
 # L1-penalized matrix linear models
-# @everywhere using matrixLMnet
-@everywhere include("../../mlm_packages2/matrixLMnet/src/matrixLMnet.jl")
-@everywhere using Main.matrixLMnet
+@everywhere using matrixLMnet
 
 
 # Read in Y (phenotypes). The first row is a header. The first column is IDs. 
@@ -36,7 +34,7 @@ lambdas = reverse(1.2.^(-32:17))
 
 
 # Number of replicates
-reps = 10
+reps = 100
 # Initialize array for storing times
 agrenTimes = SharedArrays.SharedArray{Float64}(6, reps)
 

@@ -6,9 +6,7 @@ using Random
 using CSV
 
 # L1-penalized matrix linear models
-# using matrixLMnet
-include("../../mlm_packages2/matrixLMnet/src/matrixLMnet.jl")
-using Main.matrixLMnet
+using matrixLMnet
 
 
 """
@@ -101,7 +99,7 @@ lambdas = reverse(1.3.^(-37:12))
 
 
 # Run L1-penalized matrix linear model
-results = mlmnet(admm!, MLMSimData, lambdas)
+results = mlmnet(fista_bt!, MLMSimData, lambdas)
 
 # Flatten coefficients and write results to CSV
 flat_coeffs = coef_2d(results)

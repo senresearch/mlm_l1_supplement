@@ -6,9 +6,7 @@ using Random
 using CSV
 
 # L1-penalized matrix linear models
-# using matrixLMnet
-include("../../mlm_packages2/matrixLMnet/src/matrixLMnet.jl")
-using Main.matrixLMnet
+using matrixLMnet
 
 
 # Read in X (genotype probabilities) with cytoplasm contrast. 
@@ -22,9 +20,8 @@ Y = convert(Array{Float64, 2}, CSV.read("../processed/lowry_pheno.csv",
 
 # Number of phenotypes 
 nPheno = convert(Int64, size(Y,2)/2) 
-# Create Z matrix. The first column indicates treatment (wet/dry)
-Z = hcat(repeat([1, -1], outer=nPheno), 
-         kron(Matrix{Float64}(I, nPheno, nPheno), vcat([1 1], [1 -1])))
+# Create Z matrix. 
+Z = kron(Matrix{Float64}(I, nPheno, nPheno), vcat([1 1], [1 -1]))
 
 # Put together RawData object for MLM
 MLMData = RawData(Response(Y), Predictors(X, Z))
@@ -48,20 +45,18 @@ YSub = Y[:,idx]
 
 # Create the Z matrix for this subset of phenotypes
 nPhenoSub = convert(Int64, size(YSub,2)/2) 
-ZSub = hcat(repeat([1, -1], outer=nPhenoSub), 
-            kron(Matrix{Float64}(I, nPhenoSub, nPhenoSub), 
-                 vcat([1 1], [1 -1])))
+ZSub = kron(Matrix{Float64}(I, nPhenoSub, nPhenoSub), vcat([1 1], [1 -1]))
 
 # Put together RawData object for MLM using subsetted data
 MLMDataSub = RawData(Response(YSub), Predictors(X, ZSub))
 
 # Dry run of L1-penalized matrix linear model using subset of phenotypes
-resultsSub = mlmnet(admm!, MLMDataSub, lambdas; isZInterceptReg=true) 
+resultsSub = mlmnet(fista_bt!, MLMDataSub, lambdas; isZIntercept=false) 
 
 
 # Run L1-penalized matrix linear model while timing it
 start = time()
-results = mlmnet(admm!, MLMData, lambdas; isZInterceptReg=true) 
+results = mlmnet(fista_bt!, MLMData, lambdas; isZIntercept=false) 
 elapsedTime = time() - start
 
 # Flatten coefficients and write results to CSV
@@ -72,4 +67,4 @@ CSV.write("../processed/lowry_l1_coeffs.csv",
 # Print and write time to CSV
 println(elapsedTime)
 CSV.write("../processed/lowry_time.csv", 
-          DataFrame(elapsedTime), writeheader=false)
+          DataFrame(time=elapsedTime), writeheader=false)

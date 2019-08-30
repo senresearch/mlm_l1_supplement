@@ -11,9 +11,7 @@ using SharedArrays
 @everywhere using Random
 
 # L1-penalized matrix linear models
-# @everywhere using matrixLMnet
-@everywhere include("../../mlm_packages2/matrixLMnet/src/matrixLMnet.jl")
-@everywhere using Main.matrixLMnet
+@everywhere using matrixLMnet
 
 
 @everywhere begin
@@ -190,7 +188,7 @@ end
 # Array of 50 lambdas
 lambdas = reverse(1.2.^(-32:17))
 # Number of replicates
-reps = 10
+reps = 100
 
 # Range of p and q values to try
 pqVals = collect(200:200:1000)
@@ -200,45 +198,94 @@ nmVals = collect(400:400:2000)
 
 # Generate grid of p and q values
 pqGrid = vec(collect(Base.product(pqVals, pqVals)))
-# Initialize array for storing times
-pqTimes = SharedArrays.SharedArray{Float64}(length(pqGrid), reps)
+# Generate grid of n and m values
+nmGrid = vec(collect(Base.product(nmVals, nmVals)))
+
+
+# Initialize array for storing FISTA times
+FISTApqTimes = SharedArrays.SharedArray{Float64}(length(pqGrid), reps)
 # Hold n and m fixed at 1200 and vary p and q over a grid
 @sync @distributed for j in 1:reps
     for i in 1:length(pqGrid)
-        pqTimes[i,j] = @elapsed run_sim(lambdas, admm!; n=Int64(mean(nmVals)), 
-                                        m=Int64(mean(nmVals)), 
-                                        p=pqGrid[i][1], 
-                                        q=pqGrid[i][2], stepsize=1.0)
+        FISTApqTimes[i,j] = @elapsed run_sim(fista_bt!, lambdas; 
+                                             n=Int64(mean(nmVals)), 
+                                             m=Int64(mean(nmVals)), 
+                                             p=pqGrid[i][1], 
+                                             q=pqGrid[i][2], stepsize=1.0)
     end
 end
 
-# Print and write times to CSV
-println(reshape(mean(pqTimes, dims=2), length(pqVals), length(pqVals)))
-CSV.write("../processed/pq_times.csv",  
+# Print and write FISTA times to CSV
+println(reshape(mean(FISTApqTimes, dims=2), length(pqVals), length(pqVals)))
+CSV.write("../processed/FISTA_pq_times.csv",  
           DataFrame(vcat(["p" "q" "mean" transpose(collect(1:reps))], 
                          hcat([x[1] for x in pqGrid], [x[2] for x in pqGrid], 
-                              mean(pqTimes, dims=2), pqTimes))), 
+                              mean(FISTApqTimes, dims=2), FISTApqTimes))), 
           writeheader=false)
 
 
-# Generate grid of n and m values
-nmGrid = vec(collect(Base.product(nmVals, nmVals)))
-# Initialize array for storing times
-nmTimes = SharedArrays.SharedArray{Float64}(length(nmGrid), reps)
-# Hold p and q fixed at 600 and vary n and m over a grid
+
+# Initialize array for storing FISTA times
+FISTAnmTimes = SharedArrays.SharedArray{Float64}(length(nmGrid), reps)
+# Hold p and q fixed at 400 and vary n and m over a grid
 @sync @distributed for j in 1:reps
     for i in 1:length(nmGrid)
-        nmTimes[i,j] = @elapsed run_sim(lambdas, admm!; n=nmGrid[i][1], 
-                                        m=nmGrid[i][2], 
-                                        p=minimum(nmVals), 
-                                        q=minimum(nmVals), stepsize=1.0)
+        FISTAnmTimes[i,j] = @elapsed run_sim(fista_bt!, lambdas; 
+                                             n=nmGrid[i][1], 
+                                             m=nmGrid[i][2], 
+                                             p=minimum(nmVals), 
+                                             q=minimum(nmVals), stepsize=1.0)
     end
 end
 
-# Print and write times to CSV
-println(reshape(mean(nmTimes, dims=2), length(nmVals), length(nmVals)))
-CSV.write("../processed/nm_times.csv",  
+# Print and write FISTA times to CSV
+println(reshape(mean(FISTAnmTimes, dims=2), length(nmVals), length(nmVals)))
+CSV.write("../processed/FISTA_nm_times.csv",  
           DataFrame(vcat(["n" "m" "mean" transpose(collect(1:reps))], 
                          hcat([x[1] for x in nmGrid], [x[2] for x in nmGrid], 
-                              mean(nmTimes, dims=2), nmTimes))), 
+                              mean(FISTAnmTimes, dims=2), FISTAnmTimes))), 
+          writeheader=false)
+
+
+# Initialize array for storing ADMM times
+ADMMpqTimes = SharedArrays.SharedArray{Float64}(length(pqGrid), reps)
+# Hold n and m fixed at 1200 and vary p and q over a grid
+@sync @distributed for j in 1:reps
+    for i in 1:length(pqGrid)
+        ADMMpqTimes[i,j] = @elapsed run_sim(admm!, lambdas; 
+                                             n=Int64(mean(nmVals)), 
+                                             m=Int64(mean(nmVals)), 
+                                             p=pqGrid[i][1], 
+                                             q=pqGrid[i][2])
+    end
+end
+
+# Print and write ADMM times to CSV
+println(reshape(mean(ADMMpqTimes, dims=2), length(pqVals), length(pqVals)))
+CSV.write("../processed/ADMM_pq_times.csv",  
+          DataFrame(vcat(["p" "q" "mean" transpose(collect(1:reps))], 
+                         hcat([x[1] for x in pqGrid], [x[2] for x in pqGrid], 
+                              mean(ADMMpqTimes, dims=2), ADMMpqTimes))), 
+          writeheader=false)
+
+
+# Initialize array for storing ADMM times
+ADMMnmTimes = SharedArrays.SharedArray{Float64}(length(nmGrid), reps)
+# Hold p and q fixed at 400 and vary n and m over a grid
+@sync @distributed for j in 1:reps
+    for i in 1:length(nmGrid)
+        ADMMnmTimes[i,j] = @elapsed run_sim(admm!, lambdas; 
+                                             n=nmGrid[i][1], 
+                                             m=nmGrid[i][2], 
+                                             p=minimum(nmVals), 
+                                             q=minimum(nmVals))
+    end
+end
+
+# Print and write ADMM times to CSV
+println(reshape(mean(ADMMnmTimes, dims=2), length(nmVals), length(nmVals)))
+CSV.write("../processed/ADMM_nm_times.csv",  
+          DataFrame(vcat(["n" "m" "mean" transpose(collect(1:reps))], 
+                         hcat([x[1] for x in nmGrid], [x[2] for x in nmGrid], 
+                              mean(ADMMnmTimes, dims=2), ADMMnmTimes))), 
           writeheader=false)
