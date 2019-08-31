@@ -6,7 +6,9 @@ the results presented in the paper.
 ## Simulations examining dependence of runtimes on data size
 
 - [`scaling_times.jl`](code/scaling_times.jl): examine how runtime increases 
-with dimension size in simulated data
+with dimension size in simulated data for FISTA with backtracking and ADMM
+- [`scaling_times.R`](code/scaling_times.R): visually compare runtimes from 
+FISTA with backtracking and ADMM
 
 ## Simulations inspired by environmental screening data (Woodruff)
 
