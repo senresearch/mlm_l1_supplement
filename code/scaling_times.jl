@@ -207,7 +207,7 @@ FISTApqTimes = SharedArrays.SharedArray{Float64}(length(pqGrid), reps)
 # Hold n and m fixed at 1200 and vary p and q over a grid
 @sync @distributed for j in 1:reps
     for i in 1:length(pqGrid)
-        FISTApqTimes[i,j] = @elapsed run_sim(fista_bt!, lambdas; 
+        FISTApqTimes[i,j] = @elapsed run_sim(lambdas, fista_bt!; 
                                              n=Int64(mean(nmVals)), 
                                              m=Int64(mean(nmVals)), 
                                              p=pqGrid[i][1], 
@@ -230,7 +230,7 @@ FISTAnmTimes = SharedArrays.SharedArray{Float64}(length(nmGrid), reps)
 # Hold p and q fixed at 400 and vary n and m over a grid
 @sync @distributed for j in 1:reps
     for i in 1:length(nmGrid)
-        FISTAnmTimes[i,j] = @elapsed run_sim(fista_bt!, lambdas; 
+        FISTAnmTimes[i,j] = @elapsed run_sim(lambdas, fista_bt!; 
                                              n=nmGrid[i][1], 
                                              m=nmGrid[i][2], 
                                              p=minimum(nmVals), 
@@ -252,11 +252,11 @@ ADMMpqTimes = SharedArrays.SharedArray{Float64}(length(pqGrid), reps)
 # Hold n and m fixed at 1200 and vary p and q over a grid
 @sync @distributed for j in 1:reps
     for i in 1:length(pqGrid)
-        ADMMpqTimes[i,j] = @elapsed run_sim(admm!, lambdas; 
-                                             n=Int64(mean(nmVals)), 
-                                             m=Int64(mean(nmVals)), 
-                                             p=pqGrid[i][1], 
-                                             q=pqGrid[i][2])
+        ADMMpqTimes[i,j] = @elapsed run_sim(lambdas, admm!; 
+                                            n=Int64(mean(nmVals)), 
+                                            m=Int64(mean(nmVals)), 
+                                            p=pqGrid[i][1], 
+                                            q=pqGrid[i][2])
     end
 end
 
@@ -274,11 +274,11 @@ ADMMnmTimes = SharedArrays.SharedArray{Float64}(length(nmGrid), reps)
 # Hold p and q fixed at 400 and vary n and m over a grid
 @sync @distributed for j in 1:reps
     for i in 1:length(nmGrid)
-        ADMMnmTimes[i,j] = @elapsed run_sim(admm!, lambdas; 
-                                             n=nmGrid[i][1], 
-                                             m=nmGrid[i][2], 
-                                             p=minimum(nmVals), 
-                                             q=minimum(nmVals))
+        ADMMnmTimes[i,j] = @elapsed run_sim(lambdas, admm!; 
+                                            n=nmGrid[i][1], 
+                                            m=nmGrid[i][2], 
+                                            p=minimum(nmVals), 
+                                            q=minimum(nmVals))
     end
 end
 
