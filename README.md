@@ -1,4 +1,4 @@
-# Fast algorithms for fitting L1-penalized linear models to matrix-valued structured high-throughput data
+# Sparse matrix linear models for structured high-throughput data
 
 This repository contains code and data that can be used to reproduce
 the results presented in the paper.
@@ -20,7 +20,7 @@ NHANES 2003-2004', Environmental health perspectives 119(6), 878.
 
 Simulated data inspired by the structure of the above paper.
 
-- [`woodruff_sim.jl`](code/woodruff_sim.jl): run L1-penalized matrix linear model
+- [`woodruff_sim.jl`](code/woodruff_sim.jl): run L<sub>1</sub>-penalized matrix linear model
 - [`woodruff_sim.R`](code/woodruff_sim.R): reproduce plot used in manuscript
 
 ## Arabidopsis fitness adaptation QTL data (Agren)
@@ -46,10 +46,10 @@ Download `RIL_DataForSelectionAnalyses3yrs.xls` and `geno.csv` from
     Dryad Digital Repository. https://doi.org/10.5061/ dryad.77971.
 
 - [`agren_preprocess.R`](code/agren_preprocess.R): preprocess data
-- [`agren.jl`](code/agren.jl): run L1-penalized matrix linear model
+- [`agren.jl`](code/agren.jl): run L<sub>1</sub>-penalized matrix linear model
 - [`agren.R`](code/agren.R): reproduce plot used in manuscript
 - [`agren_times.jl`](code/agren_times.jl): compare runtimes for different
-  L1-penalized algorithms
+  L<sub>1</sub>-penalized algorithms
 
 ## Arabidopsis eQTL experiment data (Lowry)
 
@@ -81,7 +81,7 @@ for the TxK RIL IDs, [`dd2014_cytocovar.csv`](data/dd2014_cytocovar.csv), are
 provided.
 
 - [`lowry_preprocess.R`](code/lowry_preprocess.R): preprocess data
-- [`lowry.jl`](code/lowry.jl): run L1-penalized matrix linear model
+- [`lowry.jl`](code/lowry.jl): run L<sub>1</sub>-penalized matrix linear model
 - [`lowry.R`](code/lowry.R): reproduce plot used in manuscript
 - [`lowry_multipleqtl.R`](code/lowry_multipleqtl.R): run multiple QTL
   analysis on individual phenotypes
