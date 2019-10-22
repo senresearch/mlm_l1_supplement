@@ -13,9 +13,9 @@ FISTA with backtracking and ADMM
 ## Simulations inspired by environmental screening data (Woodruff)
 
 ---
-Woodruff, T. J., Zota, A. R. and Schwartz, J. M. (2011),
-'Environmental chemicals in pregnant women in the United States:
-NHANES 2003-2004', Environmental health perspectives 119(6), 878.
+Woodruff, T. J., Zota, A. R., & Schwartz, J. M. (2011). Environmental 
+chemicals in pregnant women in the United States: NHANES 2003–2004. 
+*Environmental health perspectives*, 119(6), 878-885.
 ---
 
 Simulated data inspired by the structure of the above paper.
@@ -26,7 +26,10 @@ Simulated data inspired by the structure of the above paper.
 ## Arabidopsis fitness adaptation QTL data (Ågren)
 
 ---
-Ågren, J., Oakley, C. G., McKay, J. K., Lovell, J. T., & Schemske, D. W. (2013). Genetic mapping of adaptation reveals fitness tradeoffs in Arabidopsis thaliana. *Proceedings of the National Academy of Sciences*, 110(52), 21077-21082.
+Ågren, J., Oakley, C. G., McKay, J. K., Lovell, J. T., & Schemske, D. W. 
+(2013). Genetic mapping of adaptation reveals fitness tradeoffs in 
+Arabidopsis thaliana. *Proceedings of the National Academy of Sciences*, 
+110(52), 21077-21082.
 ---
 
 Download `RIL_DataForSelectionAnalyses3yrs.xls` and `geno.csv` from 
@@ -45,7 +48,11 @@ Download `RIL_DataForSelectionAnalyses3yrs.xls` and `geno.csv` from
 ## Arabidopsis eQTL experiment data (Lowry)
 
 ---
-Lowry, D. B., Logan, T. L., Santuari, L., Hardtke, C. S., Richards, J. H., DeRose-Wilson, L. J., ... & Juenger, T. E. (2013). Expression quantitative trait locus mapping across water availability environments reveals contrasting associations with genomic features in Arabidopsis. *The Plant Cell*, 25(9), 3266-3279.
+Lowry, D. B., Logan, T. L., Santuari, L., Hardtke, C. S., Richards, J. H., 
+DeRose-Wilson, L. J., ... & Juenger, T. E. (2013). Expression quantitative 
+trait locus mapping across water availability environments reveals 
+contrasting associations with genomic features in Arabidopsis. 
+*The Plant Cell*, 25(9), 3266-3279.
 ---
 
 Download the series matrix file from the paper's GEO site
