@@ -4,7 +4,7 @@ library(qtl) # mapping quantitative trait loci
 # Downloaded from https://datadryad.org/resource/doi:10.5061/dryad.77971
 agren = read.cross("csvs",dir="../data", 
                genfile="geno.csv", 
-               phefile= "RIL_DataForSelectionAnalyses3yrs2.csv",
+               phefile= "RIL_DataForSelectionAnalyses3yrs.csv",
                genotypes=c("a","b"))
 class(agren)[1] = "riself"
 
