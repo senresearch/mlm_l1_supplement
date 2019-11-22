@@ -6,7 +6,7 @@ using LinearAlgebra
 import LinearAlgebra.I
 using Random
 using CSV
-using JLD
+using JLD2
 
 # L1-penalized matrix linear models
 @everywhere using matrixLMnet
@@ -51,4 +51,4 @@ mlmnetCVObjs = mlmnet_cv(fista_bt!, MLMData, lambdas, 10, 1;
 println(mlmnet_cv_summary(mlmnetCVObjs))
 
 # Save Mlmnet_cv object
-save("../processed/agren_l1_cv.jld", "mlmnetCVObjs", mlmnetCVObjs)
+@save "../processed/agren_l1_cv.jld2" mlmnetCVObjs
