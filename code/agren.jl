@@ -25,14 +25,15 @@ X = convert(Array{Float64, 2}, CSV.read("../processed/agren_genoprobs.csv",
                                         delim=',', header=true))
 
 # Create Z matrix. The first column indicates country (Italy/Sweden). 
-Z = hcat([1, -1, 1, -1, 1, -1], Matrix{Float64}(I, 6, 6))
+# Z = hcat([1, -1, 1, -1, 1, -1], Matrix{Float64}(I, 6, 6))
+Z = reshape([1, -1, 1, -1, 1, -1],6,1)
 
 # Put together RawData object for MLM 
 MLMData = RawData(Response(Y), Predictors(X, Z))
 
 # Array of 50 lambdas
-lambdas = reverse(1.2.^(-32:17))
-
+# lambdas = reverse(1.2.^(-32:17))
+lambdas = 2.0.^LinRange(0.0,4,50)
 
 # Run L1-penalized matrix linear model
 results = mlmnet(fista_bt!, MLMData, lambdas, isZInterceptReg=true)
