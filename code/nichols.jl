@@ -1,5 +1,6 @@
 using Distributed
 using DataFrames
+using Statistics
 using Random
 using CSV
 using JLD2
@@ -14,8 +15,8 @@ using JLD2
 # Number of permutations 
 nPerms = 1000
 
-# Array of 50 lambdas
-lambdas = reverse(1.1.^(-34:15))
+# Array of 40 lambdas
+lambdas = reverse(1.2.^(-30:9))
 
 # Iterate through the six plates
 for i in 1:6
@@ -58,6 +59,14 @@ for i in 1:6
     # Save Mlmnet_cv object
 	@save string("../processed/nichols_p", i, "_l1_cv.jld2") mlmnetCVObjs
     
+end
+
+function valid_reduce2(A::Array{Float64,2}, fun::Function=mean)
+	out = Array{Float64}(undef, size(A, 1))
+	for i in 1:size(A, 1)
+		out[i] = fun(A[i, A[i, :] .< Inf])
+	end
+	return out
 end
 
 
