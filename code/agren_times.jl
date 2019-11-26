@@ -23,8 +23,9 @@ Y = (Y.-mean(Y, dims=1)) ./ std(Y, dims=1)
 X = convert(Array{Float64, 2}, CSV.read("../processed/agren_genoprobs.csv", 
                                         delim=',', header=true))
 
-# Create Z matrix. The first column indicates country (Italy/Sweden). 
-Z = hcat([1, -1, 1, -1, 1, -1], Matrix{Float64}(I, 6, 6))
+# Create Z matrix, indicates country (Italy/Sweden). 
+Z = reshape([1, -1, 1, -1, 1, -1], 6, 1)
+
 
 # Put together RawData object for MLM 
 MLMData = RawData(Response(Y), Predictors(X, Z))

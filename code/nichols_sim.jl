@@ -218,18 +218,6 @@ for i in 1:6
     flat_coeffs = coef_2d(results)
     CSV.write(string("../processed/nichols_sim_p", i, "_l1_coeffs.csv"), 
               DataFrame(flat_coeffs), writeheader=false)
-
-    # # Create 10 folds (on the rows) that ensure that at least one condition 
-	# # replicate is included in each fold
-    # Random.seed!(120)
-    # mlmnetCVfolds = make_folds_conds(convert(Array{String}, X[:Cond_Conc]))
-    # # Run 10-fold cross-validation (on the rows)
-    # mlmnetCVObjs = mlmnet_cv(fista_bt!, MLMSimData, lambdas, mlmnetCVfolds, 1)
-    # # Look at summary information from cross-validation
-    # println(mlmnet_cv_summary(mlmnetCVObjs))
-    
-    # # Save Mlmnet_cv object
-    # @save string("../processed/nichols_sim_p", i, "_l1_cv.jld2") mlmnetCVObjs
     
     # Write simulated interactions to CSV 
     CSV.write(string("../processed/nichols_sim_p", i, "_interactions.csv"), 

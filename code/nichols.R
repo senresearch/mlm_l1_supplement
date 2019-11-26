@@ -36,7 +36,7 @@ for (i in 1:6) {
 
 
 # Pull out coefficients corresponding to lambda of interest
-lambda = 10 # 10th lambda has value 0.455166
+lambda = 10 # MSE is minimized here + 1 SE (lambda = 0.455166)
 # Read in L1 coefficient estimates
 # Use condition-concentrations and mutants for the interaction names
 l1Coeffs = lapply(1:6, function(i){
@@ -176,29 +176,3 @@ dev.off()
 auc(nicholsFPRl2, nicholsTPRl2, type="spline")
 # L1-penalized estimates
 auc(nicholsFPRl1, nicholsTPRl1, type="spline")
-
-
-
-
-
-
-nicholsl1 = sapply(1:6, function(i){
-  l1Coeffs[[i]]})
-nicholsl1Df = melt(nicholsl1)
-names(nicholsl1Df) = c("Cond_Conc", "Mutant", "l1Coeff", "Plate")
-
-png("../pictures/nichols_dot.png", 
-    width=30, height=10, units="cm", res=300)
-par(mar=c(4.1,4.1,1.1,1.1))
-
-# Dot plot of coefficients corresponding to Nichols auxotrophs
-plot(l1Coeff~as.numeric(Mutant), nicholsl1Df[nicholsl1Df$Plate==1,][sample(sum(nicholsl1Df$Plate==1), 2000),], 
-     xlab="Mutants", ylab=expression("L"[1]*"-Penalized Interactions"), 
-     xaxt="n", pch=16, cex=0.3)
-# Draw horizontal bars at medians
-points(unique(as.numeric(nicholsl1Df$Mutant)), 
-       tapply(nicholsl1Df$l1Coeff, nicholsl1Df$Mutant, median), 
-       pch="-", cex=2)
-# Horizontal reference line at 0
-abline(h=0, col="grey")
-dev.off()
