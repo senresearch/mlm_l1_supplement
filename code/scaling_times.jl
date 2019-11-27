@@ -1,8 +1,6 @@
 using Distributed
 using DataFrames
-using Statistics
 import Statistics.mean, Statistics.std
-using LinearAlgebra
 using CSV
 using SharedArrays
 

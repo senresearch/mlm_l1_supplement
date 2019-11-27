@@ -14,9 +14,6 @@ using JLD2
 # Number of permutations 
 nPerms = 1000
 
-# Array of 50 lambdas
-lambdas = reverse(1.1.^(-34:15))
-
 # Array of 25 lambdas
 lambdas = reverse(1.3.^(-18:6))
 
@@ -38,7 +35,7 @@ for i in 1:6
                         "_KEY.csv"), delim='\t', header=true) 
     
     # Put together RawData object for matrix linear models 
-    MLMData = read_plate(X[[:Cond_Conc]], Y, Z[[:name]]; 
+    MLMData = read_plate(X[:,[:Cond_Conc]], Y, Z[:,[:name]]; 
                             XCVar=:Cond_Conc, ZCVar=:name,
                             XCType="sum", ZCType="sum", isYstd=true)
     
@@ -53,7 +50,7 @@ for i in 1:6
     # Create 10 folds (on the rows) that ensure that at least one condition 
 	# replicate is included in each fold
     Random.seed!(120)
-	mlmnetCVfolds = make_folds_conds(convert(Array{String}, X[:Cond_Conc]))
+	mlmnetCVfolds = make_folds_conds(convert(Array{String}, X[:,:Cond_Conc]))
 	# Run 10-fold cross-validation (on the rows)
     mlmnetCVObjs = mlmnet_cv(fista_bt!, MLMData, lambdas, mlmnetCVfolds, 1)
     # Look at summary information from cross-validation

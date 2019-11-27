@@ -194,11 +194,11 @@ for i in 1:6
     
     # Simulate interactions and response matrix
     Random.seed!(10+i)
-    interactions, YSim = sim_data(X[[:Cond_Conc]], Z[[:name]], 
+    interactions, YSim = sim_data(X[:,[:Cond_Conc]], Z[:,[:name]], 
                                   :Cond_Conc, :name)
     
     # Put together RawData object for matrix linear models
-    MLMSimData = read_plate(X[[:Cond_Conc]], YSim, Z[[:name]]; 
+    MLMSimData = read_plate(X[:,[:Cond_Conc]], YSim, Z[:,[:name]]; 
                             XCVar=:Cond_Conc, ZCVar=:name,
                             XCType="sum", ZCType="sum", isYstd=true)
     

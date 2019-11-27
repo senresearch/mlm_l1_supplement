@@ -1,9 +1,6 @@
 using Distributed
 using DataFrames
-using Statistics
 import Statistics.mean, Statistics.std
-using LinearAlgebra
-import LinearAlgebra.I
 using CSV
 using SharedArrays
 
@@ -23,7 +20,7 @@ Y = (Y.-mean(Y, dims=1)) ./ std(Y, dims=1)
 X = convert(Array{Float64, 2}, CSV.read("../processed/agren_genoprobs.csv", 
                                         delim=',', header=true))
 
-# Create Z matrix, indicates country (Italy/Sweden). 
+# Create Z matrix, indicating country (Italy/Sweden). 
 Z = reshape([1, -1, 1, -1, 1, -1], 6, 1)
 
 

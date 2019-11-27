@@ -1,6 +1,5 @@
 using Distributed
 using DataFrames
-using LinearAlgebra
 import LinearAlgebra.I
 using Random
 using CSV
@@ -19,7 +18,7 @@ Y = convert(Array{Float64, 2}, CSV.read("../processed/lowry_pheno.csv",
                                         delim=',', header=true))
 
 # Number of phenotypes 
-nPheno = convert(Int64, size(Y,2)/2) 
+nPheno = convert(Int64, round(size(Y,2)/2)) 
 # Create Z matrix. 
 Z = kron(Matrix{Float64}(I, nPheno, nPheno), vcat([1 1], [1 -1]))
 
@@ -44,7 +43,7 @@ end
 YSub = Y[:,idx]
 
 # Create the Z matrix for this subset of phenotypes
-nPhenoSub = convert(Int64, size(YSub,2)/2) 
+nPhenoSub = convert(Int64, round(size(YSub,2)/2)) 
 ZSub = kron(Matrix{Float64}(I, nPhenoSub, nPhenoSub), vcat([1 1], [1 -1]))
 
 # Put together RawData object for MLM using subsetted data
