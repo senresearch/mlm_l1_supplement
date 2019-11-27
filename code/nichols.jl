@@ -53,8 +53,8 @@ for i in 1:6
 	mlmnetCVfolds = make_folds_conds(convert(Array{String}, X[:,:Cond_Conc]))
 	# Run 10-fold cross-validation (on the rows)
     mlmnetCVObjs = mlmnet_cv(fista_bt!, MLMData, lambdas, mlmnetCVfolds, 1)
-    # Look at summary information from cross-validation
-    println(mlmnet_cv_summary(mlmnetCVObjs))
+# Look at summary information from cross-validation for best lambdas
+    println(lambda_min(mlmnetCVObjs))
     
     # Save Mlmnet_cv object
 	@save string("../processed/nichols_p", i, "_l1_cv.jld2") mlmnetCVObjs

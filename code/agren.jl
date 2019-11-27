@@ -43,8 +43,8 @@ CSV.write("../processed/agren_l1_coeffs.csv",
 Random.seed!(120)
 mlmnetCVObjs = mlmnet_cv(fista_bt!, MLMData, lambdas, 10, 1; 
                          isZInterceptReg=true)
-# Look at summary information from cross-validation
-println(mlmnet_cv_summary(mlmnetCVObjs))
+# Look at summary information from cross-validation for best lambdas
+println(lambda_min(mlmnetCVObjs))
 
 # Save Mlmnet_cv object
 @save "../processed/agren_l1_cv.jld2" mlmnetCVObjs
