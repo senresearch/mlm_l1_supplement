@@ -142,7 +142,7 @@ inter = cbind(cumSumMarkerscM[idxInter[,1]],
               cumSumTranscM2[idxInter[,2]])
 
 
-png("../pictures/lowry_gene_vs_qtl_pos_lambda1.7.png", width=380, height=380)
+png("../pictures/lowry_gene_vs_qtl_pos_lambda_1.7.png", width=380, height=380)
 par(mar=c(4.1,4.1,1.1,1.1))
 
 # Main effects
