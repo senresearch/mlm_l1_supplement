@@ -61,7 +61,7 @@ end
                                       isZInterceptReg=true)
 end
 
-# Get times from running active coordinate descent
+# Get times from running random coordinate descent
 @sync @distributed for j in 1:reps
     agrenTimes[2,j] = @elapsed mlmnet(cd_active!, MLMData, lambdas, 
                                       isZInterceptReg=true)
