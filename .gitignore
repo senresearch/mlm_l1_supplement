@@ -1,0 +1,6 @@
+syntax: glob
+processed/
+processed2/
+pictures/
+*.Rhistory
+data/
