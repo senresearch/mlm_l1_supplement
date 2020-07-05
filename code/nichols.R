@@ -121,12 +121,13 @@ names(nicholsAuxoMinl1Df) = c("Cond_Conc", "Mutant", "l1Coeff", "Plate")
 
 png("../pictures/nichols_auxo_dot.png", 
      width=15, height=10, units="cm", res=300)
-par(mar=c(4.1,4.1,1.1,1.1))
+par(mar=c(2.1,4.1,1.1,1.1))
 
 # Dot plot of coefficients corresponding to Nichols auxotrophs
 plot(l1Coeff~as.numeric(Mutant), nicholsAuxoMinl1Df, 
-     xlab="Auxotroph Mutants", ylab=expression("L"[1]*"-Penalized Interactions"), 
+     xlab="", ylab=expression("L"[1]*"-Penalized Interactions"), 
      xaxt="n", pch=16, cex=0.6)
+title(xlab="Auxotroph Mutants", line=1)
 # Draw horizontal bars at medians
 points(unique(as.numeric(nicholsAuxoMinl1Df$Mutant)), 
        tapply(nicholsAuxoMinl1Df$l1Coeff, nicholsAuxoMinl1Df$Mutant, median), 
