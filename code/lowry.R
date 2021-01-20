@@ -146,11 +146,11 @@ png("../pictures/lowry_gene_vs_qtl_pos_lambda_1.7.png", width=380, height=380)
 par(mar=c(4.1,4.1,1.1,1.1))
 
 # Main effects
-plot(mains[,1], mains[,2], col="royalblue4", 
+plot(mains[,1], mains[,2], 
      xlab="QTL Position (cM)", ylab="Gene Position (cM)") 
 
 # Interactions
-points(inter[,1], inter[,2], pch=15, col="firebrick3")
+points(inter[,1], inter[,2], pch=15)
 
 # Reference lines to delineate chromosomes
 invisible(sapply(chrcM[2:5], function(x){abline(v=x)}))

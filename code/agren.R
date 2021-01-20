@@ -10,8 +10,7 @@ par(mar=c(1.1,4.1,1.1,1.1))
 
 # Site interactions
 plot(1:700, abs(coeffs[,2]), type="l", 
-     xlab="", ylab="QTL Effects", xaxt="n", ylim=c(0,0.16), 
-     col="firebrick3")
+     xlab="", ylab="QTL Effects", xaxt="n", ylim=c(0,0.16))
 
 # Main effects
 lines(1:700, abs(coeffs[,1]), lty=2)

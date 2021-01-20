@@ -44,8 +44,8 @@ text(matrix(rep(n, 5), ncol=5), matrix(rep(m, each=5), ncol=5),
 
 # Breaks and colors for heatmaps of the ratio of runtimes
 ratioBreaks = seq(0.3, 1.7, length=12)
-ratioCols = c(colorRampPalette(colors = c("blue","white"))(6), 
-           colorRampPalette(colors = c("white","red"))(6)[-1])
+ratioCols = c(colorRampPalette(colors = c("black","white"))(6), 
+              colorRampPalette(colors = c("white","black"))(6)[-1])
 
 # Heatmap of the ratio of FISTA and ADMM runtimes, varying p and q
 image(q, p, orient(FISTApqMeans/ADMMpqMeans), 
