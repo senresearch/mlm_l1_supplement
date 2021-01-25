@@ -142,11 +142,36 @@ inter = cbind(cumSumMarkerscM[idxInter[,1]],
               cumSumTranscM2[idxInter[,2]])
 
 
-png("../pictures/lowry_gene_vs_qtl_pos_lambda_1.7.png", width=380, height=380)
+# Color
+png("../pictures/lowry_gene_vs_qtl_pos_lambda_1.7.png", 
+    width=380, height=380)
 par(mar=c(4.1,4.1,1.1,1.1))
 
 # Main effects
-plot(mains[,1], mains[,2], 
+plot(mains[,1], mains[,2], cex=0.8, col="royalblue4", 
+     xlab="QTL Position (cM)", ylab="Gene Position (cM)") 
+
+# Interactions
+points(inter[,1], inter[,2], pch=15, col="firebrick3")
+
+# Reference lines to delineate chromosomes
+invisible(sapply(chrcM[2:5], function(x){abline(v=x)}))
+invisible(sapply(chrcM[2:5], function(x){abline(h=x)}))
+
+# Label chromosomes
+mtext(side=1, text=chrNames, line=2)
+mtext(side=2, text=chrNames, line=2) 
+
+dev.off()
+
+
+# Black and white
+png("../pictures/lowry_gene_vs_qtl_pos_lambda_1.7_bw.png", 
+    width=380, height=380)
+par(mar=c(4.1,4.1,1.1,1.1))
+
+# Main effects
+plot(mains[,1], mains[,2], cex=0.8, 
      xlab="QTL Position (cM)", ylab="Gene Position (cM)") 
 
 # Interactions

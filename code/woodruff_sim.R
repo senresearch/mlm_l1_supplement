@@ -105,7 +105,46 @@ AUCs = c(MESS::auc(c(1,mlmL1FPR,0), c(1,mlmL1TPR,0), type="spline"),
            auc(c(0,lmChemFPR,1), c(0,lmChemTPR[,j],1), type="spline")}))
 
 
+# Color
 png("../pictures/woodruff_sim_ROC_chem.png", width=380, height=380)
+par(mar=c(4.1,4.1,1.1,1.1))
+
+# L1-penalized matrix linear models
+plot(c(mlmL1FPR,0), c(mlmL1TPR,0), 
+     xlab="False Positive Rate", ylab="True Positive Rate", 
+     xaxs="i", yaxs="i", type="l", lwd=1.5) 
+
+# Univariate linear regression for interactions
+lines(lmFPR, lmTPR, col="firebrick3", lty="dotted", lwd=1.5) 
+
+# Univariate linear regression with at least 1/5 chemical hits
+lines(lmChemFPR, lmChemTPR[,1], col="dodgerblue3", lty="dashed")
+# Univariate linear regression with at least 2/5 chemical hits
+lines(lmChemFPR, lmChemTPR[,2], col="dodgerblue3", lty="dotdash")
+# Univariate linear regression with at least 3/5 chemical hits
+lines(lmChemFPR, lmChemTPR[,3], col="dodgerblue3", lty="solid")
+# Univariate linear regression with at least 4/5 chemical hits
+lines(lmChemFPR, lmChemTPR[,4], col="dodgerblue3", lty="dotted")
+
+# Reference line
+abline(0,1, col="grey") 
+
+# Legend for different methods
+legChem = paste0(c("Interactions",  "1/5 Hits", "2/5 Hits", 
+                   "3/5 Hits", "4/5 Hits"), 
+                 " (", round(AUCs[-1], 3), ")")
+legend(0.4, 0.4, 
+       c(as.expression(bquote(L[1]-penalized ~ (.(round(AUCs[1], 3))))), 
+         sapply(legChem, function(x){bquote(.(x))})), 
+       col=c("black", "firebrick3", rep("dodgerblue3", 4)), 
+       lty=c("solid", "dotted", "dashed", 
+             "dotdash", "solid", "dotted"), 
+       lwd=c(rep(1.5,2), rep(1,4)), bty="n")
+dev.off()
+
+
+# Black and white
+png("../pictures/woodruff_sim_ROC_chem_bw.png", width=380, height=380)
 par(mar=c(4.1,4.1,1.1,1.1))
 
 # L1-penalized matrix linear models
