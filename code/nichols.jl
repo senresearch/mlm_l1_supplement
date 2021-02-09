@@ -24,15 +24,15 @@ for i in 1:6
     # Read in data for each plate
     # Colony opacity
     Y = CSV.read(string("../processed/processed_KEIO_data/p", i, 
-                        "_krit_dat.csv"), delim=',', header=true) 
+                        "_krit_dat.csv"), DataFrame, delim=',', header=true) 
     
     # Conditions
     X = CSV.read(string("../processed/processed_KEIO_data/p", i, 
-                        "_krit_cond.csv"), delim=',', header=true) 
+                        "_krit_cond.csv"), DataFrame, delim=',', header=true) 
     
     # Mutant keys
     Z = CSV.read(string("../data/raw_KEIO_data/KEIO", i, 
-                        "_KEY.csv"), delim='\t', header=true) 
+                        "_KEY.csv"), DataFrame, delim='\t', header=true) 
     
     # Put together RawData object for matrix linear models 
     MLMData = read_plate(X[:,[:Cond_Conc]], Y, Z[:,[:name]]; 

@@ -3,4 +3,5 @@ processed/
 processed2/
 pictures/
 *.Rhistory
+*.DS_Store
 data/

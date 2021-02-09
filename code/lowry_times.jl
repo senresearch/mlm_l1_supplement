@@ -13,11 +13,11 @@ using SharedArrays
 # Read in X (genotype probabilities) with cytoplasm contrast. 
 # The first row is a header. 
 X = convert(Array{Float64, 2}, CSV.read("../processed/lowry_cyto_genoprobs.csv", 
-                                        delim=',', header=true))
+                                        DataFrame, delim=',', header=true))
 
 # Read in Y (phenotypes). The first row is a header. 
 Y = convert(Array{Float64, 2}, CSV.read("../processed/lowry_pheno.csv", 
-                                        delim=',', header=true))
+                                        DataFrame, delim=',', header=true))
 
 # Number of phenotypes 
 nPheno = convert(Int64, round(size(Y,2)/2)) 

@@ -10,7 +10,7 @@ using SharedArrays
 
 # Read in Y (phenotypes). The first row is a header. The first column is IDs. 
 Y = convert(Array{Float64, 2}, CSV.read("../processed/agren_phe.csv", 
-                                        delim=',', header=true)[:,2:end])
+                                        DataFrame, delim=',', header=true)[:,2:end])
 # Take the log of Y
 Y = log.(Y)
 # Standardize Y 
@@ -18,7 +18,7 @@ Y = (Y.-mean(Y, dims=1)) ./ std(Y, dims=1)
 
 # Read in X (genotype probabilities). The first row is a header. 
 X = convert(Array{Float64, 2}, CSV.read("../processed/agren_genoprobs.csv", 
-                                        delim=',', header=true))
+                                        DataFrame, delim=',', header=true))
 
 # Create Z matrix, indicating country (Italy/Sweden). 
 Z = reshape([1, -1, 1, -1, 1, -1], 6, 1)
