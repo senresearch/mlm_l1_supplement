@@ -33,11 +33,11 @@ Arabidopsis thaliana. *Proceedings of the National Academy of Sciences*,
 ---
 
 Download `RIL_DataForSelectionAnalyses3yrs.xls` and `geno.csv` from 
-[https://datadryad.org/resource/doi:10.5061/dryad.77971](https://datadryad.org/resource/doi:10.5061/dryad.77971) [^fn1] [^fn2]. 
+[https://datadryad.org/resource/doi:10.5061/dryad.77971](https://datadryad.org/resource/doi:10.5061/dryad.77971) <sup>[1](#myfootnote1)</sup> <sup>[2](#myfootnote2)</sup>. 
 
-[^fn1]: Ågren, J., Oakley, C. G., Lundemo, S., & Schemske, D. W. (2017). Adaptive divergence in flowering time among natural populations of Arabidopsis thaliana: estimates of selection and QTL mapping. *Evolution*, 71(3), 550-564.
+<a name="myfootnote1">1</a>. Ågren, J., Oakley, C. G., Lundemo, S., & Schemske, D. W. (2017). Adaptive divergence in flowering time among natural populations of Arabidopsis thaliana: estimates of selection and QTL mapping. *Evolution*, 71(3), 550-564.
 
-[^fn2]: Ågren, J., Oakley, C. G., Lundemo, S., & Schemske, D. W. (2016), Adaptive divergence in flowering time among natural populations of Arabidopsis thaliana: estimates of selection and QTL mapping. Data from: Dryad Digital Repository. https://doi.org/10.5061/dryad.77971.
+<a name="myfootnote2">2</a>. Ågren, J., Oakley, C. G., Lundemo, S., & Schemske, D. W. (2016), Adaptive divergence in flowering time among natural populations of Arabidopsis thaliana: estimates of selection and QTL mapping. Data from: Dryad Digital Repository. https://doi.org/10.5061/dryad.77971.
 
 - [`agren_preprocess.R`](code/agren_preprocess.R): preprocess data
 - [`agren.jl`](code/agren.jl): run L1-penalized matrix linear model
@@ -58,9 +58,9 @@ contrasting associations with genomic features in Arabidopsis.
 Download the series matrix file from the paper's GEO site
 [https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE42408] 
 and Supplemental Dataset 1b from 
-[http://www.plantcell.org/content/27/4/969/tab-figures-data] [^fn3]. 
+[http://www.plantcell.org/content/27/4/969/tab-figures-data] <sup>[3](#myfootnote3)</sup>. 
 
-[^fn3]: Lovell, J. T., Mullen, J. L., Lowry, D. B., Awole, K., Richards, J. H., Sen, S., ... & McKay, J. K. (2015). Exploiting differential gene expression and epistasis to discover candidate genes for drought-associated QTLs in Arabidopsis thaliana. *The Plant Cell*, 27(4), 969-983.
+<a name="myfootnote3">3</a>. Lovell, J. T., Mullen, J. L., Lowry, D. B., Awole, K., Richards, J. H., Sen, S., ... & McKay, J. K. (2015). Exploiting differential gene expression and epistasis to discover candidate genes for drought-associated QTLs in Arabidopsis thaliana. *The Plant Cell*, 27(4), 969-983.
 
 Download annotation file here:  
 [https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_gff3/TAIR10_GFF3_genes.gff](https://www.arabidopsis.org/download_files/Genes/TAIR10_genome_release/TAIR10_gff3/TAIR10_GFF3_genes.gff) .
