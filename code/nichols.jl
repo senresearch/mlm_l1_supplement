@@ -11,9 +11,6 @@ using JLD2
 @everywhere using MatrixLMnet
 
 
-# Number of permutations 
-nPerms = 1000
-
 # Array of 25 lambdas
 lambdas = reverse(1.3.^(-18:6))
 

@@ -28,10 +28,10 @@ Nichols, R. J., Sen, S., Choo, Y. J., Beltrao, P., Zietek, M., Chaba, R., Lee, S
 Download the data [here](https://figshare.com/s/f7da693dee83595eafd7)<sup>[3](#myfootnote3)</sup>. Once downloaded, the data should be saved in the `data/raw_KEIO_data/` directory. 
 
 - [`nichols_preprocess.R`](code/nichols_preprocess.R): Preprocess data. 
-- [`nichols.jl`](code/nichols.jl): run L<sub>1</sub>-penalized matrix linear model
-- [`nichols.R`](code/nichols.R): reproduce plot used in manuscript
-- [`nichols_sim.jl`](code/nichols_sim.jl): Run L<sub>1</sub>-penalized matrix linear model
-- [`nichols_sim.R`](code/nichols_sim.R): reproduce plot used in manuscript
+- [`nichols.jl`](code/nichols.jl): Run L<sub>1</sub>-penalized matrix linear model, with cross-validation. 
+- [`nichols.R`](code/nichols.R): Reproduce dot plot and ROC plot for analyzing auxotrophs. 
+- [`nichols_sim.jl`](code/nichols_sim.jl): Simulate data and run matrix linear models (least squares and L<sub>1</sub>-penalized). 
+- [`nichols_sim.R`](code/nichols_sim.R): Reproduce ROC plots for comparing matrix linear models with and without the L<sub>1</sub> penalty. 
 
 
 ## Arabidopsis fitness adaptation QTL data (Ågren et al., 2013)
@@ -41,7 +41,7 @@ Download the data [here](https://figshare.com/s/f7da693dee83595eafd7)<sup>[3](#m
 Download `RIL_DataForSelectionAnalyses3yrs.xls` and `geno.csv` [here](https://datadryad.org/resource/doi:10.5061/dryad.77971) <sup>[4](#myfootnote4), [5](#myfootnote5)</sup>. Once downloaded, the data should be saved in the `data/` directory. 
 
 - [`agren_preprocess.R`](code/agren_preprocess.R): Preprocess data. 
-- [`agren.jl`](code/agren.jl): Run L<sub>1</sub>-penalized matrix linear model. 
+- [`agren.jl`](code/agren.jl): Run L<sub>1</sub>-penalized matrix linear model, with cross-validation. 
 - [`agren.R`](code/agren.R): Reproduce plot of main effect and interaction QTL peaks. 
 - [`agren_times.jl`](code/agren_times.jl): Compare the runtimes for different L<sub>1</sub>-penalized algorithms. 
 
