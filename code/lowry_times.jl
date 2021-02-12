@@ -7,7 +7,7 @@ using CSV
 using SharedArrays
 
 # L1-penalized matrix linear models
-@everywhere using matrixLMnet
+@everywhere using MatrixLMnet
 
 
 # Read in X (genotype probabilities) with cytoplasm contrast. 

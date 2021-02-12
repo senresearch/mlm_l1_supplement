@@ -8,7 +8,7 @@ using JLD2
 @everywhere using GeneticScreen
 
 # L1-penalized matrix linear models
-@everywhere using matrixLMnet
+@everywhere using MatrixLMnet
 
 
 # Number of permutations 
@@ -53,7 +53,8 @@ for i in 1:6
 	mlmnetCVfolds = make_folds_conds(convert(Array{String}, X[:,:Cond_Conc]))
 	# Run 10-fold cross-validation (on the rows)
     mlmnetCVObjs = mlmnet_cv(fista_bt!, MLMData, lambdas, mlmnetCVfolds, 1)
-# Look at summary information from cross-validation for best lambdas
+    
+    # Look at summary information from cross-validation for best lambdas
     println(lambda_min(mlmnetCVObjs))
     
     # Save Mlmnet_cv object

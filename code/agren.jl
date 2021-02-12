@@ -6,7 +6,7 @@ using CSV
 using JLD2
 
 # L1-penalized matrix linear models
-@everywhere using matrixLMnet
+@everywhere using MatrixLMnet
 
 
 # Read in Y (phenotypes). The first row is a header. The first column is IDs. 

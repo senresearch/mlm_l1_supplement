@@ -5,7 +5,7 @@ using Random
 using CSV
 
 # L1-penalized matrix linear models
-using matrixLMnet
+using MatrixLMnet
 
 
 """

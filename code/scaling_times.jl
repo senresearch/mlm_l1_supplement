@@ -9,7 +9,7 @@ using SharedArrays
 @everywhere using Random
 
 # L1-penalized matrix linear models
-@everywhere using matrixLMnet
+@everywhere using MatrixLMnet
 
 
 @everywhere begin

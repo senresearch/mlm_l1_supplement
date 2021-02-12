@@ -9,7 +9,7 @@ using JLD2
 @everywhere using GeneticScreen
 
 # L1-penalized matrix linear models
-@everywhere using matrixLMnet
+@everywhere using MatrixLMnet
 
 
 """
