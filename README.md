@@ -1,7 +1,7 @@
 # Sparse matrix linear models for structured high-throughput data
 
 This repository contains code and data that can be used to reproduce
-the results presented in the paper.
+the results presented in the paper ["Sparse matrix linear models for structured high-throughput data"](https://arxiv.org/abs/1712.05767).
 
 ## Simulations examining dependence of runtimes on data size
 
